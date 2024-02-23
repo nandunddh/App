@@ -1,11 +1,11 @@
 import "react-native-gesture-handler"
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { StackNav } from './StackNav';
 import DrawerNav from './DrawerNav';
 import BottomTab from "./TabNav";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DB_URL } from "./Components/Constants/Constants";
 import MyContext from "./MyContext";
 
@@ -18,6 +18,7 @@ const App = () => {
   const [ConferenceData, setConferenceData] = useState([]);
   const [user_name, setUser_name] = useState();
   const [isloading, setIsloading] = useState(false);
+  const [isDrawerClicked, setIsDrawerClicked] = useState(false);
 
   useEffect(() => {
     handleupcomingconferencelist()
@@ -41,7 +42,7 @@ const App = () => {
         .then(async (Response) => {
           if (Response[0].Message == "Success") {
             // alert(Response[0].Message);
-            console.log("Data upcomingconferencelist data Base == ", Response[0].data)
+            // console.log("Data upcomingconferencelist data Base == ", Response[0].data)
 
             setConferenceData(Response[0].data);
             // console.log("Live ==== ", upcomingConferencelist.token);
@@ -61,11 +62,12 @@ const App = () => {
 
   return (
     <NavigationContainer>
+      <StatusBar backgroundColor="#ffffff" />
       <MyContext.Provider value={{
-        isNotification, setIsNotification, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin, ConferenceData, setConferenceData, user_name, setUser_name, isloading, setIsloading
+        isNotification, setIsNotification, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin, ConferenceData, setConferenceData, user_name, setUser_name, isloading, setIsloading, isDrawerClicked, setIsDrawerClicked
       }}>
 
-        <DrawerNav />
+          <DrawerNav />
       </MyContext.Provider>
       {/* <StackNav /> */}
       {/* <BottomTab /> */}

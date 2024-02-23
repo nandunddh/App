@@ -2,12 +2,14 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Home from "./Home";
 import About from "./About";
+import Login from "./Components/Auth/Login";
 import Notification from "./Components/Notification";
 import Profile from "./Components/Profile";
 import EditProfile from "./Components/EditProfile";
 import CurrentConferences from "./Components/CurrentConferences";
 import ConferenceScreen from "./Components/ConferenceScreen";
 import AboutConference from "./Components/AboutConference";
+import SignUp from "./Components/Auth/SignUp";
 
 const Stack = createStackNavigator();
 
@@ -46,6 +48,18 @@ const MainStackNavigator = () => {
   );
 }
 
+const AuthStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{
+      headerTitleAlign: "center",
+      headerTitle: "Login",
+    }}>
+      <Stack.Screen name="Login Screen" component={Login} options={{cardStyle: { backgroundColor: '#fff' }}}/>
+      <Stack.Screen name="SignUp Screen" component={SignUp} options={{cardStyle: { backgroundColor: '#fff' }}}/>
+    </Stack.Navigator>
+  );
+}
 
-export { MainStackNavigator };
+
+export { MainStackNavigator, AuthStackNavigator };
 
