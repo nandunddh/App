@@ -62,7 +62,7 @@ const Home = () => {
     }
     if (conference.token == "upcoming") {
       const imageUrl = `${DB_URL}uploads/logos/${conference.logo}`;
-      console.log("Banner", imageUrl);
+      // console.log("Banner", imageUrl);
 
       return (
         <View style={styles.notificationcontainer}>

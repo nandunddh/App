@@ -21,15 +21,16 @@ const DrawerNav = () => {
     drawerContent={() => <DrawerScreen />} 
     >
       {
-        isLogin && 
+        isLogin ? 
 
         <Drawer.Screen name="Drawer Home " component={UserTabs} options={{
           headerShown : false, headerTitle: "Home"
         }}/>
+        :
+        <Drawer.Screen name="Profile" component={AuthStackNavigator}  options={{
+          headerShown : false, headerTitle: "Home"
+        }}/>
       }
-      <Drawer.Screen name="Profile" component={AuthStackNavigator}  options={{
-        headerShown : false, headerTitle: "Home"
-      }}/>
     </Drawer.Navigator>
   );
 }

@@ -30,7 +30,7 @@ const Login = () => {
   useEffect(() => {
     console.log(Platform.OS);
     getStoredCredentials();
-    console.log("isLogin from login === ", isAdmin)
+    // console.log("isLogin from login === ", isAdmin)
 
   }, [isLogin, isAdmin, email, storedCredentials, user_name])
 
@@ -42,16 +42,17 @@ const Login = () => {
       if (storedEmail && storedPassword) {
         // alert(username + " username");
         await setStoredCredentials({ email: storedEmail, password: storedPassword, username: username });
-        if (storedEmail === "admin@test.com") {
-          // navigation.navigate('HomeScreen');
-          // navigation.navigate('AdminTab', {
-          //   screen: 'HomeScreen',
-          // });
-        }
-        else {
-          // navigation.navigate('Drawer Home');
-          setIsLogin(true);
-        }
+        // if (storedEmail === "admin@test.com") {
+        //   // navigation.navigate('HomeScreen');
+        //   // navigation.navigate('AdminTab', {
+        //   //   screen: 'HomeScreen',
+        //   // });
+        // }
+        // else {
+        //   // navigation.navigate('Drawer Home');
+        //   setIsLogin(true);
+        // }
+        setIsLogin(true);
 
         // setIsLogin(true);
         // if (storedisAdmin === "true") {
@@ -118,15 +119,15 @@ const Login = () => {
       await SecureStore.setItemAsync('username', username);
       // getStoredCredentials()
       // login()
-      if (email == "admin@test.com") {
-        // navigation.navigate('AdminTab', {
-        //   screen: 'HomeScreen',
-        // });
+      // if (email == "admin@test.com") {
+      //   // navigation.navigate('AdminTab', {
+      //   //   screen: 'HomeScreen',
+      //   // });
 
-      } else {
-        // navigation.navigate('Drawer Home');
-        setIsLogin(true);
-      }
+      // } else {
+      //   // navigation.navigate('Drawer Home');
+      // }
+      setIsLogin(true);
       // navigation.navigate("HomeScreen");
       // alert("test1");
       console.log('Credentials stored successfully');

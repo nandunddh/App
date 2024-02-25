@@ -22,6 +22,7 @@ const App = () => {
 
   useEffect(() => {
     handleupcomingconferencelist()
+    // console.log(isLogin);
   }, [isLogin, isNotification, storedCredentials, ConferenceData, isloading])
 
 
