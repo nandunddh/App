@@ -1,18 +1,31 @@
-import { View, Text, Button, StyleSheet, ScrollView, Dimensions, Image, TouchableOpacity, Linking } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
-import MyContext from './MyContext'
-import { useNavigation } from '@react-navigation/native';
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  Image,
+  TouchableOpacity,
+  Linking,
+  LogBox,
+} from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import MyContext from "./MyContext";
+import { useNavigation } from "@react-navigation/native";
 // Icons
 import { Fontisto } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
-import { DB_URL } from './Components/Constants/Constants';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { DB_URL } from "./Components/Constants/Constants";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Entypo } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { Zocial } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
+
+LogBox.ignoreLogs(['Possible unhandled promise rejection (id: 1): Error: Unable to open URL: mailto:contact@unitedscientificgroup.net']);
 
 const { width } = Dimensions.get("window");
 
@@ -22,10 +35,10 @@ const Home = () => {
   const seenMonths = new Set();
   const navigation = useNavigation();
 
-  useEffect(() => {
-  }, [ConferenceData])
+  useEffect(() => {}, [ConferenceData]);
 
   const handpleUrlPress = ({ conference }) => {
+    console.log("Join Now Pressed");
     const imageUrl = `${DB_URL}uploads/banners/${conference.banner}`;
     const screenname = "Conference screen";
     const url = `${screenname}`;
@@ -51,10 +64,8 @@ const Home = () => {
   };
 
   const handletest = () => {
-    return (
-      alert("Button Pressed!")
-    )
-  }
+    return alert("Button Pressed!");
+  };
 
   const UpComingConferences = ({ conference }) => {
     if (!conference) {
@@ -66,9 +77,14 @@ const Home = () => {
 
       return (
         <View style={styles.notificationcontainer}>
-          <View style={{ flexDirection: "row" }}>
+          <View style={{ flexDirection: "row", flex: 3 }}>
             <View
-              style={{ paddingLeft: 5, paddingRight: 5, textAlign: "left" }}
+              style={{
+                paddingLeft: 5,
+                paddingRight: 5,
+                textAlign: "left",
+                flex: 1,
+              }}
             >
               {conference.logo ? (
                 <Image
@@ -79,34 +95,38 @@ const Home = () => {
                 <Text>No Logo</Text>
               )}
             </View>
-            <Text style={{ fontWeight: "600", fontSize: 17 }}>
-              {conference.name} {"\n"}
-              <View>
-                <Text
-                  style={{ fontWeight: "normal", fontSize: 13, marginTop: 4 }}
-                >
-                  {conference.month} {conference.dates}, {conference.year}
+            <View style={{ flex: 3 }}>
+              <Text style={{ fontWeight: "600", fontSize: 17 }}>
+                {conference.name} {"\n"}
+                <View>
                   <Text
-                    style={{
-                      color: "#f66b10",
-                      fontSize: 15,
-                      fontWeight: "bold",
-                    }}
+                    style={{ fontWeight: "normal", fontSize: 13, marginTop: 4 }}
                   >
-                    {" "}
-                    |{" "}
+                    {conference.month} {conference.dates}, {conference.year}
+                    <Text
+                      style={{
+                        color: "#f66b10",
+                        fontSize: 15,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {" "}
+                      |{" "}
+                    </Text>
                   </Text>
-                  <Text style={{ paddingLeft: 13 }}>{conference.venu}</Text>
-                </Text>
-              </View>
-            </Text>
+                  <Text>{conference.venu}</Text>
+                </View>
+              </Text>
+            </View>
           </View>
           <View
             style={{
               alignItems: "end",
               borderLeftWidth: 1,
               paddingLeft: 5,
-              textAlign: "right",
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center"
             }}
           >
             <Text
@@ -115,13 +135,13 @@ const Home = () => {
                 fontWeight: "bold",
                 color: "#f66b10",
                 fontSize: 14,
-                textAlign: "center",
               }}
             >
-              ${conference.price}
+              From ${conference.price}
             </Text>
-            <TouchableOpacity onPress={() => handpleUrlPress({ conference })}>
-              <Text style={{ fontWeight: "bold", fontSize: 15 }}>Join Now</Text>
+            {/* <TouchableOpacity onPress={() => alert('Button Pressed')}> */}
+            <TouchableOpacity style={{borderWidth: 1, borderRadius: 10}}onPress={() => handpleUrlPress({ conference })}>
+              <Text style={{ fontWeight: "bold", fontSize: 15, paddingHorizontal: 5, paddingVertical: 5 }}>Join Now</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -153,8 +173,7 @@ const Home = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  {ConferenceData[0].month} {ConferenceData[0].year}{" "}
-                  Conferences
+                  {ConferenceData[0].month} {ConferenceData[0].year} Conferences
                 </Text>
                 {/* <TouchableOpacity onPress={() => navigation.navigate("CurrentConferences")}>
                             <Text style={{ textAlign: "right", color: "red" }}> View all</Text>
@@ -252,7 +271,8 @@ const Home = () => {
                                     marginHorizontal: 10,
                                   }}
                                 >
-                                  {conference.month} {conference.dates}, {conference.year}
+                                  {conference.month} {conference.dates},{" "}
+                                  {conference.year}
                                 </Text>
                               </View>
                               <View
@@ -350,10 +370,7 @@ const Home = () => {
             </View>
             <View>
               {ConferenceData.map((conference, index) => (
-                <UpComingConferences
-                  key={index}
-                  conference={conference}
-                />
+                <UpComingConferences key={index} conference={conference} />
               ))}
             </View>
           </View>
@@ -364,46 +381,41 @@ const Home = () => {
               <Text style={styles.header2}>Conferences 2024</Text>
             </View>
             <View style={{ flex: 1 }}>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-              >
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View>
                   <View
                     style={[
                       month == "All"
                         ? {
-                          backgroundColor: "#f66b10",
-                          borderRadius: 10,
-                          borderColor: "#fff",
-                          marginHorizontal: 10,
-                        }
+                            backgroundColor: "#f66b10",
+                            borderRadius: 10,
+                            borderColor: "#fff",
+                            marginHorizontal: 10,
+                          }
                         : {
-                          backgroundColor: "#fff",
-                          borderRadius: 10,
-                          borderColor: "#fff",
-                          marginHorizontal: 10,
-                        },
+                            backgroundColor: "#fff",
+                            borderRadius: 10,
+                            borderColor: "#fff",
+                            marginHorizontal: 10,
+                          },
                     ]}
                   >
-                    <TouchableOpacity
-                      onPress={() => setMonth("All")}
-                    >
+                    <TouchableOpacity onPress={() => setMonth("All")}>
                       <Text
                         style={[
                           month === "All"
                             ? {
-                              margin: 10,
-                              fontSize: 20,
-                              paddingHorizontal: 15,
-                              color: "#fff",
-                            }
+                                margin: 10,
+                                fontSize: 20,
+                                paddingHorizontal: 15,
+                                color: "#fff",
+                              }
                             : {
-                              margin: 10,
-                              fontSize: 20,
-                              paddingHorizontal: 15,
-                              color: "#000",
-                            },
+                                margin: 10,
+                                fontSize: 20,
+                                paddingHorizontal: 15,
+                                color: "#000",
+                              },
                         ]}
                       >
                         All
@@ -421,17 +433,17 @@ const Home = () => {
                           style={[
                             conference.month == month
                               ? {
-                                backgroundColor: "#f66b10",
-                                borderRadius: 10,
-                                borderColor: "#fff",
-                                marginHorizontal: 10,
-                              }
+                                  backgroundColor: "#f66b10",
+                                  borderRadius: 10,
+                                  borderColor: "#fff",
+                                  marginHorizontal: 10,
+                                }
                               : {
-                                backgroundColor: "#fff",
-                                borderRadius: 10,
-                                borderColor: "#fff",
-                                marginHorizontal: 10,
-                              },
+                                  backgroundColor: "#fff",
+                                  borderRadius: 10,
+                                  borderColor: "#fff",
+                                  marginHorizontal: 10,
+                                },
                           ]}
                         >
                           <TouchableOpacity
@@ -441,17 +453,17 @@ const Home = () => {
                               style={[
                                 conference.month === month
                                   ? {
-                                    margin: 10,
-                                    fontSize: 20,
-                                    paddingHorizontal: 15,
-                                    color: "#fff",
-                                  }
+                                      margin: 10,
+                                      fontSize: 20,
+                                      paddingHorizontal: 15,
+                                      color: "#fff",
+                                    }
                                   : {
-                                    margin: 10,
-                                    fontSize: 20,
-                                    paddingHorizontal: 15,
-                                    color: "#000",
-                                  },
+                                      margin: 10,
+                                      fontSize: 20,
+                                      paddingHorizontal: 15,
+                                      color: "#000",
+                                    },
                               ]}
                             >
                               {conference.month}
@@ -469,10 +481,7 @@ const Home = () => {
                     if (month == "All") {
                       if (conference.year === "2024") {
                         return (
-                          <View
-                            style={styles.flatlistcontainer}
-                            key={index}
-                          >
+                          <View style={styles.flatlistcontainer} key={index}>
                             <View
                               style={{
                                 flexDirection: "row",
@@ -594,14 +603,13 @@ const Home = () => {
                           </View>
                         );
                       }
-                    }
-                    else {
-                      if (conference.year == "2024" && conference.month === month) {
+                    } else {
+                      if (
+                        conference.year == "2024" &&
+                        conference.month === month
+                      ) {
                         return (
-                          <View
-                            style={styles.flatlistcontainer}
-                            key={index}
-                          >
+                          <View style={styles.flatlistcontainer} key={index}>
                             <View
                               style={{
                                 flexDirection: "row",
@@ -758,13 +766,12 @@ const Home = () => {
                   <Text style={{ fontWeight: "bold" }}>
                     United Scientific Group (USG)
                   </Text>{" "}
-                  is a scientific event organizer and publisher founded in
-                  2014 in San Jose, CA. In 2016, it relocated to Plano,
-                  TX. USG is known for organizing national and
-                  international scientific conferences with participant
-                  numbers ranging from 50 to 350. It holds tax-exempt
-                  status under Section 501c3 of the Internal Revenue
-                  Service in the United States.
+                  is a scientific event organizer and publisher founded in 2014
+                  in San Jose, CA. In 2016, it relocated to Plano, TX. USG is
+                  known for organizing national and international scientific
+                  conferences with participant numbers ranging from 50 to 350.
+                  It holds tax-exempt status under Section 501c3 of the Internal
+                  Revenue Service in the United States.
                   {"\n"}
                 </Text>
                 <Text
@@ -775,11 +782,11 @@ const Home = () => {
                   }}
                 >
                   USG's primary goal is to establish scientific networking
-                  platforms through conferences. These platforms aim to
-                  bridge the gap between research and business,
-                  facilitating the translation of scientific discoveries
-                  and innovative ideas into practical solutions and
-                  products for the betterment of humanity.
+                  platforms through conferences. These platforms aim to bridge
+                  the gap between research and business, facilitating the
+                  translation of scientific discoveries and innovative ideas
+                  into practical solutions and products for the betterment of
+                  humanity.
                   {"\n"}
                 </Text>
                 <Text
@@ -789,11 +796,11 @@ const Home = () => {
                     lineHeight: 25,
                   }}
                 >
-                  USG is governed by a board of directors comprising
-                  renowned scientists. Their dedication lies in supporting
-                  the scientific community by providing exceptional
-                  services in organizing scientific conferences and open
-                  access scientific publications.
+                  USG is governed by a board of directors comprising renowned
+                  scientists. Their dedication lies in supporting the scientific
+                  community by providing exceptional services in organizing
+                  scientific conferences and open access scientific
+                  publications.
                 </Text>
               </View>
             </View>
@@ -1015,11 +1022,7 @@ const Home = () => {
                     justifyContent: "flex-end",
                   }}
                 >
-                  <SimpleLineIcons
-                    name="globe-alt"
-                    size={45}
-                    color="white"
-                  />
+                  <SimpleLineIcons name="globe-alt" size={45} color="white" />
                   <View style={{ flexDirection: "column" }}>
                     <Text
                       style={{
@@ -1137,9 +1140,7 @@ const Home = () => {
                     size={45}
                     color="white"
                     onPress={() => {
-                      Linking.openURL(
-                        "https://unitedscientificgroup.org"
-                      );
+                      Linking.openURL("https://unitedscientificgroup.org");
                     }}
                   />
                 </View>
@@ -1149,8 +1150,8 @@ const Home = () => {
         </View>
       </ScrollView>
     </SafeAreaProvider>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   center: {
@@ -1172,6 +1173,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderRadius: 25,
     justifyContent: "space-between",
+    flex: 1,
   },
   header2: {
     fontSize: 20,
@@ -1189,5 +1191,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home
-
+export default Home;
