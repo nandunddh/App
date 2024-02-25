@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 
 import { DrawerItem, createDrawerNavigator } from "@react-navigation/drawer";
 
@@ -16,6 +16,8 @@ const Drawer = createDrawerNavigator();
 
 const DrawerNav = () => {
   const {isLogin} = useContext(MyContext); 
+  useEffect(() => { 
+  }, [isLogin]);
   return (
     <Drawer.Navigator 
     drawerContent={() => <DrawerScreen />} 

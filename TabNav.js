@@ -15,17 +15,17 @@ import MyContext from "./MyContext";
 const Tab = createBottomTabNavigator();
 
 const UserTabs = () => {
+  const {storedCredentials} = useContext(MyContext);
   const user_name = "Nandu";
-  
   
   const CustomDrawerHeader = ({ navigation }) => {
     const { isDrawerClicked, setIsDrawerClicked } = useContext(MyContext);
     const handlePress = () => {
       setIsDrawerClicked(true);
-      return(
-        navigation.toggleDrawer()
-      )
-    }
+      console.log("button pressed");
+      // return navigation.dispatch(DrawerActions.openDrawer());
+      navigation.toggleDrawer()
+    };
     return (
       <View style={{ marginLeft: 20 }}>
         <TouchableOpacity onPress={handlePress}>
@@ -51,7 +51,11 @@ const UserTabs = () => {
           </View> */}
           <View>
             <Text style={{ color: "#fff" }}> Hi Welcome </Text>
+            {storedCredentials ? 
+            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}> {storedCredentials.username}</Text>
+            :
             <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}> {user_name}</Text>
+          }
           </View>
         </View>
       </View >
@@ -80,12 +84,11 @@ const UserTabs = () => {
       <Tab.Screen name="User Home Tab" component={MainStackNavigator}
         options={({ navigation }) => ({
           headerShadowVisible: false,
-          headerShown: true,
           headerTitleStyle: {
             color: "#fff",
           },
+          headerShown: false,
           headerLeft: () => <CustomDrawerHeader navigation={navigation} />,
-          headerShown: true,
           headerTitle: () => <HeaderTitle />,
           tabBarLabel: "",
           tabBarIcon: () => (

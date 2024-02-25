@@ -28,9 +28,10 @@ const Login = () => {
   const { isLogin, setIsLogin, setIsAdmin, isAdmin, setStoredCredentials, storedCredentials, user_email, setUser_email, user_name, setUser_name } = useContext(MyContext)
 
   useEffect(() => {
-    console.log(Platform.OS);
+    // console.log(Platform.OS);
     getStoredCredentials();
-    console.log("isLogin from login === ", isAdmin)
+    // console.log("isLogin from login === ", isAdmin)
+    // console.log("isLogin == ", isLogin)
 
   }, [isLogin, isAdmin, email, storedCredentials, user_name])
 
@@ -60,7 +61,7 @@ const Login = () => {
         // {storeCredentials && 
         // navigation.navigate("") }
 
-        console.log('Stored Credentials Login Screen:', { email: storedEmail, password: storedPassword });
+        // console.log('Stored Credentials Login Screen:', { email: storedEmail, password: storedPassword });
       } else {
         console.log('No credentials found.');
       }
@@ -125,11 +126,12 @@ const Login = () => {
 
       } else {
         // navigation.navigate('Drawer Home');
+
         setIsLogin(true);
+        console.log('Credentials stored successfully');
       }
       // navigation.navigate("HomeScreen");
       // alert("test1");
-      console.log('Credentials stored successfully');
     } catch (error) {
       console.error('Error storing credentials:', error);
     }
@@ -140,10 +142,11 @@ const Login = () => {
     // const abortController = new AbortController();
     if (email.length == 0) {
       alert("Type your email");
-      email1.focus()
+      email1.current.focus()
     }
     else if (password.length == 0) {
       alert("Type your password");
+      password1.current.focus()
     }
     else {
       try {

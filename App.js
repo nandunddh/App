@@ -8,10 +8,11 @@ import BottomTab from "./TabNav";
 import { useEffect, useRef, useState } from "react";
 import { DB_URL } from "./Components/Constants/Constants";
 import MyContext from "./MyContext";
+import ExpoStatusBar from "expo-status-bar/build/ExpoStatusBar";
 
 
 const App = () => {
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isNotification, setIsNotification] = useState(false);
   const [storedCredentials, setStoredCredentials] = useState(null);
@@ -22,6 +23,7 @@ const App = () => {
 
   useEffect(() => {
     handleupcomingconferencelist()
+    // console.log("storedCredentials App.js == ", storedCredentials);
   }, [isLogin, isNotification, storedCredentials, ConferenceData, isloading])
 
 
@@ -62,7 +64,7 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <StatusBar backgroundColor="#ffffff" />
+      <StatusBar style="light" />
       <MyContext.Provider value={{
         isNotification, setIsNotification, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin, ConferenceData, setConferenceData, user_name, setUser_name, isloading, setIsloading, isDrawerClicked, setIsDrawerClicked
       }}>
