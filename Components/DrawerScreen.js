@@ -5,17 +5,55 @@ import {
   Image,
   ImageBackground,
 } from "react-native";
-import React, { useContext } from "react";
+import * as SecureStore from "expo-secure-store";
+import React, { useContext, useEffect } from "react";
 import MyContext from "../MyContext";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialsCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import Octicons from "react-native-vector-icons/Octicons";
+import Animated from "react-native-reanimated";
 
 const DrawerScreen = () => {
-  const user_name = "Nandu";
+  // const user_name = "Nandu";
   const user_email = "nandu@test.com";
-  const { isDrawerClicked, setIsDrawerClicked } = useContext(MyContext);
+  const {
+    isDrawerClicked,
+    setIsDrawerClicked,
+    setStoredCredentials,
+    storedCredentials,
+    setIsLogin,
+    isLogin,
+    user_name,
+  } = useContext(MyContext);
+
+  useEffect(() => {
+    console.log("logout", isLogin);
+  }, [isLogin]);
+
+  const clearCredentials = async () => {
+    try {
+      await SecureStore.deleteItemAsync("email");
+      await SecureStore.deleteItemAsync("password");
+      await SecureStore.deleteItemAsync("username");
+      // setfirst(await SecureStore.getItemAsync('username'));
+      await setStoredCredentials(null); // Clear stored credentials in state
+      // navigation.reset({
+      //   index: 0,
+      //   routes: [{ name: 'Sign_Up', screen: 'Sign_Up' }],
+      // });
+      await setIsLogin(false);
+      alert("Sign Out Success");
+      // navigation.navigate('Sign_Up')
+      console.log(
+        "Credentials cleared (logged out) successfully.",
+        storedCredentials
+      );
+      // console.log('Credentials cleared (logged out) successfully.');
+    } catch (error) {
+      console.error("Error clearing credentials:", error);
+    }
+  };
 
   return (
     // <ImageBackground
@@ -23,62 +61,143 @@ const DrawerScreen = () => {
     //   resizeMode="center"
     //   style={{ flex: 1, paddingTop: 50 }}
     // >
-    <View style={{paddingTop: 50}}>
-      {isDrawerClicked && (
-        <View >
-          <View style={{ flexDirection: "row", borderBottomWidth: 2, borderBottomColor: "orange", paddingBottom: 20 }}>
-            <View style={{marginLeft: 10}}>
-              <Image
-                source={require("../assets/nandu.png")}
-                style={{ borderRadius: 25, width: 80, height: 80 }}
-              />
+    <Animated.ScrollView>
+      <View style={{ paddingTop: 50 }}>
+        {isDrawerClicked && (
+          <View>
+            <View
+              style={{
+                flexDirection: "row",
+                borderBottomWidth: 2,
+                borderBottomColor: "orange",
+                paddingBottom: 20,
+              }}
+            >
+              <View style={{ marginLeft: 10 }}>
+                <Image
+                  source={require("../assets/nandu.png")}
+                  style={{ borderRadius: 25, width: 80, height: 80 }}
+                />
+              </View>
+              <View style={{ justifyContent: "center", paddingLeft: 10 }}>
+                <Text
+                  style={{ fontWeight: "bold", fontSize: 20, paddingTop: 20 }}
+                >
+                  {" "}
+                  {user_name}
+                </Text>
+                <Text style={{ fontSize: 15, paddingVertical: 10 }}>
+                  {" "}
+                  {user_email}
+                </Text>
+              </View>
             </View>
-            <View style={{ justifyContent: "center", paddingLeft: 10 }}>
-              <Text style={{ fontWeight: "bold", fontSize: 20, paddingTop: 20 }}>
-                {" "}
-                {user_name}
-              </Text>
-              <Text style={{ fontSize: 15, paddingVertical: 10 }}>
-                {" "}
-                {user_email}
-              </Text>
+            <View style={{ marginVertical: 30 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingHorizontal: 20,
+                  backgroundColor: "#eee",
+                  paddingHorizontal: 5,
+                  margin: 10,
+                  borderRadius: 15,
+                  paddingVertical: 10,
+                }}
+              >
+                <MaterialsCommunityIcons
+                  name="account-outline"
+                  size={35}
+                  style={{ flex: 1 }}
+                />
+                <Text style={{ flex: 4 }}>Profile</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  margin: 10,
+                  paddingHorizontal: 5,
+                  borderRadius: 15,
+                  paddingVertical: 10,
+                  paddingLeft: 20,
+                  backgroundColor: "#eee",
+                }}
+              >
+                <MaterialsCommunityIcons
+                  name="account-edit-outline"
+                  size={35}
+                  style={{ flex: 1 }}
+                />
+                <Text style={{ flex: 4 }}>Edit Profile</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  margin: 10,
+                  paddingHorizontal: 5,
+                  borderRadius: 15,
+                  paddingVertical: 10,
+                  paddingLeft: 20,
+                  backgroundColor: "#eee",
+                }}
+              >
+                <Fontisto name="email" size={30} style={{ flex: 1 }} />
+                <Text style={{ flex: 4 }}>Contact Us</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  margin: 10,
+                  paddingHorizontal: 5,
+                  borderRadius: 15,
+                  paddingVertical: 10,
+                  paddingLeft: 20,
+                  backgroundColor: "#eee",
+                }}
+              >
+                <Ionicons
+                  name="help-circle-outline"
+                  size={35}
+                  style={{ flex: 1 }}
+                />
+                <Text style={{ flex: 4 }}>Help & FAQs</Text>
+              </View>
+              <TouchableOpacity onPress={() => clearCredentials()}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    margin: 10,
+                    paddingHorizontal: 5,
+                    borderRadius: 15,
+                    paddingVertical: 10,
+                    paddingLeft: 20,
+                    backgroundColor: "#eee",
+                  }}
+                >
+                  <Octicons name="sign-out" size={35} style={{ flex: 1 }} />
+                  <Text style={{ flex: 4 }}>Sign Out</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                marginBottom: 50,
+                paddingHorizontal: 10,
+              }}
+            >
+              <Text>Privacy Policy | Terms & Conditions</Text>
+              <Text>Version 1.0.0</Text>
             </View>
           </View>
-          <View style={{ marginVertical: 30,}}>
-            <View style={{flexDirection: "row", alignItems: "center", paddingHorizontal: 20, backgroundColor: "#eee", paddingHorizontal: 5, margin: 10, borderRadius: 15, paddingVertical : 10 }}>
-              <MaterialsCommunityIcons name="account-outline" size={35} style={{flex: 1}}/>
-              <Text style={{flex: 4}}>Profile</Text>
-            </View>
-            <View style={{flexDirection: "row", alignItems: "center", margin: 10, paddingHorizontal:5, borderRadius: 15, paddingVertical: 10, paddingLeft: 20, backgroundColor: "#eee"}}>
-              <MaterialsCommunityIcons name="account-edit-outline" size={35} style={{flex: 1}}/>
-              <Text style={{flex: 4}}>Edit Profile</Text>
-            </View>
-            <View style={{flexDirection: "row", alignItems: "center", margin: 10, paddingHorizontal:5, borderRadius: 15, paddingVertical: 10, paddingLeft: 20, backgroundColor: "#eee"}}>
-              <Fontisto name="email" size={30} style={{flex: 1}}/>
-              <Text style={{flex: 4}}>Contact Us</Text>
-            </View>
-            <View style={{flexDirection: "row", alignItems: "center", margin: 10, paddingHorizontal:5, borderRadius: 15, paddingVertical: 10, paddingLeft: 20, backgroundColor: "#eee"}}>
-            <Ionicons name="help-circle-outline" size={35} style={{flex: 1}}/>
-              <Text style={{flex: 4}}>Help & FAQs</Text>
-            </View>
-            <View style={{flexDirection: "row", alignItems: "center", margin: 10, paddingHorizontal:5, borderRadius: 15, paddingVertical: 10, paddingLeft: 20, backgroundColor: "#eee"}}>
-            <Octicons name="sign-out" size={35} style={{flex: 1}}/>
-              <Text style={{flex: 4}}>Sign Out</Text>
-            </View>
-          </View>
-          <View
-            style={{ 
-              marginBottom: 50, paddingHorizontal: 10
-            }}
-          >
-            <Text>Privacy Policy | Terms & Conditions</Text>
-            <Text>Version 1.0.0</Text>
-          </View>
-        </View>
-      )}
-    {/* </ImageBackground> */}
-    </View>
+        )}
+        {/* </ImageBackground> */}
+      </View>
+    </Animated.ScrollView>
   );
 };
 
-export default DrawerScreen
+export default DrawerScreen;

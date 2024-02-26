@@ -3,6 +3,7 @@ import React, { useContext, useEffect } from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 import MyContext from '../MyContext';
+import Animated from 'react-native-reanimated';
 
 const Notification = ({ route }) => {
   useEffect(() => {
@@ -93,7 +94,7 @@ const Notification = ({ route }) => {
   return (
     <SafeAreaProvider>
       {isNotification ?
-        <ScrollView>
+        <Animated.ScrollView>
           <View>
             {notificationDesc && notificationDesc.slice(0)
               .reverse().map((notificationDesc, index) => {
@@ -115,7 +116,7 @@ const Notification = ({ route }) => {
                 )
               })}
           </View>
-        </ScrollView>
+        </Animated.ScrollView>
         :
         <View style={styles.container}>
           <View style={styles.imageConatiner}>

@@ -11,6 +11,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import { DB_URL } from '../Constants/Constants';
+import Animated from 'react-native-reanimated';
 
 const SignUp = ({ navigation }) => {
   const [hidePass, setHidePass] = useState(true);
@@ -110,7 +111,7 @@ const SignUp = ({ navigation }) => {
 
   return (
     <SafeAreaProvider>
-      <ScrollView>
+      <Animated.ScrollView>
         <View style={{ paddingHorizontal: 20, flex: 1, marginBottom: 20}}>
           <Text style={{ marginVertical: 20 }}>Create account and enjoy all services</Text>
           <View style={styles.inputbox}>
@@ -182,7 +183,7 @@ const SignUp = ({ navigation }) => {
               /> */}
           </View>
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
     </SafeAreaProvider>
   )
 }

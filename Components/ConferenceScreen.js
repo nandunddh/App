@@ -12,6 +12,7 @@ import { ScrollView } from 'react-native';
 import MapView from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
 import { Linking } from 'react-native';
+import Animated from 'react-native-reanimated';
 const { height: screenHeight } = Dimensions.get('window');
 
 LogBox.ignoreLogs(['Unsupported dashed / dotted border style']);
@@ -36,8 +37,7 @@ const ConferenceScreen = ({ route, navigation }) => {
   const [url, setUrl] = useState(route.params.url);
 
   return (
-    <SafeAreaProvider >
-      <ScrollView>
+      <Animated.ScrollView>
           <>
             <View>
               <View>
@@ -141,8 +141,7 @@ const ConferenceScreen = ({ route, navigation }) => {
               </View>
             </View>
           </>
-      </ScrollView>
-    </SafeAreaProvider>
+      </Animated.ScrollView>
   )
 }
 
