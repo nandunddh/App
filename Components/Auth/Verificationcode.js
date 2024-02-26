@@ -44,6 +44,7 @@ const Verificationcode = () => {
               navigation.navigate('New_Password', { email });
             } else {
               alert(Response[0].Password);
+              navigation.navigate('Login Screen');
             }
           })
           .catch((error) => {

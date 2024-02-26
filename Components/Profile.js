@@ -18,24 +18,24 @@ const Profile = () => {
 
   const clearCredentials = async () => {
     try {
-        await SecureStore.deleteItemAsync("email");
-        await SecureStore.deleteItemAsync("password");
-        await SecureStore.deleteItemAsync("username");
-        await setStoredCredentials(null); // Clear stored credentials in state
-        console.log(
-            "Before credentials cleared (logged out) successfully.",
-            storedCredentials
-        );
-        await setIsLogin(false);
-        alert("Sign Out Success");
-        console.log(
-            "Credentials cleared (logged out) successfully.",
-            storedCredentials // Here you're accessing storedCredentials which might be null after clearing
-        );
+      await SecureStore.deleteItemAsync("email");
+      await SecureStore.deleteItemAsync("password");
+      await SecureStore.deleteItemAsync("username");
+      await setStoredCredentials(null); // Clear stored credentials in state
+      console.log(
+        "Before credentials cleared (logged out) successfully.",
+        storedCredentials
+      );
+      await setIsLogin(false);
+      alert("Sign Out Success");
+      console.log(
+        "Credentials cleared (logged out) successfully.",
+        storedCredentials // Here you're accessing storedCredentials which might be null after clearing
+      );
     } catch (error) {
-        console.error("Error clearing credentials:", error);
+      console.error("Error clearing credentials:", error);
     }
-};
+  };
 
 
   return (

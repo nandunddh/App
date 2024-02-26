@@ -35,21 +35,21 @@ const DrawerScreen = () => {
     try {
       await SecureStore.deleteItemAsync("email");
       await SecureStore.deleteItemAsync("password");
-      await SecureStore.deleteItemAsync("username");
-      // setfirst(await SecureStore.getItemAsync('username'));
-      await setStoredCredentials(null); // Clear stored credentials in state
-      // navigation.reset({
-      //   index: 0,
-      //   routes: [{ name: 'Sign_Up', screen: 'Sign_Up' }],
-      // });
-      await setIsLogin(false);
-      alert("Sign Out Success");
-      // navigation.navigate('Sign_Up')
+      if (storedCredentials.username !== undefined) {
+
+        await SecureStore.deleteItemAsync("username");
+      }
+      await setStoredCredentials(null) // Clear stored credentials in state
       console.log(
-        "Credentials cleared (logged out) successfully.",
+        "Before credentials cleared (logged out) successfully.",
         storedCredentials
       );
-      // console.log('Credentials cleared (logged out) successfully.');
+      await setIsLogin(false)
+      alert("Sign Out Success");
+      console.log(
+        "Credentials cleared (logged out) successfully.",
+        storedCredentials // Here you're accessing storedCredentials which might be null after clearing
+      );
     } catch (error) {
       console.error("Error clearing credentials:", error);
     }

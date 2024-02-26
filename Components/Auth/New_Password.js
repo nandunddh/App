@@ -16,8 +16,10 @@ const New_Password = () => {
 
 
   const generateOTP = (params) => {
+    try {
 
-    const otpbody = `<!DOCTYPE html>
+
+      const otpbody = `<!DOCTYPE html>
     <html lang="en">
     <head>
       <meta charset="UTF-8">
@@ -60,27 +62,32 @@ const New_Password = () => {
     </body>
     </html>`;
 
-    Email.send({
-      Username: "nandugoud113@gmail.com",
-      Password: "AC781B881AC3B360ACFFC638E3AC951181F8",
-      // SecureToken: "95009f41-b2ce-4a70-947f-62c2449e5f69",
-      Host: "smtp.elasticemail.com",
-      To: 'nandu-pc2@outlook.com',
-      From: "nandugoud113@gmail.com",
-      Subject: "Password Reset | OTP Verification",
-      Body: otpbody,
-      Port: 2525,
-      tracking_settings: {
-        subscription_tracking: {
-          enable: false
+      Email.send({
+        Username: "nandugoud113@gmail.com",
+        Password: "AC781B881AC3B360ACFFC638E3AC951181F8",
+        // SecureToken: "95009f41-b2ce-4a70-947f-62c2449e5f69",
+        Host: "smtp.elasticemail.com",
+        To: 'nandu-pc2@outlook.com',
+        From: "nandugoud113@gmail.com",
+        Subject: "Password Reset | OTP Verification",
+        Body: otpbody,
+        Port: 2525,
+        tracking_settings: {
+          subscription_tracking: {
+            enable: false
+          }
         }
-      }
-    }).then(
-      alert("Password Reset Success"),
-      // console.log("params", params)
-    ).catch(
-      console.log("error in smtp")
-    )
+      }).then(
+        alert("Password Reset Success"),
+        // console.log("params", params)
+      ).catch(
+        console.log("error in smtp")
+      )
+      return true;
+    } catch (error) {
+      alert("Error", error);
+      return false;
+    }
 
 
     // const credentials = {
@@ -126,10 +133,11 @@ const New_Password = () => {
             if (Response[0].Message_status == "Success") {
               // alert(Response[0].Message);
               generateOTP()
-              navigation.navigate('Sign_in');
+              navigation.navigate('Login Screen');
             }
             else {
               alert(Response[0].Message);
+              navigation.navigate('Login Screen');
             }
           })
           .catch((error) => {

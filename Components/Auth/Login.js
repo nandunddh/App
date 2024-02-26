@@ -29,10 +29,13 @@ const Login = () => {
   const { isLogin, setIsLogin, setIsAdmin, isAdmin, setStoredCredentials, storedCredentials, user_email, setUser_email, user_name, setUser_name } = useContext(MyContext)
 
   useEffect(() => {
-    // console.log(Platform.OS);
-    getStoredCredentials();
-    console.log("isLogin from login === ", SecureStore.getItemAsync('username'))
-  }, [isLogin, isAdmin, email, storedCredentials, user_name])
+    if (user_name !== undefined) {
+      console.log("user_name = ", user_name);
+      storeCredentials()
+
+      getStoredCredentials()
+    }
+  }, [isLogin, isAdmin, email, storedCredentials, user_name]);
 
   const getStoredCredentials = async () => {
     try {
@@ -61,44 +64,6 @@ const Login = () => {
     return false;
   }
 
-  // async function handleSignInWithGoogle() {
-  //   const user = await AsyncStorage.getItem('@user')
-  //   if (!user) {
-  //     if (response?.type === 'success') {
-  //       await getUserInfo(response.authentication.accessToken);
-  //       console.log("!user = ", userInfo)
-  //       // setIsLogin(true);
-  //       // alert('Login Success!');
-  //     }
-  //   } else {
-  //     setuserInfo(JSON.parse(user));
-  //     login()
-  //     // setIsLogin(true)
-  //     // alert('Login Success!')
-  //   }
-  // }
-
-  // const getUserInfo = async (token) => {
-  //   if (!token) return
-  //   try {
-  //     const response = await fetch(
-  //       'https://www.googleapis.com/userinfo/v2/me',
-  //       // 'https://accounts.google.com/o/oauth2/auth',
-  //       {
-  //         headers: { Authorization: `Bearer ${token}` },
-  //       },
-  //     )
-
-  //     const user = await response.json()
-  //     await AsyncStorage.setItem('@user', JSON.stringify(user))
-  //     setuserInfo(user)
-  //     login()
-  //     alert('Login Success!');
-  //   } catch (error) { }
-  // }
-
-  // const insets = useSafeAreaInsets()
-
   // Function to store credentials
   const storeCredentials = async () => {
     try {
@@ -110,8 +75,8 @@ const Login = () => {
       await SecureStore.setItemAsync('username', username);
 
       await setStoredCredentials({ email: emailString, password: passwordString, username: username });
-      await getStoredCredentials();
-       console.log('Stored Credentials Login Screen Stored function', username);
+      // await getStoredCredentials();
+      console.log('Stored Credentials Login Screen Stored function', username);
     } catch (error) {
       console.error('Error storing credentials:', error);
     }
@@ -120,86 +85,56 @@ const Login = () => {
 
 
   const handleLogin = async () => {
-    // const abortController = new AbortController();
-    if (email.length == 0) {
+    if (email.length === 0) {
       alert("Type your email");
-      email1.current.focus()
-    }
-    else if (password.length == 0) {
+      email1.current.focus();
+      return;
+    } else if (password.length === 0) {
       alert("Type your password");
-      password1.current.focus()
+      password1.current.focus();
+      return;
     }
-    else {
-      try {
-        var APIURL = `${DB_URL}login.php`;
 
-        var headers = {
+    try {
+        const APIURL = `${DB_URL}login.php`;
+        const headers = {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         };
 
-        var Data = {
+        const Data = {
           Email: email,
-          // isAdmin: isAdmin,
           Password: password
         };
 
-        fetch(APIURL, {
+        const response = await fetch(APIURL, {
           method: 'POST',
           headers: headers,
           body: JSON.stringify(Data)
-        })
-          .then((Response) => Response.json())
-          .then(async (Response) => {
-            // console.log("Login ===", Response);
-            if (Response[0].Message == "Success") {
-              // console.log("Login", Response)
-              console.log("Before Saving user_name =============", user_name);
-              await setUser_name(Response[0].User_Name)
-              console.log("Data user name", user_name);
-              await storeCredentials();
-              // alert(Response[0].User_Name);
-            }
-            else {
-              alert(Response[0].Message);
-            }
-            if (Response[0].Message == "No account yet") {
-              // console.log("Login true =============")
-              // email1.clear();
-              // password1.clear();
+        });
 
-              // storeCredentials()
+        const responseData = await response.json();
+
+        if (responseData[0].Message === "Success") {
+            await setUser_name(responseData[0].User_Name);
+            if (responseData[0].IsAdmin == true) {
+                await setIsLogin(true);
+                navigation.navigate("Admin Tab")
+                // await storeCredentials();
             }
-            // console.log("Data", Data);
+            alert(responseData[0].User_Name);
             console.log("Data user name", user_name);
-          })
-          .catch((error) => {
-            console.error("ERROR FOUND" + error);
-          })
-      } catch (error) {
-        alert("Fetch Error!")
-      }
-      return false;
-    }
-    // else {
-    //   if (email === "nandu@test.com") {
-    //     // navigation.navigate('HomeScreen');
-    //     storeCredentials()
-    //     navigation.navigate('UserTab', {
-    //       screen: 'HomeScreen',
-    //     });
-    //   }
-    //   else if (email === "admin@test.com") {
-    //     storeCredentials()
-    //     navigation.navigate('AdminTab', {
-    //       screen: 'HomeScreen',
-    //     });
-    //   }
-    // }
-    console.log("input email = ", email);
-    console.log("input password = ", password);
+        } else {
+            alert(responseData[0].Message);
+        }
 
-  }
+        console.log("Data user name = ", user_name);
+    } catch (error) {
+        console.error("ERROR FOUND", error);
+        alert("Fetch Error!");
+    }
+}
+
 
   return (
     <SafeAreaProvider>
