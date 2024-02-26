@@ -1,14 +1,13 @@
 import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { StackNav } from "./StackNav";
+import { StyleSheet} from "react-native";
 import DrawerNav from "./DrawerNav";
-import BottomTab from "./TabNav";
 import { useEffect, useRef, useState } from "react";
 import { DB_URL } from "./Components/Constants/Constants";
 import MyContext from "./MyContext";
 import ExpoStatusBar from "expo-status-bar/build/ExpoStatusBar";
+import * as SecureStore from 'expo-secure-store';
 
 
 const App = () => {
@@ -21,11 +20,19 @@ const App = () => {
   const [isloading, setIsloading] = useState(false);
   const [isDrawerClicked, setIsDrawerClicked] = useState(false);
 
+  // notification //
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
+  // ENd //
+
 
   useEffect(() => {
     handleupcomingconferencelist();
-    // console.log(storedCredentials);
   }, [isLogin, isNotification, storedCredentials, ConferenceData, isloading]);
+
 
   const handleupcomingconferencelist = async () => {
     try {

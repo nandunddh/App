@@ -39,20 +39,10 @@ const Login = () => {
       const storedEmail = await SecureStore.getItemAsync('email');
       const storedPassword = await SecureStore.getItemAsync('password');
       const storedUsername = await SecureStore.getItemAsync('username');
-      if (storedEmail && storedPassword && storedUsername) {
+      if (storedEmail && storedPassword) {
         // alert(username + " username");
         await setStoredCredentials({ email: storedEmail, password: storedPassword, username: storedUsername });
-        // if (storedEmail === "admin@test.com") {
-        //   // navigation.navigate('HomeScreen');
-        //   // navigation.navigate('AdminTab', {
-        //   //   screen: 'HomeScreen',
-        //   // });
-        // }
-        // else {
-        //   // navigation.navigate('Drawer Home');
-        //   setIsLogin(true);
-        // }
-        await setIsLogin(true);
+        await setIsLogin(true)
 
         // setIsLogin(true);
         // if (storedisAdmin === "true") {
@@ -120,20 +110,8 @@ const Login = () => {
       await SecureStore.setItemAsync('username', username);
 
       await setStoredCredentials({ email: emailString, password: passwordString, username: username });
-      getStoredCredentials()
-      // login()
-      // if (email == "admin@test.com") {
-      //   // navigation.navigate('AdminTab', {
-      //   //   screen: 'HomeScreen',
-      //   // });
-
-      // } else {
-      //   // navigation.navigate('Drawer Home');
-      // }
-      // await setIsLogin(true);
-       console.log('Stored Credentials Login Screen Stored function', storedCredentials);
-      // navigation.navigate("HomeScreen");
-      // alert("test1");
+      await getStoredCredentials();
+       console.log('Stored Credentials Login Screen Stored function', username);
     } catch (error) {
       console.error('Error storing credentials:', error);
     }
@@ -153,7 +131,6 @@ const Login = () => {
     }
     else {
       try {
-        // var APIURL = `http://localhost:8081/SERVER(backend)/login.php`;
         var APIURL = `${DB_URL}login.php`;
 
         var headers = {
@@ -177,10 +154,10 @@ const Login = () => {
             // console.log("Login ===", Response);
             if (Response[0].Message == "Success") {
               // console.log("Login", Response)
-              console.log("Login true =============", user_name);
+              console.log("Before Saving user_name =============", user_name);
               await setUser_name(Response[0].User_Name)
               console.log("Data user name", user_name);
-              await storeCredentials()
+              await storeCredentials();
               // alert(Response[0].User_Name);
             }
             else {
@@ -193,7 +170,7 @@ const Login = () => {
 
               // storeCredentials()
             }
-            console.log("Data", Data);
+            // console.log("Data", Data);
             console.log("Data user name", user_name);
           })
           .catch((error) => {

@@ -15,23 +15,27 @@ import MyContext from "./MyContext";
 const Drawer = createDrawerNavigator();
 
 const DrawerNav = () => {
-  const {isLogin} = useContext(MyContext); 
-  useEffect(() => { 
+  const { isLogin } = useContext(MyContext);
+  useEffect(() => {
   }, [isLogin]);
-  return (
-    <Drawer.Navigator 
-    drawerContent={() => <DrawerScreen />} 
-    >
-      {
-        isLogin ? 
 
-        <Drawer.Screen name="Drawer Home " component={UserTabs} options={{
-          headerShown : false, headerTitle: "Home"
-        }}/>
-        :
-        <Drawer.Screen name="Profile" component={AuthStackNavigator}  options={{
-          headerShown : false, headerTitle: "Home"
-        }}/>
+  const CustomDrawerContent = () => {
+    return isLogin ? <DrawerScreen /> : null;
+  };
+  
+  return (
+    <Drawer.Navigator
+    drawerContent={CustomDrawerContent} >
+      {
+        isLogin ?
+
+          <Drawer.Screen name="Drawer Home " component={UserTabs} options={{
+            headerShown: false, headerTitle: "Home"
+          }} />
+          :
+          <Drawer.Screen name="Profile" component={AuthStackNavigator} options={{
+            headerShown: false, headerTitle: "Home"
+          }} />
       }
     </Drawer.Navigator>
   );

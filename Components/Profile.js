@@ -7,6 +7,7 @@ import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import MyContext from '../MyContext';
 import Animated from 'react-native-reanimated';
+import * as SecureStore from 'expo-secure-store';
 
 const Profile = () => {
   const { user_name } = useContext(MyContext);
@@ -14,6 +15,28 @@ const Profile = () => {
   const { isLogin, setIsLogin, isAdmin, setIsAdmin, setStoredCredentials, storedCredentials } = useContext(MyContext);
 
   const notification_image = require("../assets/emptyNotification.jpg");
+
+  const clearCredentials = async () => {
+    try {
+        await SecureStore.deleteItemAsync("email");
+        await SecureStore.deleteItemAsync("password");
+        await SecureStore.deleteItemAsync("username");
+        await setStoredCredentials(null); // Clear stored credentials in state
+        console.log(
+            "Before credentials cleared (logged out) successfully.",
+            storedCredentials
+        );
+        await setIsLogin(false);
+        alert("Sign Out Success");
+        console.log(
+            "Credentials cleared (logged out) successfully.",
+            storedCredentials // Here you're accessing storedCredentials which might be null after clearing
+        );
+    } catch (error) {
+        console.error("Error clearing credentials:", error);
+    }
+};
+
 
   return (
 
@@ -74,6 +97,9 @@ const Profile = () => {
             <View style={{ marginTop: 25, marginBottom: 40 }}>
               <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 22 }} onPress={() => navigation.navigate("Edit_Profile")}>
                 <Text style={{ color: "#fff", textAlign: "center", fontSize: 20 }}> Edit Details </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 22 }} onPress={() => clearCredentials()}>
+                <Text style={{ color: "#fff", textAlign: "center", fontSize: 20 }}> Log out </Text>
               </TouchableOpacity>
               {/* <Button title='SIGN IN' color="#000" /> */}
             </View>

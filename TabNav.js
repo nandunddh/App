@@ -1,67 +1,17 @@
-import React, { useContext } from "react";
+import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MainStackNavigator } from "./StackNav";
 import Notification from "./Components/Notification";
-import About from "./About";
 import Profile from "./Components/Profile";
 import CurrentConferences from "./Components/CurrentConferences";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import MyContext from "./MyContext";
-import AddNotification from "./Components/Constants/AddNotification";
+import AddNotification from "./Components/AddNotification";
 
 const Tab = createBottomTabNavigator();
 
 const UserTabs = () => {
-  const {storedCredentials} = useContext(MyContext);
-  const user_name = "Nandu";
-  
-  const CustomDrawerHeader = ({ navigation }) => {
-    const { isDrawerClicked, setIsDrawerClicked } = useContext(MyContext);
-    const handlePress = () => {
-      setIsDrawerClicked(true);
-      console.log("button pressed");
-      // return navigation.dispatch(DrawerActions.openDrawer());
-      navigation.toggleDrawer()
-    };
-    return (
-      <View style={{ marginLeft: 20 }}>
-        <TouchableOpacity onPress={handlePress}>
-          {/* <Image
-            source={require("./assets/nandu.png")}
-            style={{ borderRadius: 25, marginLeft: 10, width: 60, height: 60 }}
-          /> */}
-          <Ionicons name="menu" size={35} color={"#fff"} />
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
-  const HeaderTitle = () => {
-    return (
-      <View>
-        <View style={{ flexDirection: "row" }}>
-          {/* <View>
-            <Image
-              source={require("./assets/favicon.png")}
-              style={{ borderRadius: 25, marginLeft: 10 }}
-            />
-          </View> */}
-          <View>
-            <Text style={{ color: "#fff" }}> Hi Welcome </Text>
-            {storedCredentials ? 
-            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}> {storedCredentials.username}</Text>
-            :
-            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}> {user_name}</Text>
-          }
-          </View>
-        </View>
-      </View >
-    )
-  }
 
   return (
     <Tab.Navigator
@@ -83,29 +33,13 @@ const UserTabs = () => {
         },
       }}>
       <Tab.Screen name="User Home Tab" component={MainStackNavigator}
-        options={({ navigation }) => ({
-          headerShadowVisible: false,
-          headerTitleStyle: {
-            color: "#fff",
-          },
+        options={{
           headerShown: false,
-          headerLeft: () => <CustomDrawerHeader navigation={navigation} />,
-          headerTitle: () => <HeaderTitle />,
           tabBarLabel: "",
           tabBarIcon: () => (
             <MaterialCommunityIcons name="home-variant-outline" size={30} />
           ),
-          headerStyle: {
-            backgroundColor: "#373a43",
-            height: 120,
-          },
-          // headerRight: () => <View style={{ marginEnd: 20 }}>
-          //   <Image
-          //     source={require("./assets/nandu.png")}
-          //     style={{ borderRadius: 25, marginLeft: 10, width: 60, height: 60 }}
-          //   />
-          // </View>
-        })}
+        }}
       />
       <Tab.Screen name="User CurrentConference Tab" component={CurrentConferences} options={{
         headerTitleAlign: "center",
