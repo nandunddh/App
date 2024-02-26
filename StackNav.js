@@ -14,6 +14,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import MyContext from "./MyContext";
 import { Text, TouchableOpacity, View } from "react-native";
+import AddNotification from "./Components/Constants/AddNotification";
 
 const Stack = createStackNavigator();
 
@@ -26,8 +27,8 @@ const screenOptionStyle = {
 };
 
 const MainStackNavigator = () => {
-  const user_name = "Nandu";
-  const {storedCredentials} = useContext(MyContext);
+  // const user_name = "Nandu";
+  const {storedCredentials, user_name} = useContext(MyContext);
   const navigation = useNavigation();
   const HeaderTitle = () => {
     return (
@@ -41,7 +42,7 @@ const MainStackNavigator = () => {
           </View> */}
           <View>
             <Text style={{ color: "#fff" }}> Hi Welcome </Text>
-            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}>
+            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20, textTransform: "capitalize" }}>
               {" "}
               {user_name}
             </Text>
@@ -92,6 +93,13 @@ const MainStackNavigator = () => {
       <Stack.Screen
         name="Notification"
         component={Notification}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Add Notification"
+        component={AddNotification}
         options={{
           headerShown: false,
         }}

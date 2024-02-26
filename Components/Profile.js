@@ -6,6 +6,7 @@ import { Entypo } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import MyContext from '../MyContext';
+import Animated from 'react-native-reanimated';
 
 const Profile = () => {
   const { user_name } = useContext(MyContext);
@@ -17,7 +18,7 @@ const Profile = () => {
   return (
 
     <>
-      <ScrollView>
+      <Animated.ScrollView>
         <View style={styles.container}>
           <View style={styles.profile_container}>
             <Image source={notification_image} style={styles.profile_image} />
@@ -78,7 +79,7 @@ const Profile = () => {
             </View>
           </View>
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
     </>
   )
 }

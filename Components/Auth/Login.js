@@ -16,6 +16,7 @@ import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { DB_URL } from '../Constants/Constants';
 import MyContext from '../../MyContext';
+import Animated from 'react-native-reanimated';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -30,18 +31,17 @@ const Login = () => {
   useEffect(() => {
     // console.log(Platform.OS);
     getStoredCredentials();
-    console.log("isLogin from login === ", isAdmin)
-
+    console.log("isLogin from login === ", SecureStore.getItemAsync('username'))
   }, [isLogin, isAdmin, email, storedCredentials, user_name])
 
   const getStoredCredentials = async () => {
     try {
       const storedEmail = await SecureStore.getItemAsync('email');
       const storedPassword = await SecureStore.getItemAsync('password');
-      const username = await SecureStore.getItemAsync('username');
-      if (storedEmail && storedPassword) {
+      const storedUsername = await SecureStore.getItemAsync('username');
+      if (storedEmail && storedPassword && storedUsername) {
         // alert(username + " username");
-        await setStoredCredentials({ email: storedEmail, password: storedPassword, username: username });
+        await setStoredCredentials({ email: storedEmail, password: storedPassword, username: storedUsername });
         // if (storedEmail === "admin@test.com") {
         //   // navigation.navigate('HomeScreen');
         //   // navigation.navigate('AdminTab', {
@@ -52,7 +52,7 @@ const Login = () => {
         //   // navigation.navigate('Drawer Home');
         //   setIsLogin(true);
         // }
-        setIsLogin(true);
+        await setIsLogin(true);
 
         // setIsLogin(true);
         // if (storedisAdmin === "true") {
@@ -61,13 +61,14 @@ const Login = () => {
         // {storeCredentials && 
         // navigation.navigate("") }
 
-        // console.log('Stored Credentials Login Screen:', { email: storedEmail, password: storedPassword });
+        console.log('Stored Credentials Login Screen:', { email: storedEmail, password: storedPassword, username: storedUsername });
       } else {
         console.log('No credentials found.');
       }
     } catch (error) {
       console.error('Error retrieving credentials:', error);
     }
+    return false;
   }
 
   // async function handleSignInWithGoogle() {
@@ -117,22 +118,26 @@ const Login = () => {
       await SecureStore.setItemAsync('email', emailString);
       await SecureStore.setItemAsync('password', passwordString);
       await SecureStore.setItemAsync('username', username);
-      // getStoredCredentials()
+
+      await setStoredCredentials({ email: emailString, password: passwordString, username: username });
+      getStoredCredentials()
       // login()
       // if (email == "admin@test.com") {
       //   // navigation.navigate('AdminTab', {
       //   //   screen: 'HomeScreen',
       //   // });
 
-      } else {
-        // navigation.navigate('Drawer Home');
-        setIsLogin(true);
-      }
+      // } else {
+      //   // navigation.navigate('Drawer Home');
+      // }
+      // await setIsLogin(true);
+       console.log('Stored Credentials Login Screen Stored function', storedCredentials);
       // navigation.navigate("HomeScreen");
       // alert("test1");
     } catch (error) {
       console.error('Error storing credentials:', error);
     }
+    return false;
   }
 
 
@@ -172,9 +177,9 @@ const Login = () => {
             // console.log("Login ===", Response);
             if (Response[0].Message == "Success") {
               // console.log("Login", Response)
-              // console.log("Login true =============")
+              console.log("Login true =============", user_name);
               await setUser_name(Response[0].User_Name)
-
+              console.log("Data user name", user_name);
               await storeCredentials()
               // alert(Response[0].User_Name);
             }
@@ -189,6 +194,7 @@ const Login = () => {
               // storeCredentials()
             }
             console.log("Data", Data);
+            console.log("Data user name", user_name);
           })
           .catch((error) => {
             console.error("ERROR FOUND" + error);
@@ -196,6 +202,7 @@ const Login = () => {
       } catch (error) {
         alert("Fetch Error!")
       }
+      return false;
     }
     // else {
     //   if (email === "nandu@test.com") {
@@ -219,7 +226,7 @@ const Login = () => {
 
   return (
     <SafeAreaProvider>
-      <ScrollView>
+      <Animated.ScrollView>
 
         <View style={{ flex: 1 }}>
           {/* <View style={{paddingTop: insets.top, paddingHorizontal: 20 }}> */}
@@ -298,7 +305,7 @@ const Login = () => {
               /> */}
           </View>
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
     </SafeAreaProvider >
   )
 }

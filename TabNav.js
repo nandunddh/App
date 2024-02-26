@@ -11,6 +11,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import MyContext from "./MyContext";
+import AddNotification from "./Components/Constants/AddNotification";
 
 const Tab = createBottomTabNavigator();
 
@@ -115,6 +116,13 @@ const UserTabs = () => {
         headerTitle: "Current Conferences"
       }} />
       <Tab.Screen name="User Notification Tab" component={Notification} options={{
+        headerTitleAlign: "center",
+        tabBarLabel: "",
+        tabBarIcon: () => (
+          <Ionicons name="notifications-outline" size={30} />
+        ),
+      }} />
+      <Tab.Screen name="User Add Notification Tab" component={AddNotification} options={{
         headerTitleAlign: "center",
         tabBarLabel: "",
         tabBarIcon: () => (
