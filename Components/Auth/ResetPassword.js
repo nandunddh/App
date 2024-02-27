@@ -5,7 +5,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { DB_URL } from '../Constants/Constants';
 import { useNavigation } from '@react-navigation/native';
 import { Email } from './smtp';
-import Otpbody from './otpbody';
 
 const ResetPassword = () => {
 
@@ -89,7 +88,7 @@ const ResetPassword = () => {
         console.log("params", params)
       ).catch(
         console.log("error in smtp")
-      )
+      );
 
 
     // const credentials = {
@@ -140,14 +139,14 @@ const ResetPassword = () => {
             }
             else if (Response[0].Message == "Failed") {
               alert(Response[0].Password);
-              navigation.navigate('Sign_in');
+              navigation.navigate('Login Screen');
             } else {
               alert(Response[0].Message);
-              navigation.navigate('Sign_in');
+              navigation.navigate('Login Screen');
             }
           })
           .catch((error) => {
-            console.error("ERROR FOUND" + error);
+            console.error("ERROR FOUND Reset Passowrd = " + error);
           })
       } catch (error) {
         alert("Fetch Error!")

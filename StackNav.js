@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Home from "./Home";
 import About from "./About";
@@ -10,11 +10,13 @@ import CurrentConferences from "./Components/CurrentConferences";
 import ConferenceScreen from "./Components/ConferenceScreen";
 import AboutConference from "./Components/AboutConference";
 import SignUp from "./Components/Auth/SignUp";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { DrawerActions, useNavigation } from "@react-navigation/native";
 import MyContext from "./MyContext";
 import { Text, TouchableOpacity, View } from "react-native";
-import AddNotification from "./Components/Constants/AddNotification";
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import ResetPassword from "./Components/Auth/ResetPassword";
+import Verificationcode from "./Components/Auth/Verificationcode";
+import New_Password from "./Components/Auth/New_Password";
 
 const Stack = createStackNavigator();
 
@@ -27,39 +29,13 @@ const screenOptionStyle = {
 };
 
 const MainStackNavigator = () => {
-  // const user_name = "Nandu";
-  const {storedCredentials, user_name} = useContext(MyContext);
-  const navigation = useNavigation();
-  const HeaderTitle = () => {
-    return (
-      <View>
-        <View style={{ flexDirection: "row" }}>
-          {/* <View>
-            <Image
-              source={require("./assets/favicon.png")}
-              style={{ borderRadius: 25, marginLeft: 10 }}
-            />
-          </View> */}
-          <View>
-            <Text style={{ color: "#fff" }}> Hi Welcome </Text>
-            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20, textTransform: "capitalize" }}>
-              {" "}
-              {user_name}
-            </Text>
-          </View>
-        </View>
-      </View>
-    );
-  };
 
   const CustomDrawerHeader = ({ navigation }) => {
-    const { isDrawerClicked, setIsDrawerClicked } = useContext(MyContext);
     const handlePress = () => {
-      setIsDrawerClicked(true);
-      console.log("button pressed");
-      // return navigation.dispatch(DrawerActions.openDrawer());
-      navigation.toggleDrawer()
-    };
+      return (
+        navigation.toggleDrawer()
+      )
+    }
     return (
       <View style={{ marginLeft: 20 }}>
         <TouchableOpacity onPress={handlePress}>
@@ -73,98 +49,69 @@ const MainStackNavigator = () => {
     );
   };
 
+  const HeaderTitle = () => {
+      const { userData } = useContext(MyContext);
+      useEffect(() => {
+      },[userData])
+    return (
+      <View>
+        <View style={{ flexDirection: "row" }}>
+          {/* <View>
+            <Image
+              source={require("./assets/favicon.png")}
+              style={{ borderRadius: 25, marginLeft: 10 }}
+            />
+          </View> */}
+          <View>
+            <Text style={{ color: "#fff" }}> Hi Welcome </Text>
+            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20, textTransform: "capitalize" }}> {userData.name}</Text>
+          </View>
+        </View>
+      </View >
+    )
+  }
+
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
-      <Stack.Screen
-        name="Home Screen"
-        component={Home}
-        options={{
-          headerShown: true,
-          headerTitle: () => <HeaderTitle />,
-          headerLeft: () => <CustomDrawerHeader navigation={navigation} />,
-          headerStyle: {
-            backgroundColor: "#373a43",
-            height: 120,
-          },
-          headerShadowVisible: false,
-          headerTitleAlign: "left"
-        }}
-      />
-      <Stack.Screen
-        name="Notification"
-        component={Notification}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="Add Notification"
-        component={AddNotification}
-        options={{
-          headerShown: false,
-        }}
-      />
+      <Stack.Screen name="Home Screen" component={Home} options={({ navigation }) => ({
+        headerLeft: () => <CustomDrawerHeader navigation={navigation} />,
+        headerShown: true,
+        headerTitle: () => <HeaderTitle />,
+      }
+      )
+      } />
+      <Stack.Screen name="Notification" component={Notification} options={{
+        headerShown: false,
+      }} />
 
-      <Stack.Screen
-        name="CurrentConferences screen"
-        component={CurrentConferences}
-        options={{
-          headerShown: false,
-        }}
-      />
+      <Stack.Screen name="CurrentConferences screen" component={CurrentConferences} options={{
+        headerShown: false
+      }} />
 
-      <Stack.Screen
-        name="Conference screen"
-        component={ConferenceScreen}
-        options={({ route }) => ({ title: route.params.name })}
-      />
-      <Stack.Screen
-        name="About Conference"
-        component={AboutConference}
-        options={({ route }) => ({
-          title: route.params.name,
-          headerTitleAlign: "center",
-        })}
-      />
-      <Stack.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="Edit_Profile"
-        component={EditProfile}
-        options={{
-          headerShown: true,
-        }}
-      />
+      <Stack.Screen name="Conference screen" component={ConferenceScreen} options={({ route }) => ({ title: route.params.name, headerTitleAlign: "center" })} />
+      <Stack.Screen name="About Conference" component={AboutConference} options={({ route }) => ({ title: route.params.name, headerTitleAlign: "center" })} />
+      <Stack.Screen name="Profile" component={Profile} options={({ route }) => ({ title: route.params.name, headerTitleAlign: "center" })} />
+      <Stack.Screen name="Edit_Profile" component={EditProfile} ooptions={({ route }) => ({ title: route.params.name, headerTitleAlign: "center"})} />
       <Stack.Screen name="Contact Screen" component={About} />
     </Stack.Navigator>
   );
-};
+}
 
 const AuthStackNavigator = () => {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerTitleAlign: "center",
-        headerTitle: "Login",
-      }}
-    >
-      <Stack.Screen
-        name="Login Screen"
-        component={Login}
-        options={{ cardStyle: { backgroundColor: "#fff" } }}
-      />
-      <Stack.Screen
-        name="SignUp Screen"
-        component={SignUp}
-        options={{ cardStyle: { backgroundColor: "#fff" } }}
-      />
+    <Stack.Navigator screenOptions={{
+      headerTitleAlign: "center",
+      headerTitle: "Login",
+    }}>
+      <Stack.Screen name="Login Screen" component={Login} options={{ cardStyle: { backgroundColor: '#fff' } }} />
+      <Stack.Screen name="Reset_Password" component={ResetPassword} options={{ cardStyle: { backgroundColor: '#fff' } }} />
+      <Stack.Screen name="Verificationcode" component={Verificationcode} options={{ cardStyle: { backgroundColor: '#fff' } }} />
+      <Stack.Screen name="New_Password" component={New_Password} options={{ cardStyle: { backgroundColor: '#fff' } }} />
+      <Stack.Screen name="SignUp Screen" component={SignUp} options={{ cardStyle: { backgroundColor: '#fff' } }} />
     </Stack.Navigator>
   );
-};
+}
+
 
 export { MainStackNavigator, AuthStackNavigator };
+

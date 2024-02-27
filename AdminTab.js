@@ -11,11 +11,10 @@ import AddNotification from "./Components/AddNotification";
 
 const Tab = createBottomTabNavigator();
 
-const UserTabs = () => {
+const AdminTab = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName="Home"
       screenOptions={{
         tabBarActiveTintColor: '#fff',
         tabBarInactiveTintColor: '#999',
@@ -32,7 +31,7 @@ const UserTabs = () => {
           marginTop: 5, // Adjust icon position vertically
         },
       }}>
-      <Tab.Screen name="User Home Tab" component={MainStackNavigator}
+      <Tab.Screen name="AdminTab Home Tab" component={MainStackNavigator}
         options={{
           headerShown: false,
           tabBarLabel: "",
@@ -41,7 +40,7 @@ const UserTabs = () => {
           ),
         }}
       />
-      <Tab.Screen name="User CurrentConference Tab" component={CurrentConferences} options={{
+      <Tab.Screen name="AdminTab CurrentConference Tab" component={CurrentConferences} options={{
         headerTitleAlign: "center",
         tabBarLabel: "",
         tabBarIcon: () => (
@@ -49,18 +48,25 @@ const UserTabs = () => {
         ),
         headerTitle: "Current Conferences"
       }} />
-      <Tab.Screen name="User Notification Tab" component={Notification} options={{
+      <Tab.Screen name="AdminTab Notification Tab" component={Notification} options={{
         headerTitleAlign: "center",
         tabBarLabel: "",
         tabBarIcon: () => (
           <Ionicons name="notifications-outline" size={30} />
         ),
       }} />
-     
-      <Tab.Screen name="Profile Tab" component={Profile} options={{
+      <Tab.Screen name="AdminTab Add Notification Tab" component={AddNotification} options={{
+        headerTitleAlign: "center",
+        tabBarLabel: "",
+        tabBarIcon: () => (
+          <Ionicons name="notifications-outline" size={30} />
+        ),
+      }} />
+
+      <Tab.Screen name="AdminTab Profile Tab" component={Profile} options={{
         headerTitleAlign: "center",
         tabBarLabel: " ",
-        headerTitle: "Profile-1",
+        headerTitle: "AdminTab Profile",
         tabBarIcon: () => (
           <MaterialCommunityIcons name="account-outline" size={30} />
         ),
@@ -70,4 +76,4 @@ const UserTabs = () => {
 };
 
 
-export default UserTabs;
+export default AdminTab;

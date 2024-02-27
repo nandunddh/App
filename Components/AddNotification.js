@@ -18,8 +18,8 @@ async function sendPushNotification(expoPushToken) {
   const message = {
     to: expoPushToken,
     sound: 'default',
-    title: 'Original Title',
-    body: 'And here is the body!',
+    title: 'CCE-2024',
+    body: 'Hi CCE-2024 Program updated, Please check the below link!',
     data: { someData: 'goes here' },
   };
 

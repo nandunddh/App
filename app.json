@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "USGAPP",
-    "slug": "USGAPP",
+    "slug": "expo-notification",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -44,6 +44,12 @@
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "d90ececd-a70a-49cb-abf3-a4271c6c5832"
+      }
+    },
+    "owner": "nanduexpo"
   }
 }

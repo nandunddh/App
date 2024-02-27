@@ -10,28 +10,38 @@ import Profile from "./Components/Profile";
 import DrawerScreen from "./Components/DrawerScreen";
 import Login from "./Components/Auth/Login";
 import MyContext from "./MyContext";
+import AdminTab from "./AdminTab";
 
 
 const Drawer = createDrawerNavigator();
 
 const DrawerNav = () => {
-  const {isLogin} = useContext(MyContext); 
-  useEffect(() => { 
-  }, [isLogin]);
-  return (
-    <Drawer.Navigator 
-    drawerContent={() => <DrawerScreen />} 
-    >
-      {
-        isLogin ? 
+  const { isLogin, isAdmin } = useContext(MyContext);
+  useEffect(() => {
+    console.log("isAdmin", isAdmin);
+  }, [isLogin, isAdmin]);
 
-        <Drawer.Screen name="Drawer Home " component={UserTabs} options={{
-          headerShown : false, headerTitle: "Home"
-        }}/>
-        :
-        <Drawer.Screen name="Profile" component={AuthStackNavigator}  options={{
-          headerShown : false, headerTitle: "Home"
-        }}/>
+  const CustomDrawerContent = () => {
+    return isLogin ? <DrawerScreen /> : null;
+  };
+
+  return (
+    <Drawer.Navigator
+      drawerContent={CustomDrawerContent} >
+      {
+        isLogin ?
+          <>
+            <Drawer.Screen name="Drawer Home " component={UserTabs} options={{
+              headerShown: false, headerTitle: "Home"
+            }} />
+            <Drawer.Screen name="Admin Tab" component={AdminTab} options={{
+              headerShown: false, headerTitle: "Home"
+            }} />
+          </>
+          :
+          <Drawer.Screen name="Profile" component={AuthStackNavigator} options={{
+            headerShown: false, headerTitle: "Home"
+          }} />
       }
     </Drawer.Navigator>
   );

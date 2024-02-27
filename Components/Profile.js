@@ -1,5 +1,5 @@
 import { View, Text, Image, ScrollView, StyleSheet } from 'react-native'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
@@ -7,13 +7,39 @@ import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import MyContext from '../MyContext';
 import Animated from 'react-native-reanimated';
+import * as SecureStore from 'expo-secure-store';
 
-const Profile = () => {
-  const { user_name } = useContext(MyContext);
+const Profile = ({route}) => {
   const navigation = useNavigation();
-  const { isLogin, setIsLogin, isAdmin, setIsAdmin, setStoredCredentials, storedCredentials } = useContext(MyContext);
 
-  const notification_image = require("../assets/emptyNotification.jpg");
+  const {  setIsLogin, setStoredCredentials, storedCredentials, userData } = useContext(MyContext);
+  const notification_image = require("../assets/nandu.png");
+  
+  useEffect(() => {
+    // console.log(userData.name);
+  },[userData])
+
+  const clearCredentials = async () => {
+    try {
+      await SecureStore.deleteItemAsync("email");
+      await SecureStore.deleteItemAsync("password");
+      await SecureStore.deleteItemAsync("username");
+      await setStoredCredentials(null); // Clear stored credentials in state
+      console.log(
+        "Before credentials cleared (logged out) successfully.",
+        storedCredentials
+      );
+      await setIsLogin(false);
+      alert("Sign Out Success");
+      console.log(
+        "Credentials cleared (logged out) successfully.",
+        storedCredentials // Here you're accessing storedCredentials which might be null after clearing
+      );
+    } catch (error) {
+      console.error("Error clearing credentials:", error);
+    }
+  };
+
 
   return (
 
@@ -22,11 +48,7 @@ const Profile = () => {
         <View style={styles.container}>
           <View style={styles.profile_container}>
             <Image source={notification_image} style={styles.profile_image} />
-            {user_name ?
-              <Text>{user_name}</Text>
-              :
-              <Text style={styles.profile_name}>P.NanduKumar Goud</Text>
-            }
+              <Text style={{ fontSize: 20, fontWeight: "bold", textTransform: "capitalize"}}>{userData.name}</Text>
           </View>
           <View style={styles.inner_container}>
             <View style={{ flex: 2 }}>
@@ -34,7 +56,7 @@ const Profile = () => {
                 <Text style={styles.subheading}>Email</Text>
                 <View style={{ flexDirection: "row" }}>
                   <MaterialCommunityIcons name="email-outline" size={30} color="#f3ba2d" style={styles.email_icon} />
-                  <Text style={styles.sub_text}>nandu@test.com</Text>
+                  <Text style={styles.sub_text}>{userData.email}</Text>
                 </View>
               </View>
               <View
@@ -47,7 +69,7 @@ const Profile = () => {
                 <Text style={styles.subheading}>Mobile Number</Text>
                 <View style={{ flexDirection: "row" }}>
                   <Feather name="phone" size={30} color="#f3ba2d" style={styles.email_icon} />
-                  <Text style={styles.sub_text}>+91 1010101010</Text>
+                  <Text style={styles.sub_text}>{userData.mobilenumber}</Text>
                 </View>
               </View>
               <View
@@ -61,7 +83,7 @@ const Profile = () => {
                 <View style={{ flexDirection: "row" }}>
                   <Entypo name="location-pin" size={30} color="#f3ba2d" style={styles.email_icon} />
                   {/* <EvilIcons name="location" size={24} color="black" style={styles.email_icon} /> */}
-                  <Text style={styles.sub_text}>Hyderabad, TS, India</Text>
+                  <Text style={styles.sub_text}>{userData.location}</Text>
                 </View>
               </View>
               <View
@@ -75,7 +97,6 @@ const Profile = () => {
               <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 22 }} onPress={() => navigation.navigate("Edit_Profile")}>
                 <Text style={{ color: "#fff", textAlign: "center", fontSize: 20 }}> Edit Details </Text>
               </TouchableOpacity>
-              {/* <Button title='SIGN IN' color="#000" /> */}
             </View>
           </View>
         </View>
