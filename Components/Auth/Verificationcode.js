@@ -48,7 +48,7 @@ const Verificationcode = () => {
             }
           })
           .catch((error) => {
-            console.error("ERROR FOUND" + error);
+            console.error("ERROR FOUND Verification = " + error);
           })
       } catch (error) {
         alert("Fetch Error!")

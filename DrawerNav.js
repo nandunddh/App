@@ -18,6 +18,7 @@ const Drawer = createDrawerNavigator();
 const DrawerNav = () => {
   const { isLogin, isAdmin } = useContext(MyContext);
   useEffect(() => {
+    console.log("isAdmin", isAdmin);
   }, [isLogin, isAdmin]);
 
   const CustomDrawerContent = () => {
@@ -30,15 +31,12 @@ const DrawerNav = () => {
       {
         isLogin ?
           <>
-            {isAdmin ?
-
-              <Drawer.Screen name="Drawer Home " component={UserTabs} options={{
-                headerShown: false, headerTitle: "Home"
-              }} />
-              :
-              <Drawer.Screen name="Admin Tab" component={AdminTab} options={{
-                headerShown: false, headerTitle: "Home"
-              }} />}
+            <Drawer.Screen name="Drawer Home " component={UserTabs} options={{
+              headerShown: false, headerTitle: "Home"
+            }} />
+            <Drawer.Screen name="Admin Tab" component={AdminTab} options={{
+              headerShown: false, headerTitle: "Home"
+            }} />
           </>
           :
           <Drawer.Screen name="Profile" component={AuthStackNavigator} options={{

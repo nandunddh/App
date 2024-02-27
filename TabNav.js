@@ -56,15 +56,8 @@ const UserTabs = () => {
           <Ionicons name="notifications-outline" size={30} />
         ),
       }} />
-      <Tab.Screen name="User Add Notification Tab" component={AddNotification} options={{
-        headerTitleAlign: "center",
-        tabBarLabel: "",
-        tabBarIcon: () => (
-          <Ionicons name="notifications-outline" size={30} />
-        ),
-      }} />
-
-      <Tab.Screen name="User Profile Tab" component={Profile} options={{
+     
+      <Tab.Screen name="Profile Tab" component={Profile} options={{
         headerTitleAlign: "center",
         tabBarLabel: " ",
         headerTitle: "Profile-1",

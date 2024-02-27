@@ -146,7 +146,7 @@ const ResetPassword = () => {
             }
           })
           .catch((error) => {
-            console.error("ERROR FOUND" + error);
+            console.error("ERROR FOUND Reset Passowrd = " + error);
           })
       } catch (error) {
         alert("Fetch Error!")

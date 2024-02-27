@@ -32,9 +32,8 @@ const Login = () => {
     if (user_name !== undefined) {
       console.log("user_name = ", user_name);
       storeCredentials()
-
-      getStoredCredentials()
     }
+    getStoredCredentials()
   }, [isLogin, isAdmin, email, storedCredentials, user_name]);
 
   const getStoredCredentials = async () => {
@@ -96,44 +95,46 @@ const Login = () => {
     }
 
     try {
-        const APIURL = `${DB_URL}login.php`;
-        const headers = {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        };
+      const APIURL = `${DB_URL}login.php`;
+      const headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      };
 
-        const Data = {
-          Email: email,
-          Password: password
-        };
+      const Data = {
+        Email: email,
+        Password: password
+      };
 
-        const response = await fetch(APIURL, {
-          method: 'POST',
-          headers: headers,
-          body: JSON.stringify(Data)
-        });
+      const response = await fetch(APIURL, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(Data)
+      });
 
-        const responseData = await response.json();
+      const responseData = await response.json();
 
-        if (responseData[0].Message === "Success") {
-            await setUser_name(responseData[0].User_Name);
-            if (responseData[0].IsAdmin == true) {
-                await setIsLogin(true);
-                navigation.navigate("Admin Tab")
-                // await storeCredentials();
-            }
-            alert(responseData[0].User_Name);
-            console.log("Data user name", user_name);
+      if (responseData[0].Message === "Success") {
+        if (responseData[0].IsAdmin == true) {
+          await setUser_name(responseData[0].User_Name);
+          await setIsLogin(true);
+          navigation.navigate("Admin Tab")
+          // await storeCredentials();
         } else {
-            alert(responseData[0].Message);
+          await setUser_name(responseData[0].User_Name);
         }
+        // alert(responseData[0].User_Name);
+        console.log("Data user name", user_name);
+      } else {
+        alert(responseData[0].Message);
+      }
 
-        console.log("Data user name = ", user_name);
+      console.log("Data user name = ", user_name);
     } catch (error) {
-        console.error("ERROR FOUND", error);
-        alert("Fetch Error!");
+      console.error("ERROR FOUND Login = ", error);
+      alert("Fetch Error!");
     }
-}
+  }
 
 
   return (

@@ -141,7 +141,7 @@ const New_Password = () => {
             }
           })
           .catch((error) => {
-            console.error("ERROR FOUND" + error);
+            console.error("ERROR FOUND New Password = " + error);
           })
       } catch (error) {
         alert("Fetch Error!")
