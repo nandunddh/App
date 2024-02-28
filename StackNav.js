@@ -17,6 +17,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import ResetPassword from "./Components/Auth/ResetPassword";
 import Verificationcode from "./Components/Auth/Verificationcode";
 import New_Password from "./Components/Auth/New_Password";
+import ContactUs from "./Components/ContactUs";
+import { Messgae } from "./Components/Auth/Messgae";
 
 const Stack = createStackNavigator();
 
@@ -50,9 +52,9 @@ const MainStackNavigator = () => {
   };
 
   const HeaderTitle = () => {
-      const { userData } = useContext(MyContext);
-      useEffect(() => {
-      },[userData])
+    const { userData } = useContext(MyContext);
+    useEffect(() => {
+    }, [userData])
     return (
       <View>
         <View style={{ flexDirection: "row" }}>
@@ -64,7 +66,7 @@ const MainStackNavigator = () => {
           </View> */}
           <View>
             <Text style={{ color: "#fff" }}> Hi Welcome </Text>
-            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20, textTransform: "capitalize" }}> {userData.name}</Text>
+            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20, }}> {userData.name}</Text>
           </View>
         </View>
       </View >
@@ -77,6 +79,7 @@ const MainStackNavigator = () => {
         headerLeft: () => <CustomDrawerHeader navigation={navigation} />,
         headerShown: true,
         headerTitle: () => <HeaderTitle />,
+        headerShadowVisible : false,
       }
       )
       } />
@@ -91,7 +94,8 @@ const MainStackNavigator = () => {
       <Stack.Screen name="Conference screen" component={ConferenceScreen} options={({ route }) => ({ title: route.params.name, headerTitleAlign: "center" })} />
       <Stack.Screen name="About Conference" component={AboutConference} options={({ route }) => ({ title: route.params.name, headerTitleAlign: "center" })} />
       <Stack.Screen name="Profile" component={Profile} options={({ route }) => ({ title: route.params.name, headerTitleAlign: "center" })} />
-      <Stack.Screen name="Edit_Profile" component={EditProfile} ooptions={({ route }) => ({ title: route.params.name, headerTitleAlign: "center"})} />
+      <Stack.Screen name="Edit_Profile" component={EditProfile} options={{ headerTitleAlign: "center", headerTitle: "Edit Details" }} />
+      <Stack.Screen name="ContactUs" component={ContactUs} options={{ headerTitleAlign: "center", headerTitle: "Contact Us" }} />
       <Stack.Screen name="Contact Screen" component={About} />
     </Stack.Navigator>
   );

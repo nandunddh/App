@@ -17,7 +17,7 @@ const Profile = ({route}) => {
   
   useEffect(() => {
     // console.log(userData.name);
-  },[userData])
+  },[])
 
   const clearCredentials = async () => {
     try {
@@ -48,7 +48,7 @@ const Profile = ({route}) => {
         <View style={styles.container}>
           <View style={styles.profile_container}>
             <Image source={notification_image} style={styles.profile_image} />
-              <Text style={{ fontSize: 20, fontWeight: "bold", textTransform: "capitalize"}}>{userData.name}</Text>
+              <Text style={{ fontSize: 20, fontWeight: "bold",}}>{userData.name}</Text>
           </View>
           <View style={styles.inner_container}>
             <View style={{ flex: 2 }}>

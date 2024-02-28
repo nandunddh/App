@@ -22,6 +22,7 @@ const DrawerScreen = () => {
     setIsLogin,
     isLogin,
     userData,
+    setUserData,
   } = useContext(MyContext);
 
   const navigation = useNavigation();
@@ -36,11 +37,13 @@ const DrawerScreen = () => {
       await SecureStore.deleteItemAsync("username");
 
       await setStoredCredentials(null) // Clear stored credentials in state
+      await setUserData(null) // Clear userData in state
       console.log(
         "Before credentials cleared (logged out) successfully.",
         storedCredentials
       );
       await setIsLogin(false)
+      await setIsAdmin(false)
       alert("Sign Out Success");
       console.log(
         "Credentials cleared (logged out) successfully.",
@@ -130,6 +133,7 @@ const DrawerScreen = () => {
                 <Text style={{ flex: 4 }}>Edit Profile</Text>
               </View>
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("ContactUs", { name: userData.name })}>
             <View
               style={{
                 flexDirection: "row",
@@ -145,6 +149,7 @@ const DrawerScreen = () => {
               <Fontisto name="email" size={30} style={{ flex: 1 }} />
               <Text style={{ flex: 4 }}>Contact Us</Text>
             </View>
+            </TouchableOpacity>
             <View
               style={{
                 flexDirection: "row",

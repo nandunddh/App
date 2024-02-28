@@ -7,18 +7,20 @@ import { useNavigation } from '@react-navigation/native';
 
 const EditProfile = () => {
   const navigation = useNavigation();
-  const { userData } = useContext(MyContext);
-  const [name, setName] = useState('');
-  const [mobilenumber, setMobileNumber] = useState('');
-  const [location, setLocation] = useState('');
+  const { userData, setUserData } = useContext(MyContext);
+  const [name, setName] = useState(userData ? userData.name : "");
+  const [mobilenumber, setMobileNumber] = useState(userData ? userData.mobilenumber : "");
+  const [location, setLocation] = useState(userData ? userData.location : "");
   const name1 = useRef();
   const mobilenumber1 = useRef();
   const loaction1 = useRef();
 
-  useEffect(() => { }, [userData])
+  useEffect(() => { }, [])
 
   const handleUpdate = async () => {
     console.log("name ", name, " phone ", mobilenumber, " location ", location);
+
+    if((name !== userData.name) || (mobilenumber !== userData.mobilenumber) || (location !== userData.location)){
 
     if (name.length === 0) {
       alert("Name can not be empty");
@@ -67,14 +69,17 @@ const EditProfile = () => {
 
           if (parsedData[0].Message === "Success") {
             alert(parsedData[0].Message);
-            navigation.navigate("Profile");
+            await setUserData(parsedData[0].Data[0]); // Update userData in the global context
+            navigation.goBack();
+            // navigation.navigate("Profile");
+            console.log("Edit Status", parsedData[0].Data[0])
           } else {
             alert(parsedData[0].Message);
-            navigation.navigate("Profile");
+            navigation.goBack();
           }
         } catch (error) {
-          console.error("Error parsing response data:", error);
-          alert("Error parsing response data");
+          console.error("Error parsing response data Edit:", error);
+          alert("Error parsing response data Edit");
         }
       } else {
         console.error("Empty response from server");
@@ -83,6 +88,9 @@ const EditProfile = () => {
     } catch (error) {
       console.error("ERROR FOUND ", error);
     }
+  }else{
+    alert("No Change Found!");
+  }
   }
 
   const notification_image = require("../assets/nandu.png");

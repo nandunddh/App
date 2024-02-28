@@ -22,7 +22,7 @@ const App = () => {
 
   useEffect(() => {
     getStoredCredentials();
-  }, [userData, storedCredentials, ConferenceData, loadingCredentials]);
+  }, [getStoredCredentials, handleupcomingconferencelist, getUserData]);
 
   const getStoredCredentials = async () => {
     try {
@@ -33,7 +33,6 @@ const App = () => {
         setStoredCredentials({ email: storedEmail, password: storedPassword, username: storedUsername });
         setIsLogin(true);
         getUserData(storedEmail, storedPassword);
-        handleupcomingconferencelist()
         // console.log('Stored Credentials App Screen:', { email: storedEmail, password: storedPassword, username: storedUsername });
       } else {
         console.log('No credentials found App.');
@@ -69,6 +68,7 @@ const App = () => {
       if (responseData[0].Message === "Success") {
         setUserData(responseData[0].Data[0]);
         console.log("User Data", responseData[0].Data[0]);
+        handleupcomingconferencelist();
       } else {
         alert(responseData[0].Message);
         setUserData(null);

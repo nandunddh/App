@@ -173,7 +173,7 @@ const Home = () => {
           {ConferenceData && ConferenceData.length > 0 && (
             <View
               style={{
-                backgroundColor: "#373a43",
+                backgroundColor: "#363942",
                 paddingHorizontal: 25,
                 flexDirection: "row",
                 justifyContent: "space-between",
