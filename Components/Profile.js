@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import MyContext from '../MyContext';
 import Animated from 'react-native-reanimated';
 import * as SecureStore from 'expo-secure-store';
+import { DB_URL } from './Constants/Constants';
 
 const Profile = ({route}) => {
   const navigation = useNavigation();
@@ -47,7 +48,7 @@ const Profile = ({route}) => {
       <Animated.ScrollView>
         <View style={styles.container}>
           <View style={styles.profile_container}>
-            <Image source={notification_image} style={styles.profile_image} />
+            <Image source={{uri: `${DB_URL}uploads/user_profile/${userData.profile}`}} style={styles.profile_image} />
               <Text style={{ fontSize: 20, fontWeight: "bold",}}>{userData.name}</Text>
           </View>
           <View style={styles.inner_container}>

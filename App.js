@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import DrawerNav from './DrawerNav';
 import { DB_URL } from './Components/Constants/Constants';
 import MyContext from './MyContext';
 import * as SecureStore from 'expo-secure-store';
 import LoadingScreen from './LoadingScreen'; // Import the loading screen component
+import Web from './Web';
 
 const App = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -31,7 +32,6 @@ const App = () => {
       const storedUsername = await SecureStore.getItemAsync('username');
       if (storedEmail && storedPassword) {
         setStoredCredentials({ email: storedEmail, password: storedPassword, username: storedUsername });
-        setIsLogin(true);
         getUserData(storedEmail, storedPassword);
         // console.log('Stored Credentials App Screen:', { email: storedEmail, password: storedPassword, username: storedUsername });
       } else {
@@ -67,7 +67,12 @@ const App = () => {
 
       if (responseData[0].Message === "Success") {
         setUserData(responseData[0].Data[0]);
-        console.log("User Data", responseData[0].Data[0]);
+        if (responseData[0].Data[0].isAdmin == "true") {
+          console.log("Admin Login")
+          setIsAdmin(true);
+        }
+        setIsLogin(true);
+        console.log("User Data = ", responseData[0].Data[0]);
         handleupcomingconferencelist();
       } else {
         alert(responseData[0].Message);
@@ -121,18 +126,18 @@ const App = () => {
         Accept: "application/json",
         "Content-Type": "application/json",
       };
-  
+
       const response = await fetch(APIURL, {
         method: "GET",
         headers: headers,
       });
-  
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-  
+
       const responseData = await response.text(); // Get the response as text
-  
+
       if (responseData) {
         try {
           const parsedData = JSON.parse(responseData); // Parse the response
@@ -160,42 +165,50 @@ const App = () => {
       setIsloading(false);
     }
   };
-  
-  
+
+
 
   return (
     <>
-      <StatusBar style="light" />
-      {loadingCredentials ? ( // Conditionally render based on loadingCredentials state
-        <LoadingScreen />
-      ) : (
-        <NavigationContainer>
-          <MyContext.Provider
-            value={{
-              isNotification,
-              setIsNotification,
-              isAdmin,
-              setIsAdmin,
-              storedCredentials,
-              setStoredCredentials,
-              isLogin,
-              setIsLogin,
-              ConferenceData,
-              setConferenceData,
-              user_name,
-              setUser_name,
-              isloading,
-              setIsloading,
-              isDrawerClicked,
-              setIsDrawerClicked,
-              userData,
-              setUserData
-            }}
-          >
-            <DrawerNav />
-          </MyContext.Provider>
-        </NavigationContainer>
-      )}
+      {Platform.OS == "web" ?
+        <Web />
+        :
+        <>
+          <StatusBar style="light" />
+          {loadingCredentials ? ( // Conditionally render based on loadingCredentials state
+            <LoadingScreen />
+          )
+
+            : (
+              <NavigationContainer>
+                <MyContext.Provider
+                  value={{
+                    isNotification,
+                    setIsNotification,
+                    isAdmin,
+                    setIsAdmin,
+                    storedCredentials,
+                    setStoredCredentials,
+                    isLogin,
+                    setIsLogin,
+                    ConferenceData,
+                    setConferenceData,
+                    user_name,
+                    setUser_name,
+                    isloading,
+                    setIsloading,
+                    isDrawerClicked,
+                    setIsDrawerClicked,
+                    userData,
+                    setUserData
+                  }}
+                >
+                  <DrawerNav />
+                </MyContext.Provider>
+              </NavigationContainer>
+            )}
+        </>
+      }
     </>
   );
 };

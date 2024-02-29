@@ -8,6 +8,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AddNotification from "./Components/AddNotification";
+import UserList from "./Components/UserList";
+import EventsList from "./Components/EventsList";
 
 const Tab = createBottomTabNavigator();
 
@@ -59,7 +61,22 @@ const AdminTab = () => {
         headerTitleAlign: "center",
         tabBarLabel: "",
         tabBarIcon: () => (
-          <Ionicons name="notifications-outline" size={30} />
+          <MaterialIcons name="add-alert" size={30} />
+        ),
+      }} />
+      <Tab.Screen name="UserList" component={UserList} options={{
+        headerTitleAlign: "center", 
+        tabBarLabel: "",
+        tabBarIcon: () => (
+          <MaterialCommunityIcons name="account-group-outline" size={30} />
+        ),
+        
+      }} />
+      <Tab.Screen name="EventsList" component={EventsList} options={{
+        headerTitleAlign: "center",
+        tabBarLabel: "",
+        tabBarIcon: () => (
+          <Ionicons name="list" size={30} />
         ),
       }} />
 

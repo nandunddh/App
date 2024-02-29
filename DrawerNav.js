@@ -10,7 +10,7 @@ import AdminTab from "./AdminTab";
 const Drawer = createDrawerNavigator();
 
 const DrawerNav = () => {
-  const { isLogin } = useContext(MyContext);
+  const { isLogin, isAdmin } = useContext(MyContext);
   useEffect(() => {
   }, [isLogin]);
 
@@ -21,16 +21,21 @@ const DrawerNav = () => {
 
   return isLogin ? (
     <Drawer.Navigator drawerContent={CustomDrawerContent}>
-      <Drawer.Screen
-        name="Drawer Home"
-        component={UserTabs}
-        options={{ headerShown: false, headerTitle: "Home" }}
-      />
-      <Drawer.Screen
-        name="Admin Tab"
-        component={AdminTab}
-        options={{ headerShown: false, headerTitle: "Home" }}
-      />
+      {
+        isAdmin ?
+
+          <Drawer.Screen
+            name="Admin Tab"
+            component={AdminTab}
+            options={{ headerShown: false, headerTitle: "Home" }}
+          />
+          :
+          <Drawer.Screen
+            name="Drawer Home"
+            component={UserTabs}
+            options={{ headerShown: false, headerTitle: "Home" }}
+          />
+      }
     </Drawer.Navigator>
   ) : (
     <AuthStackNavigator />

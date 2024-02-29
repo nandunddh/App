@@ -96,7 +96,8 @@ const MainStackNavigator = () => {
       <Stack.Screen name="Profile" component={Profile} options={({ route }) => ({ title: route.params.name, headerTitleAlign: "center" })} />
       <Stack.Screen name="Edit_Profile" component={EditProfile} options={{ headerTitleAlign: "center", headerTitle: "Edit Details" }} />
       <Stack.Screen name="ContactUs" component={ContactUs} options={{ headerTitleAlign: "center", headerTitle: "Contact Us" }} />
-      <Stack.Screen name="Contact Screen" component={About} />
+      {/* <Stack.Screen name="" component={About} />
+      <Stack.Screen name="Contact Screen" component={About} /> */}
     </Stack.Navigator>
   );
 }

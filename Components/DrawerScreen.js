@@ -14,6 +14,7 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import Octicons from "react-native-vector-icons/Octicons";
 import Animated from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
+import { DB_URL } from "./Constants/Constants";
 
 const DrawerScreen = () => {
   const {
@@ -23,6 +24,7 @@ const DrawerScreen = () => {
     isLogin,
     userData,
     setUserData,
+    setIsAdmin
   } = useContext(MyContext);
 
   const navigation = useNavigation();
@@ -73,8 +75,8 @@ const DrawerScreen = () => {
           >
             <View style={{ marginLeft: 10 }}>
               <Image
-                source={require("../assets/nandu.png")}
-                style={{ borderRadius: 25, width: 80, height: 80 }}
+                source={{uri: `${DB_URL}uploads/user_profile/${userData.profile}`}}
+                style={{ borderRadius: 80, width: 80, height: 80 }}
               />
             </View>
             <View style={{ justifyContent: "center", paddingLeft: 10 }}>
