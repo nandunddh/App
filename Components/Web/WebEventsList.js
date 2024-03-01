@@ -2,16 +2,17 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from 'rea
 import React, { useContext, useEffect } from 'react'
 import { Animated } from 'react-native'
 import Ionicons from "react-native-vector-icons/Ionicons";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Feather from "react-native-vector-icons/Feather";
-import MyContext from '../MyContext';
-import { DB_URL } from './Constants/Constants';
+import MyContext from '../../MyContext';
+import { DB_URL } from '../Constants/Constants';
 
 
-const EventsList = ({ navigation }) => {
+const WebEventsList = ({ navigation }) => {
 
   const { ConferenceData, setConferenceData } = useContext(MyContext);
-  useEffect(() => {},[ConferenceData])
+  useEffect(() => {
+    console.log("ConferenceData", ConferenceData)
+  },[ConferenceData])
   
   const handleupcomingconferencelist = async () => {
     try {
@@ -113,9 +114,6 @@ const EventsList = ({ navigation }) => {
                       {conference.token == "completed" &&
                         <Text style={{ backgroundColor: "#dc3545", color: "#fff", paddingVertical: 5, borderRadius: 30, fontSize: 16, paddingHorizontal: 5 }}>{conference.token}</Text>
                       }
-                      {conference.token == "next" &&
-                        <Text style={{ backgroundColor: "#6c757d", color: "#fff", paddingVertical: 5, borderRadius: 30, fontSize: 16, paddingHorizontal: 15 }}>{conference.token}</Text>
-                      }
                     </View>
                     <View style={{ width: "25%", alignItems: "center", justifyContent: "center", flexDirection: "row", }}>
                       <TouchableOpacity onPress={() => navigation.navigate("EditScreen", {data : conference})}>
@@ -137,7 +135,7 @@ const EventsList = ({ navigation }) => {
   )
 }
 
-export default EventsList
+export default WebEventsList
 
 
 const styles = StyleSheet.create({

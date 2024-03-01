@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Linking } from 'react-native'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Fontisto } from '@expo/vector-icons';
 import { EvilIcons } from '@expo/vector-icons';
@@ -8,6 +8,7 @@ import { DB_URL } from './Constants/Constants';
 
 
 const CurrentConferences = () => {
+  useEffect(() => {},[ConferenceData])
   const { ConferenceData } = useContext(MyContext);
 
   const HandleUrl = ({ item }) => {

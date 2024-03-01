@@ -22,8 +22,16 @@ const App = () => {
   const [loadingCredentials, setLoadingCredentials] = useState(true);
 
   useEffect(() => {
-    getStoredCredentials();
-  }, [getStoredCredentials, handleupcomingconferencelist, getUserData]);
+    console.log("ConferenceData= ", ConferenceData.length, "storedCredentials=", storedCredentials, "userData=", userData.length);
+    if (ConferenceData.length == 0 && storedCredentials == null && userData.length == 0) {
+      // Execute getStoredCredentials only when all conditions are met
+      getStoredCredentials();
+    }else{
+      console.log("storedCredentials =", storedCredentials, "userData =", userData);
+      handleupcomingconferencelist();
+    }
+    // getStoredCredentials();
+  }, [getStoredCredentials, handleupcomingconferencelist, getUserData, ConferenceData]);
 
   const getStoredCredentials = async () => {
     try {
@@ -170,45 +178,39 @@ const App = () => {
 
   return (
     <>
-      {Platform.OS == "web" ?
-        <Web />
-        :
-        <>
-          <StatusBar style="light" />
-          {loadingCredentials ? ( // Conditionally render based on loadingCredentials state
-            <LoadingScreen />
-          )
+      <StatusBar style="light" />
+      {loadingCredentials ? ( // Conditionally render based on loadingCredentials state
+        <LoadingScreen />
+      )
 
-            : (
-              <NavigationContainer>
-                <MyContext.Provider
-                  value={{
-                    isNotification,
-                    setIsNotification,
-                    isAdmin,
-                    setIsAdmin,
-                    storedCredentials,
-                    setStoredCredentials,
-                    isLogin,
-                    setIsLogin,
-                    ConferenceData,
-                    setConferenceData,
-                    user_name,
-                    setUser_name,
-                    isloading,
-                    setIsloading,
-                    isDrawerClicked,
-                    setIsDrawerClicked,
-                    userData,
-                    setUserData
-                  }}
-                >
-                  <DrawerNav />
-                </MyContext.Provider>
-              </NavigationContainer>
-            )}
-        </>
-      }
+        : (
+          <NavigationContainer>
+            <MyContext.Provider
+              value={{
+                isNotification,
+                setIsNotification,
+                isAdmin,
+                setIsAdmin,
+                storedCredentials,
+                setStoredCredentials,
+                isLogin,
+                setIsLogin,
+                ConferenceData,
+                setConferenceData,
+                user_name,
+                setUser_name,
+                isloading,
+                setIsloading,
+                isDrawerClicked,
+                setIsDrawerClicked,
+                userData,
+                setUserData
+              }}
+            >
+              <DrawerNav />
+            </MyContext.Provider>
+          </NavigationContainer>
+        )}
     </>
   );
 };

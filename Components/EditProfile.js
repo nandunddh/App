@@ -24,8 +24,9 @@ const EditProfile = () => {
 
   LogBox.ignoreLogs(['Key "cancelled" in the image picker result is deprecated']);
 
+  useEffect(() => { console.log("first", profile_path) }, [profile_path]);
   const handleUpdate = async () => {
-    console.log("name ", name, " phone ", mobilenumber, " location ", location);
+    console.log("name ", name, " phone ", mobilenumber, " location ", location, "profile ", profile_path);
 
     if ((name !== userData.name) || (mobilenumber !== userData.mobilenumber) || (location !== userData.location || (profile_path !== userData.profile))) {
 
@@ -42,84 +43,88 @@ const EditProfile = () => {
         loaction1.current.focus();
         return;
       }
+      else {
+        try {
+          const APIURL = `${DB_URL}updateDeatils.php`;
+          const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          };
 
-      try {
-        const APIURL = `${DB_URL}updateDeatils.php`;
-        const headers = {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        };
+          const Data = {
+            Email: userData.email,
+            Name: name,
+            Mobilenumber: mobilenumber,
+            Location: location,
+            Image: profile_path,
+          };
 
-        const Data = {
-          Email: userData.email,
-          Name: name,
-          Mobilenumber: mobilenumber,
-          Location: location,
-          Image: profile_path,
-        };
+          if (profile_path !== userData.profile) {
 
-        const uri = image;
+            const uri = image;
 
-        const formData = new FormData();
-        formData.append('new_image', { uri, name: profile_path, type: 'image/jpg' });
-        formData.append('old_image', old_path);
+            const formData = new FormData();
+            formData.append('new_image', { uri, name: profile_path, type: 'image/jpg' });
+            formData.append('old_image', old_path);
 
-        // Make a POST request to the PHP script
-        fetch(`${DB_URL}profileUpdate.php`, {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            // Handle the response as needed
-          })
-          .catch((error) => {
-            console.error('Error uploading image:', error);
-          });
-        // }
-
-        const response = await fetch(APIURL, {
-          method: 'POST',
-          headers: headers,
-          body: JSON.stringify(Data)
-        });
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-
-        const responseData = await response.text();
-        console.log("response = ", responseData)
-
-        if (responseData) {
-          try {
-            const parsedData = JSON.parse(responseData); // Parse the response
-
-            if (parsedData[0].Message === "Success") {
-              alert(parsedData[0].Message);
-              await setUserData(parsedData[0].Data[0]); // Update userData in the global context
-              navigation.goBack();
-              // navigation.navigate("Profile");
-              console.log("Edit Status", parsedData[0].Data[0])
-            } else {
-              alert(parsedData[0].Message);
-              navigation.goBack();
-            }
-          } catch (error) {
-            console.error("Error parsing response data Edit:", error);
-            alert("Error parsing response data Edit");
+            // Make a POST request to the PHP script
+            fetch(`${DB_URL}profileUpdate.php`, {
+              method: 'POST',
+              body: formData,
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                console.log("data", data);
+                // Handle the response as needed
+              })
+              .catch((error) => {
+                console.error('Error uploading image:', error);
+              });
           }
-        } else {
-          console.error("Empty response from server");
-          // Handle empty response here
+          // }
+
+          const response = await fetch(APIURL, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(Data)
+          });
+
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+
+          const responseData = await response.text();
+          console.log("response = ", responseData)
+
+          if (responseData) {
+            try {
+              const parsedData = JSON.parse(responseData); // Parse the response
+
+              if (parsedData[0].Message === "Success") {
+                alert(parsedData[0].Message);
+                await setUserData(parsedData[0].Data[0]); // Update userData in the global context
+                navigation.goBack();
+                // navigation.navigate("Profile");
+                console.log("Edit Status", parsedData[0].Data[0])
+              } else {
+                alert(parsedData[0].Message);
+                navigation.goBack();
+              }
+            } catch (error) {
+              console.error("Error parsing response data Edit:", error);
+              alert("Error parsing response data Edit");
+            }
+          } else {
+            console.error("Empty response from server");
+            // Handle empty response here
+          }
+        } catch (error) {
+          console.error("ERROR FOUND ", error);
         }
-      } catch (error) {
-        console.error("ERROR FOUND ", error);
       }
     } else {
       alert("No Change Found!");

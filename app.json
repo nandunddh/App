@@ -43,7 +43,8 @@
           "photosPermission": "Selecct and upload images.",
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
         }
-      ]
+      ],
+      "expo-router"
     ],
     "extra": {
       "eas": {

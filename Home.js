@@ -38,7 +38,7 @@ const Home = () => {
   const seenMonths = new Set();
   const navigation = useNavigation();
 
-  useEffect(() => {}, [ConferenceData]);
+  // useEffect(() => {}, [ConferenceData]);
 
   const handpleUrlPress = ({ conference }) => {
     // console.log("Join Now Pressed");
