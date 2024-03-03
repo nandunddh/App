@@ -20,9 +20,10 @@ const App = () => {
   const [isDrawerClicked, setIsDrawerClicked] = useState(false);
   const [loadingCredentials, setLoadingCredentials] = useState(true);
 
+  const navigation = 
   useEffect(() => {
     getStoredCredentials();
-  }, [userData, storedCredentials, ConferenceData, loadingCredentials]);
+  }, [getStoredCredentials, handleupcomingconferencelist]);
 
   const getStoredCredentials = async () => {
     try {
@@ -67,6 +68,9 @@ const App = () => {
       const responseData = await response.json();
 
       if (responseData[0].Message === "Success") {
+        if(responseData[0].Data[0].isAdmin == true){
+          navigation.navigate("Admin Tab");
+        }
         setUserData(responseData[0].Data[0]);
         console.log("User Data", responseData[0].Data[0]);
       } else {
