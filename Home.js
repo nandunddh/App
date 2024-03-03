@@ -38,7 +38,7 @@ const Home = () => {
   const seenMonths = new Set();
   const navigation = useNavigation();
 
-  useEffect(() => {}, [ConferenceData]);
+  // useEffect(() => {}, [ConferenceData]);
 
   const handpleUrlPress = ({ conference }) => {
     // console.log("Join Now Pressed");
@@ -173,7 +173,7 @@ const Home = () => {
           {ConferenceData && ConferenceData.length > 0 && (
             <View
               style={{
-                backgroundColor: "#373a43",
+                backgroundColor: "#363942",
                 paddingHorizontal: 25,
                 flexDirection: "row",
                 justifyContent: "space-between",

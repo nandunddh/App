@@ -1,14 +1,8 @@
 import React, { useContext, useEffect } from "react";
-
-import { DrawerItem, createDrawerNavigator } from "@react-navigation/drawer";
-
-import Home from "./Home";
-import About from "./About";
-import { AuthStackNavigator, ContactStackNavigator } from "./StackNav";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { AuthStackNavigator } from "./StackNav";
 import UserTabs from "./TabNav";
-import Profile from "./Components/Profile";
 import DrawerScreen from "./Components/DrawerScreen";
-import Login from "./Components/Auth/Login";
 import MyContext from "./MyContext";
 import AdminTab from "./AdminTab";
 
@@ -18,32 +12,33 @@ const Drawer = createDrawerNavigator();
 const DrawerNav = () => {
   const { isLogin, isAdmin } = useContext(MyContext);
   useEffect(() => {
-    console.log("isAdmin", isAdmin);
-  }, [isLogin, isAdmin]);
+  }, [isLogin]);
 
   const CustomDrawerContent = () => {
+    console.log("islogin from Drawer nav = ", isLogin);
     return isLogin ? <DrawerScreen /> : null;
   };
 
-  return (
-    <Drawer.Navigator
-      drawerContent={CustomDrawerContent} >
+  return isLogin ? (
+    <Drawer.Navigator drawerContent={CustomDrawerContent}>
       {
-        isLogin ?
-          <>
-            <Drawer.Screen name="Drawer Home " component={UserTabs} options={{
-              headerShown: false, headerTitle: "Home"
-            }} />
-            <Drawer.Screen name="Admin Tab" component={AdminTab} options={{
-              headerShown: false, headerTitle: "Home"
-            }} />
-          </>
+        isAdmin ?
+
+          <Drawer.Screen
+            name="Admin Tab"
+            component={AdminTab}
+            options={{ headerShown: false, headerTitle: "Home" }}
+          />
           :
-          <Drawer.Screen name="Profile" component={AuthStackNavigator} options={{
-            headerShown: false, headerTitle: "Home"
-          }} />
+          <Drawer.Screen
+            name="Drawer Home"
+            component={UserTabs}
+            options={{ headerShown: false, headerTitle: "Home" }}
+          />
       }
     </Drawer.Navigator>
+  ) : (
+    <AuthStackNavigator />
   );
 }
 

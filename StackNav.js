@@ -17,6 +17,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import ResetPassword from "./Components/Auth/ResetPassword";
 import Verificationcode from "./Components/Auth/Verificationcode";
 import New_Password from "./Components/Auth/New_Password";
+import ContactUs from "./Components/ContactUs";
+import { Messgae } from "./Components/Auth/Messgae";
+import EditScreen from "./Components/EditScreen";
+import { useNavigation } from "@react-navigation/native";
 
 const Stack = createStackNavigator();
 
@@ -48,11 +52,25 @@ const MainStackNavigator = () => {
       </View>
     );
   };
+  const HeaderLeft = () => {
+    const navigation = useNavigation();
+    return (
+      <View style={{ marginLeft: 20 }}>
+        <TouchableOpacity onPress={() => navigation.navigate("EventsList")}>
+          {/* <Image
+            source={require("./assets/nandu.png")}
+            style={{ borderRadius: 25, marginLeft: 10, width: 60, height: 60 }}
+          /> */}
+          <Ionicons name="arrow-undo-outline" size={35} color={"#fff"} />
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   const HeaderTitle = () => {
-      const { userData } = useContext(MyContext);
-      useEffect(() => {
-      },[userData])
+    const { userData } = useContext(MyContext);
+    useEffect(() => {
+    }, [userData])
     return (
       <View>
         <View style={{ flexDirection: "row" }}>
@@ -64,7 +82,11 @@ const MainStackNavigator = () => {
           </View> */}
           <View>
             <Text style={{ color: "#fff" }}> Hi Welcome </Text>
-            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20, textTransform: "capitalize" }}> {userData.name}</Text>
+            {userData ? 
+            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20, }}> {userData.name}</Text>
+            :
+            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20, }}> loading...</Text>
+          }
           </View>
         </View>
       </View >
@@ -77,6 +99,7 @@ const MainStackNavigator = () => {
         headerLeft: () => <CustomDrawerHeader navigation={navigation} />,
         headerShown: true,
         headerTitle: () => <HeaderTitle />,
+        headerShadowVisible: false,
       }
       )
       } />
@@ -91,8 +114,10 @@ const MainStackNavigator = () => {
       <Stack.Screen name="Conference screen" component={ConferenceScreen} options={({ route }) => ({ title: route.params.name, headerTitleAlign: "center" })} />
       <Stack.Screen name="About Conference" component={AboutConference} options={({ route }) => ({ title: route.params.name, headerTitleAlign: "center" })} />
       <Stack.Screen name="Profile" component={Profile} options={({ route }) => ({ title: route.params.name, headerTitleAlign: "center" })} />
-      <Stack.Screen name="Edit_Profile" component={EditProfile} ooptions={({ route }) => ({ title: route.params.name, headerTitleAlign: "center"})} />
-      <Stack.Screen name="Contact Screen" component={About} />
+      <Stack.Screen name="Edit_Profile" component={EditProfile} options={{ headerTitleAlign: "center", headerTitle: "Edit Details" }} />
+      <Stack.Screen name="ContactUs" component={ContactUs} options={{ headerTitleAlign: "center", headerTitle: "Contact Us" }} />
+      <Stack.Screen name="EditScreen" component={EditScreen} options={({ route }) => ({ title: route.params.data.name, headerTitleAlign: "center", headerLeft: () => <HeaderLeft /> })} />
+      {/* {/* <Stack.Screen name="" component={About} /> */}
     </Stack.Navigator>
   );
 }
