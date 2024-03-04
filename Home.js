@@ -10,7 +10,7 @@ import {
   Linking,
   LogBox,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import MyContext from "./MyContext";
 import { useNavigation } from "@react-navigation/native";
 // Icons
@@ -37,8 +37,6 @@ const Home = () => {
   const { ConferenceData } = useContext(MyContext);
   const seenMonths = new Set();
   const navigation = useNavigation();
-
-  // useEffect(() => {}, [ConferenceData]);
 
   const handpleUrlPress = ({ conference }) => {
     // console.log("Join Now Pressed");

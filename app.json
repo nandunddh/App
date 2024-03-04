@@ -51,6 +51,16 @@
         "projectId": "d90ececd-a70a-49cb-abf3-a4271c6c5832"
       }
     },
-    "owner": "nanduexpo"
+    "owner": "nanduexpo",
+    "permissions": {
+      "camera": {
+        "allowsRecording": true,
+        "allowsExternalStorage": true,
+        "android": {
+          "cameraPermission": true,
+          "storagePermission": true
+        }
+      }
+    }
   }
 }

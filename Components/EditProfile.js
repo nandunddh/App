@@ -24,7 +24,6 @@ const EditProfile = () => {
 
   LogBox.ignoreLogs(['Key "cancelled" in the image picker result is deprecated']);
 
-  useEffect(() => { console.log("first", profile_path) }, [profile_path]);
   const handleUpdate = async () => {
     console.log("name ", name, " phone ", mobilenumber, " location ", location, "profile ", profile_path);
 
@@ -137,6 +136,7 @@ const EditProfile = () => {
       if (status !== 'granted') {
         alert('Sorry, we need camera roll permissions to make this work!');
       }
+      
     })();
     console.log("profile path", profile_path);
   }, [profile_path]);
@@ -189,33 +189,24 @@ const EditProfile = () => {
         aspect: [4, 3],
         quality: 1,
       });
-      console.log('Result:', result);
 
       if (result.canceled) {
         setImage(null);
-        setLogo_path(null);
+        setProfile_path(userData.profile);
       } else {
-        // Save the image path and file name
         const selectedAsset = result.assets[0];
         const imagePath = selectedAsset.uri;
         const fileName = `Image_${Date.now()}.jpg`;
 
-        // Write the image to a folder in the document directory
         const destinationUri = `${FileSystem.documentDirectory}${fileName}`;
         await FileSystem.copyAsync({ from: imagePath, to: destinationUri });
 
-        // Do something with the imagePath and fileName (e.g., save to state)
-        setLogo_path(fileName)
-        console.log('Image Path:', imagePath);
-        console.log('File Name:', fileName);
-        console.log('destinationUri:', destinationUri);
-
-        // Set the image state to display the selected image
-        // setImage(imagePath);
+        setProfile_path(fileName);
         setImage(destinationUri);
       }
     } catch (error) {
-      alert('Kindly Select image');
+      console.error('Error picking image:', error);
+      Alert.alert('Error', 'An error occurred while picking an image.');
     }
   };
 
@@ -234,9 +225,9 @@ const EditProfile = () => {
               <TouchableOpacity title="Choose from gallery" onPress={pickImage} style={{ marginRight: 10, backgroundColor: "#363942", borderRadius: 10 }}>
                 <Text style={{ color: "#fff", paddingHorizontal: 20, paddingVertical: 10 }}>Choose from Gallery</Text>
               </TouchableOpacity>
-              <TouchableOpacity title="Capture Image" onPress={takePicture} style={{ marginRight: 10, backgroundColor: "#363942", borderRadius: 10 }}>
+              {/* <TouchableOpacity title="Capture Image" onPress={takePicture} style={{ marginRight: 10, backgroundColor: "#363942", borderRadius: 10 }}>
                 <Text style={{ color: "#fff", paddingHorizontal: 20, paddingVertical: 10 }}>Capture Image</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
           <View style={{ flex: 1 }}>

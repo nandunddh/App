@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { AuthStackNavigator } from "./StackNav";
 import UserTabs from "./TabNav";
@@ -10,13 +10,13 @@ import AdminTab from "./AdminTab";
 const Drawer = createDrawerNavigator();
 
 const DrawerNav = () => {
+  const memorizedislogin = useMemo(() => isLogin, [isLogin]);
   const { isLogin, isAdmin } = useContext(MyContext);
   useEffect(() => {
-  }, [isLogin]);
+  }, [memorizedislogin]);
 
   const CustomDrawerContent = () => {
-    console.log("islogin from Drawer nav = ", isLogin);
-    return isLogin ? <DrawerScreen /> : null;
+    return isLogin && <DrawerScreen /> ;
   };
 
   return isLogin ? (

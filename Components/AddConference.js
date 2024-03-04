@@ -1,5 +1,5 @@
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Button, FlatList, Platform } from 'react-native'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { DB_URL } from '../Constants/Constants';
@@ -54,8 +54,6 @@ const AddConference = ({ navigation }) => {
     { key: '6', value: 'CCE-2024' },
     { key: '7', value: 'NDS-2024' },
   ]
-  useEffect(() => {
-  }, [name, Logo_path])
 
   const handleCreate = async () => {
     try {

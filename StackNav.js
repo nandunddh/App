@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Home from "./Home";
 import About from "./About";
@@ -69,8 +69,7 @@ const MainStackNavigator = () => {
 
   const HeaderTitle = () => {
     const { userData } = useContext(MyContext);
-    useEffect(() => {
-    }, [userData])
+
     return (
       <View>
         <View style={{ flexDirection: "row" }}>

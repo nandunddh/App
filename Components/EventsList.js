@@ -11,7 +11,6 @@ import { DB_URL } from './Constants/Constants';
 const EventsList = ({ navigation }) => {
 
   const { ConferenceData, setConferenceData } = useContext(MyContext);
-  useEffect(() => {},[ConferenceData])
   
   const handleupcomingconferencelist = async () => {
     try {

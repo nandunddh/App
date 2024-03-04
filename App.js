@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet } from 'react-native';
-import DrawerNav from './DrawerNav';
-import { DB_URL } from './Components/Constants/Constants';
-import MyContext from './MyContext';
-import * as SecureStore from 'expo-secure-store';
-import LoadingScreen from './LoadingScreen'; // Import the loading screen component
-import Web from './Web';
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
+import { Platform, StyleSheet } from "react-native";
+import DrawerNav from "./DrawerNav";
+import { DB_URL } from "./Components/Constants/Constants";
+import MyContext from "./MyContext";
+import * as SecureStore from "expo-secure-store";
+import LoadingScreen from "./LoadingScreen"; // Import the loading screen component
+import Web from "./Web";
+import debounce from 'lodash/debounce';
 
 const App = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -21,26 +22,36 @@ const App = () => {
   const [isDrawerClicked, setIsDrawerClicked] = useState(false);
   const [loadingCredentials, setLoadingCredentials] = useState(true);
 
-  const navigation = 
-  useEffect(() => {
-    getStoredCredentials();
-  }, [userData, storedCredentials, ConferenceData, loadingCredentials]);
+  const memoizedUserData = useMemo(() => userData, [userData]);
+  const memoizedConferenceData = useMemo(() => ConferenceData, [ConferenceData]);
+  
+    useEffect(() => {
+      debouncedGetStoredCredentials();
+      return () => {
+        debouncedGetStoredCredentials.cancel(); // Cleanup debounce on unmount
+      };
+    }, [memoizedConferenceData, memoizedUserData, debouncedGetStoredCredentials]);
+
 
   const getStoredCredentials = async () => {
     try {
-      const storedEmail = await SecureStore.getItemAsync('email');
-      const storedPassword = await SecureStore.getItemAsync('password');
-      const storedUsername = await SecureStore.getItemAsync('username');
+      const storedEmail = await SecureStore.getItemAsync("email");
+      const storedPassword = await SecureStore.getItemAsync("password");
+      const storedUsername = await SecureStore.getItemAsync("username");
       if (storedEmail && storedPassword) {
-        setStoredCredentials({ email: storedEmail, password: storedPassword, username: storedUsername });
+        setStoredCredentials({
+          email: storedEmail,
+          password: storedPassword,
+          username: storedUsername,
+        });
         getUserData(storedEmail, storedPassword);
         // console.log('Stored Credentials App Screen:', { email: storedEmail, password: storedPassword, username: storedUsername });
       } else {
-        console.log('No credentials found App.');
+        console.log("No credentials found App.");
         setLoadingCredentials(false); // Set loading state to false if no credentials are found
       }
     } catch (error) {
-      console.error('Error retrieving credentials:', error);
+      console.error("Error retrieving credentials:", error);
       setLoadingCredentials(false); // Set loading state to false if an error occurs
     }
   };
@@ -49,34 +60,30 @@ const App = () => {
     try {
       const APIURL = `${DB_URL}login.php`;
       const headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        Accept: "application/json",
+        "Content-Type": "application/json",
       };
 
       const Data = {
         Email: storedEmail,
-        Password: storedPassword
+        Password: storedPassword,
       };
 
       const response = await fetch(APIURL, {
-        method: 'POST',
+        method: "POST",
         headers: headers,
-        body: JSON.stringify(Data)
+        body: JSON.stringify(Data),
       });
 
       const responseData = await response.json();
 
       if (responseData[0].Message === "Success") {
-        if(responseData[0].Data[0].isAdmin == true){
-          navigation.navigate("Admin Tab");
-        }
         setUserData(responseData[0].Data[0]);
         if (responseData[0].Data[0].isAdmin == "true") {
-          console.log("Admin Login")
+          console.log("Admin Login");
           setIsAdmin(true);
         }
         setIsLogin(true);
-        console.log("User Data = ", responseData[0].Data[0]);
         handleupcomingconferencelist();
       } else {
         alert(responseData[0].Message);
@@ -86,8 +93,14 @@ const App = () => {
       console.error("Fetch Error!", error);
       setUserData(null);
     }
-  }
+  };
 
+
+  const debouncedGetStoredCredentials = useCallback(
+    debounce(() => getStoredCredentials(), 500),
+    []
+  );
+  
   // const handleupcomingconferencelist = async () => {
   //   try {
   //     var APIURL = `${DB_URL}GetConferenceDetails.php`;
@@ -170,43 +183,66 @@ const App = () => {
     }
   };
 
-
-
   return (
     <>
       <StatusBar style="light" />
       {loadingCredentials ? ( // Conditionally render based on loadingCredentials state
-        <LoadingScreen />
-      )
-
-        : (
-          <NavigationContainer>
-            <MyContext.Provider
-              value={{
-                isNotification,
-                setIsNotification,
-                isAdmin,
-                setIsAdmin,
-                storedCredentials,
-                setStoredCredentials,
-                isLogin,
-                setIsLogin,
-                ConferenceData,
-                setConferenceData,
-                user_name,
-                setUser_name,
-                isloading,
-                setIsloading,
-                isDrawerClicked,
-                setIsDrawerClicked,
-                userData,
-                setUserData
-              }}
-            >
-              <DrawerNav />
-            </MyContext.Provider>
-          </NavigationContainer>
-        )}
+        <MyContext.Provider
+          value={{
+            isNotification,
+            setIsNotification,
+            isAdmin,
+            setIsAdmin,
+            storedCredentials,
+            setStoredCredentials,
+            isLogin,
+            setIsLogin,
+            ConferenceData,
+            setConferenceData,
+            user_name,
+            setUser_name,
+            isloading,
+            setIsloading,
+            isDrawerClicked,
+            setIsDrawerClicked,
+            userData,
+            setUserData,
+            loadingCredentials,
+            setLoadingCredentials,
+          }}
+        >
+          <LoadingScreen />
+        </MyContext.Provider>
+      ) : (
+        <NavigationContainer>
+          <MyContext.Provider
+            value={{
+              isNotification,
+              setIsNotification,
+              isAdmin,
+              setIsAdmin,
+              storedCredentials,
+              setStoredCredentials,
+              isLogin,
+              setIsLogin,
+              ConferenceData,
+              setConferenceData,
+              user_name,
+              setUser_name,
+              isloading,
+              setIsloading,
+              isDrawerClicked,
+              setIsDrawerClicked,
+              userData,
+              setUserData,
+              loadingCredentials,
+              setLoadingCredentials,
+            }}
+          >
+            <DrawerNav />
+          </MyContext.Provider>
+        </NavigationContainer>
+      )}
     </>
   );
 };
@@ -216,8 +252,8 @@ export default App;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
