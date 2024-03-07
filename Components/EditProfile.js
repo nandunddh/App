@@ -136,7 +136,7 @@ const EditProfile = () => {
       if (status !== 'granted') {
         alert('Sorry, we need camera roll permissions to make this work!');
       }
-      
+
     })();
     console.log("profile path", profile_path);
   }, [profile_path]);
@@ -158,7 +158,8 @@ const EditProfile = () => {
 
         const selectedAsset = result.assets[0];
         const imagePath = selectedAsset.uri;
-        const fileName = `Image_${Date.now()}.jpg`;
+        const randomNumber = Math.floor(Math.random() * 1000); // Generates a random number between 0 and 999
+        const fileName = `Image_${Date.now()}_${randomNumber}.jpg`;
 
         // Write the image to a folder in the document directory
         const destinationUri = `${FileSystem.documentDirectory}${fileName}`;
@@ -196,7 +197,8 @@ const EditProfile = () => {
       } else {
         const selectedAsset = result.assets[0];
         const imagePath = selectedAsset.uri;
-        const fileName = `Image_${Date.now()}.jpg`;
+        const randomNumber = Math.floor(Math.random() * 1000); // Generates a random number between 0 and 999
+        const fileName = `Image_${Date.now()}_${randomNumber}.jpg`;
 
         const destinationUri = `${FileSystem.documentDirectory}${fileName}`;
         await FileSystem.copyAsync({ from: imagePath, to: destinationUri });

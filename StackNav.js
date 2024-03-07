@@ -122,6 +122,7 @@ const MainStackNavigator = () => {
 }
 
 const AuthStackNavigator = () => {
+  console.log("AuthStacknav");
   return (
     <Stack.Navigator screenOptions={{
       headerTitleAlign: "center",

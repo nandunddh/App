@@ -45,11 +45,15 @@ const Login = () => {
     setStoredCredentials,
     storedCredentials,
     user_email,
+    userData,
+    setUserData,
     setUser_email,
     user_name,
     setUser_name,
     setLoadingCredentials,
     loadingCredentials,
+    setIsloading,
+    setConferenceData
   } = useContext(MyContext);
 
   const memorizedislogin = useMemo(() => isLogin, [isLogin]);
@@ -65,15 +69,61 @@ const Login = () => {
   }, [ memorizedislogin, memorizedisAdmin, memorizedemail, memorizedstoredCredentials, memorizedloadingCredentials, getStoredCredentials]);
 
   const checkStorderCredentials = () => {
-    if (storedCredentials == undefined) {
+    console.log("Login IsADmin = ", isAdmin);
+    if (storedCredentials == null) {
       // setLoadingCredentials(true);
       getStoredCredentials();
+      console.log("Loading... ");
     } 
-    else{
-      getStoredCredentials();
-      setIsLogin(true);
+    if (storedCredentials !== null) {
+      // getStoredCredentials();\
+      console.log("Login Stored = ", storedCredentials);
+      getUserData(storedCredentials.email, storedCredentials.password);
+      // setIsLogin(true);
     }
   };
+
+  const getUserData = async (storedEmail, storedPassword) => {
+    try {
+      const APIURL = `${DB_URL}login.php`;
+      const headers = {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      };
+
+      const Data = {
+        Email: storedEmail,
+        Password: storedPassword,
+      };
+
+      const response = await fetch(APIURL, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(Data),
+      });
+
+      const responseData = await response.json();
+
+      if (responseData[0].Message === "Success") {
+        setUserData(responseData[0].Data[0]);
+        console.log("getUserData = ", isAdmin)
+        if (responseData[0].Data[0].isAdmin == "true") {
+          console.log("Admin Login");
+          setIsAdmin(true);
+          handleupcomingconferencelist();
+        }
+        // setIsLogin(true);
+        handleupcomingconferencelist();
+      } else {
+        alert(responseData[0].Message);
+        setUserData(null);
+      }
+    } catch (error) {
+      console.error("Fetch Error!", error);
+      setUserData(null);
+    }
+  };
+
 
   // Function to store credentials
   const storeCredentials = async () => {
@@ -87,7 +137,7 @@ const Login = () => {
         email: emailString,
         password: passwordString,
       });
-      await getStoredCredentials();
+      // await getStoredCredentials();
       console.log(
         "Stored Credentials Login Screen Stored function",
         storedCredentials
@@ -103,30 +153,21 @@ const Login = () => {
     try {
       const storedEmail = await SecureStore.getItemAsync("email");
       const storedPassword = await SecureStore.getItemAsync("password");
-      const storedUsername = await SecureStore.getItemAsync("username");
       if (storedEmail && storedPassword) {
         // alert(username + " username");
         await setStoredCredentials({
           email: storedEmail,
           password: storedPassword,
-          username: storedUsername,
         });
-        // await setIsLogin(true);
-
-        // setIsLogin(true);
-        // if (storedisAdmin === "true") {
-        //   setIsAdmin(true);
-        // }
-        // {storeCredentials &&
-        // navigation.navigate("") }
 
         console.log("Stored Credentials Login Screen:", {
           email: storedEmail,
           password: storedPassword,
-          username: storedUsername,
         });
+        console.log("getStoredCredentials =", isAdmin);
       } else {
         console.log("No credentials found.");
+        console.log("userData", userData);
         await setIsLogin(false);
         await setStoredCredentials(null);
       }
@@ -168,16 +209,16 @@ const Login = () => {
       const responseData = await response.json();
 
       if (responseData[0].Message === "Success") {
-        if (responseData[0].IsAdmin == true) {
-          await setUser_name(responseData[0].User_Name);
+        // if (responseData[0].IsAdmin == true) {
+        //   await setUser_name(responseData[0].User_Name);
+        //   await storeCredentials();
+        //   // await setIsLogin(true);
+        //   navigation.navigate("Admin Tab");
+        //   // await storeCredentials();
+        // } else {
           await storeCredentials();
-          // await setIsLogin(true);
-          navigation.navigate("Admin Tab");
-          // await storeCredentials();
-        } else {
-          await storeCredentials();
           await setUser_name(responseData[0].User_Name);
-        }
+        // }
         // alert(responseData[0].User_Name);
         console.log("Data user name", user_name);
       } else {
@@ -188,6 +229,56 @@ const Login = () => {
     } catch (error) {
       console.error("ERROR FOUND Login = ", error);
       alert("Fetch Error!");
+    }
+  };
+
+  const handleupcomingconferencelist = async () => {
+    try {
+      const APIURL = `${DB_URL}GetConferenceDetails.php`;
+      const headers = {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      };
+
+      const response = await fetch(APIURL, {
+        method: "GET",
+        headers: headers,
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const responseData = await response.text(); // Get the response as text
+
+      if (responseData) {
+        try {
+          const parsedData = JSON.parse(responseData); // Parse the response
+          if (parsedData[0].Message === "Success") {
+            console.log("handleupcomingconferencelist ", isAdmin);
+            setConferenceData(parsedData[0].data);
+            setIsloading(true);
+            setLoadingCredentials(false); // Set loading state to false once credentials are fetched
+            setIsLogin(true);
+          } else {
+            alert(parsedData[0].Message);
+            setConferenceData(null);
+            setIsloading(false);
+            setLoadingCredentials(true); // Set loading state to false once credentials are fetched
+            setIsLogin(false);
+          }
+        } catch (error) {
+          console.error("Error parsing response data:", error);
+          alert("Error parsing response data");
+        }
+      } else {
+        console.error("Empty response from server");
+        // Handle empty response here
+      }
+    } catch (error) {
+      console.error("Error fetching conference data:", error);
+      setConferenceData(null);
+      setIsloading(false);
     }
   };
 

@@ -9,6 +9,7 @@ import * as SecureStore from "expo-secure-store";
 import LoadingScreen from "./LoadingScreen"; // Import the loading screen component
 import Web from "./Web";
 import debounce from 'lodash/debounce';
+import performance from 'performance-now';
 
 const App = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -18,19 +19,86 @@ const App = () => {
   const [ConferenceData, setConferenceData] = useState([]);
   const [userData, setUserData] = useState([]);
   const [user_name, setUser_name] = useState();
+  const [price, setPrice] = useState();
   const [isloading, setIsloading] = useState(false);
   const [isDrawerClicked, setIsDrawerClicked] = useState(false);
   const [loadingCredentials, setLoadingCredentials] = useState(true);
 
   const memoizedUserData = useMemo(() => userData, [userData]);
   const memoizedConferenceData = useMemo(() => ConferenceData, [ConferenceData]);
-  
-    useEffect(() => {
-      debouncedGetStoredCredentials();
-      return () => {
-        debouncedGetStoredCredentials.cancel(); // Cleanup debounce on unmount
+  let startTime = "";
+  let startTimeCdata = "";
+  let startTimeUdata = "";
+  let startTimeFdata = "";
+
+  useEffect(() => {
+    startTime = performance();
+    startTimeCdata = performance();
+    startTimeUdata = performance();
+    startTimeFdata = performance();
+    if (storedCredentials == null) {
+      getStoredCredentials();
+    }
+
+    // if (ConferenceData.length != 0) {
+    //   const intervalId = setInterval(handleupcomingconferencelist, 10000); // Poll for updates every 5 seconds
+    //   return () => {
+    //     clearInterval(intervalId); // Cleanup the interval when component unmounts
+    //   }
+    // // };
+    // if (ConferenceData.length != 0) {
+    // };
+    // handleupcomingconferencelist();
+    update();
+  }, [price]);
+
+  const update = async() =>{
+    try {
+
+      const APIURL = `${DB_URL}flag.php`;
+
+      const headers = {
+        Accept: "application/json",
+        "Content-Type": "application/json",
       };
-    }, [memoizedConferenceData, memoizedUserData, debouncedGetStoredCredentials]);
+
+      const response = await fetch(APIURL, {
+        method: "GET",
+        headers: headers,
+      });
+
+      const responseData = await response.json();
+
+      if(responseData[0].Message == "Success"){
+
+        const endTime = performance();
+        const elapsedTime = endTime - startTimeFdata;
+        console.log(`Flag loaded in ${elapsedTime} milliseconds`);
+        console.log("flag updated!", responseData[0].data[0]);
+        setPrice(responseData[0].data[0]);
+        if(responseData[0].data[0].price != price.price){
+          console.log("Data changed...........", price);
+        }
+      }
+      
+    } catch (error) {
+      
+      console.log("flag updated erroe", error);
+    }
+  }
+
+  
+  // Run handleupcomingconferencelist again when ConferenceData changes
+  // useEffect(() => {
+  //   handleupcomingconferencelist();
+  // }, [ConferenceData]);
+
+  // useEffect(() => {
+  //   debouncedGetStoredCredentials();
+  //   return () => {
+  //     debouncedGetStoredCredentials.cancel(); // Cleanup debounce on unmount
+  //   };
+  // }, [memoizedConferenceData, memoizedUserData, debouncedGetStoredCredentials]);
 
 
   const getStoredCredentials = async () => {
@@ -46,6 +114,9 @@ const App = () => {
         });
         getUserData(storedEmail, storedPassword);
         // console.log('Stored Credentials App Screen:', { email: storedEmail, password: storedPassword, username: storedUsername });
+        const endTime = performance();
+        const elapsedTime = endTime - startTime;
+        console.log(`Data loaded in ${elapsedTime} milliseconds`);
       } else {
         console.log("No credentials found App.");
         setLoadingCredentials(false); // Set loading state to false if no credentials are found
@@ -85,6 +156,9 @@ const App = () => {
         }
         setIsLogin(true);
         handleupcomingconferencelist();
+        const endTime = performance();
+        const elapsedTime = endTime - startTime;
+        console.log(`User Data loaded in ${elapsedTime} milliseconds`);
       } else {
         alert(responseData[0].Message);
         setUserData(null);
@@ -100,7 +174,7 @@ const App = () => {
     debounce(() => getStoredCredentials(), 500),
     []
   );
-  
+
   // const handleupcomingconferencelist = async () => {
   //   try {
   //     var APIURL = `${DB_URL}GetConferenceDetails.php`;
@@ -159,9 +233,24 @@ const App = () => {
         try {
           const parsedData = JSON.parse(responseData); // Parse the response
           if (parsedData[0].Message === "Success") {
-            setConferenceData(parsedData[0].data);
-            setIsloading(true);
+            // setConferenceData(parsedData[0].data);
+            console.log("first");
+            // if (
+            //   JSON.stringify(parsedData[0].data) !==
+            //   JSON.stringify(ConferenceData)
+            // ) {
+            //   setConferenceData(parsedData[0].data); // Update state only if there are changes
+            // }
+            // else{
+              //   console.log("No changes found");
+              // }
+                setConferenceData(parsedData[0].data); // Update state only if there are changes
+              setIsloading(true);
             setLoadingCredentials(false); // Set loading state to false once credentials are fetched
+            const endTime = performance();
+            const elapsedTime = endTime - startTime;
+            console.log(`C Data loaded in ${elapsedTime} milliseconds`);
+
           } else {
             alert(parsedData[0].Message);
             setConferenceData(null);
