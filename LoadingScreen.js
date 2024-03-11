@@ -6,11 +6,30 @@ import { DB_URL } from "./Components/Constants/Constants";
 
 const LoadingScreen = () => {
   const memorizedislogin = useMemo(() => isLogin, [isLogin]);
-  const memorizedloading = useMemo(() => loadingCredentials, [loadingCredentials]);
+  const memorizedloading = useMemo(
+    () => loadingCredentials,
+    [loadingCredentials]
+  );
   const memorizeduserData = useMemo(() => userData, [userData]);
-  const { loadingCredentials, setLoadingCredentials, setStoredCredentials, setUserData, userData, storedCredentials, isLogin, setIsLogin } = useContext(MyContext);
+  const {
+    loadingCredentials,
+    setLoadingCredentials,
+    setStoredCredentials,
+    setUserData,
+    userData,
+    storedCredentials,
+    isLogin,
+    setIsLogin,
+  } = useContext(MyContext);
 
   useEffect(() => {
+    if (userData == null) {
+      setLoadingCredentials(false);
+    }
+    // if (storedCredentials !== null) {
+    //   setLoadingCredentials(false);
+    // }
+    console.log("con data 1 = ", storedCredentials);
   }, [loadingCredentials, userData, isLogin]);
 
   const getStoredCredentials = async () => {

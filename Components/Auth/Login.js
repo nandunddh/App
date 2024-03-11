@@ -64,16 +64,13 @@ const Login = () => {
 
   useEffect(() => {
     // getStoredCredentials()
-
     checkStorderCredentials();
   }, [ memorizedislogin, memorizedisAdmin, memorizedemail, memorizedstoredCredentials, memorizedloadingCredentials, getStoredCredentials]);
 
   const checkStorderCredentials = () => {
-    console.log("Login IsADmin = ", isAdmin);
     if (storedCredentials == null) {
       // setLoadingCredentials(true);
       getStoredCredentials();
-      console.log("Loading... ");
     } 
     if (storedCredentials !== null) {
       // getStoredCredentials();\
@@ -112,8 +109,10 @@ const Login = () => {
           setIsAdmin(true);
           handleupcomingconferencelist();
         }
-        // setIsLogin(true);
-        handleupcomingconferencelist();
+        else{
+          // setIsLogin(true);
+          handleupcomingconferencelist();
+        }
       } else {
         alert(responseData[0].Message);
         setUserData(null);
@@ -234,6 +233,7 @@ const Login = () => {
 
   const handleupcomingconferencelist = async () => {
     try {
+      setLoadingCredentials(true);
       const APIURL = `${DB_URL}GetConferenceDetails.php`;
       const headers = {
         Accept: "application/json",
@@ -258,8 +258,9 @@ const Login = () => {
             console.log("handleupcomingconferencelist ", isAdmin);
             setConferenceData(parsedData[0].data);
             setIsloading(true);
-            setLoadingCredentials(false); // Set loading state to false once credentials are fetched
             setIsLogin(true);
+            await setLoadingCredentials(false); // Set loading state to false once credentials are fetched
+            console.log("loading = ", loadingCredentials);
           } else {
             alert(parsedData[0].Message);
             setConferenceData(null);

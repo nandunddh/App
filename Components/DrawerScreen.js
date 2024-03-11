@@ -25,7 +25,8 @@ const DrawerScreen = () => {
     userData,
     setUserData,
     setIsAdmin,
-    isAdmin
+    isAdmin,
+    setLoadingCredentials
   } = useContext(MyContext);
 
   const navigation = useNavigation();
@@ -34,14 +35,14 @@ const DrawerScreen = () => {
 
   useEffect(() => {
     if (userData == null) {
-      setIsLogin(true);
+      setIsLogin(false);
       setIsAdmin(false);
-      alert("Sign Out Success!");
+      setLoadingCredentials(false);
     }
     console.log("usedata Screen =", userData);
     console.log("usedata Screen islogin=", isLogin);
     console.log("usedata Screen isAdmin=", isAdmin);
-  }, [memorizedislogin]);
+  }, []);
 
   const getUserData = async (storedEmail, storedPassword) => {
     try {
@@ -85,13 +86,15 @@ const DrawerScreen = () => {
 
   const clearCredentials = async () => {
     try {
+      setLoadingCredentials(true);
       await SecureStore.deleteItemAsync("email");
       await SecureStore.deleteItemAsync("password");
 
       await setStoredCredentials(null); // Clear stored credentials in state
       await setUserData(null); // Clear userData in state
-      setIsLogin(true);
+      setIsLogin(false);
       setIsAdmin(false);
+      // navigation.navigate("Login Screen");
       alert("Sign Out Success!");
       console.log(
         "Before credentials cleared (logged out) successfully.",

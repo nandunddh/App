@@ -8,8 +8,11 @@ import MyContext from "./MyContext";
 import * as SecureStore from "expo-secure-store";
 import LoadingScreen from "./LoadingScreen"; // Import the loading screen component
 import Web from "./Web";
-import debounce from 'lodash/debounce';
-import performance from 'performance-now';
+import debounce from "lodash/debounce";
+import performance from "performance-now";
+import Gettoken from "./Components/Getoken";
+import * as Notifications from "expo-notifications";
+import { Animated } from "react-native";
 
 const App = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -23,15 +26,25 @@ const App = () => {
   const [isloading, setIsloading] = useState(false);
   const [isDrawerClicked, setIsDrawerClicked] = useState(false);
   const [loadingCredentials, setLoadingCredentials] = useState(true);
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [device_tokens, setDevice_tokens] = useState([]);
+
 
   const memoizedUserData = useMemo(() => userData, [userData]);
-  const memoizedConferenceData = useMemo(() => ConferenceData, [ConferenceData]);
+  const memoizedConferenceData = useMemo(
+    () => ConferenceData,
+    [ConferenceData]
+  );
   let startTime = "";
   let startTimeCdata = "";
   let startTimeUdata = "";
   let startTimeFdata = "";
 
   useEffect(() => {
+    console.log("UserData = ", userData);
+    if (expoPushToken.length == 0) {
+      setupPushNotifications();
+    }
     startTime = performance();
     startTimeCdata = performance();
     startTimeUdata = performance();
@@ -40,21 +53,95 @@ const App = () => {
       getStoredCredentials();
     }
 
-    // if (ConferenceData.length != 0) {
-    //   const intervalId = setInterval(handleupcomingconferencelist, 10000); // Poll for updates every 5 seconds
-    //   return () => {
-    //     clearInterval(intervalId); // Cleanup the interval when component unmounts
-    //   }
-    // // };
-    // if (ConferenceData.length != 0) {
-    // };
+    if (expoPushToken.length !== 0 && userData !== null) {
+      sendTokenToServer(expoPushToken);
+    }
+
     // handleupcomingconferencelist();
-    update();
-  }, [price]);
+  }, [price, ConferenceData]);
 
-  const update = async() =>{
+  const animatedValue = new Animated.Value(0);
+
+  // Attach a listener to the animated value
+  animatedValue.addListener((value) => {
+    console.log("Animated value updated:", value.value);
+  });
+
+  // Later in your code or component lifecycle
+  Animated.timing(animatedValue, {
+    toValue: 1,
+    duration: 1000,
+    useNativeDriver: false, // Note: UseNativeDriver requires 'value' listener to be added
+  }).start();
+
+  const setupPushNotifications = async () => {
     try {
+      const { status: existingStatus } =
+        await Notifications.getPermissionsAsync();
 
+      if (existingStatus !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+        if (status !== "granted") {
+          console.log("Permission for push notifications denied.");
+          return;
+        }
+      }
+
+      try {
+        const tokenData = await Notifications.getExpoPushTokenAsync();
+        const expoPushToken = tokenData.data;
+
+        // console.log("Expo Push Token:", expoPushToken);
+
+        setExpoPushToken(expoPushToken);
+      } catch (tokenError) {
+        console.error("Error fetching Expo Push Token:", tokenError);
+      }
+    } catch (error) {
+      console.error("Error setting up push notifications:", error);
+    }
+  };
+
+  const sendTokenToServer = async (expoPushToken) => {
+    try {
+      const APIURL = `${DB_URL}store_token.php`;
+      const headers = {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      };
+
+      const Data = {
+        token: expoPushToken,
+        email: userData.email,
+      };
+
+      // console.log("expo token from function = ", expoPushToken);
+      const response = await fetch(APIURL, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(Data),
+      });
+
+      const responseData = await response.json();
+
+      if (responseData[0].Message === "Success") {
+        const tokens = responseData[0].Data.map((item) => item);
+        setDevice_tokens(tokens);
+        console.log("Device Tokens:", tokens);
+      } else {
+        console.log("Error user token ", responseData[0].Message);
+      }
+
+      // console.log("Response = ", responseData[0].Data);
+
+      console.log("data toke", Data);
+    } catch (error) {
+      console.error("ERROR FOUND Storing token = ", error);
+    }
+  };
+
+  const update = async () => {
+    try {
       const APIURL = `${DB_URL}flag.php`;
 
       const headers = {
@@ -69,25 +156,21 @@ const App = () => {
 
       const responseData = await response.json();
 
-      if(responseData[0].Message == "Success"){
-
+      if (responseData[0].Message == "Success") {
         const endTime = performance();
         const elapsedTime = endTime - startTimeFdata;
         console.log(`Flag loaded in ${elapsedTime} milliseconds`);
         console.log("flag updated!", responseData[0].data[0]);
         setPrice(responseData[0].data[0]);
-        if(responseData[0].data[0].price != price.price){
+        if (responseData[0].data[0].price != price.price) {
           console.log("Data changed...........", price);
         }
       }
-      
     } catch (error) {
-      
       console.log("flag updated erroe", error);
     }
-  }
+  };
 
-  
   // Run handleupcomingconferencelist again when ConferenceData changes
   // useEffect(() => {
   //   handleupcomingconferencelist();
@@ -99,7 +182,6 @@ const App = () => {
   //     debouncedGetStoredCredentials.cancel(); // Cleanup debounce on unmount
   //   };
   // }, [memoizedConferenceData, memoizedUserData, debouncedGetStoredCredentials]);
-
 
   const getStoredCredentials = async () => {
     try {
@@ -169,7 +251,6 @@ const App = () => {
     }
   };
 
-
   const debouncedGetStoredCredentials = useCallback(
     debounce(() => getStoredCredentials(), 500),
     []
@@ -233,8 +314,9 @@ const App = () => {
         try {
           const parsedData = JSON.parse(responseData); // Parse the response
           if (parsedData[0].Message === "Success") {
+            // console.log(`C Data =`, parsedData[0].data);
             // setConferenceData(parsedData[0].data);
-            console.log("first");
+            // console.log("first");
             // if (
             //   JSON.stringify(parsedData[0].data) !==
             //   JSON.stringify(ConferenceData)
@@ -242,15 +324,14 @@ const App = () => {
             //   setConferenceData(parsedData[0].data); // Update state only if there are changes
             // }
             // else{
-              //   console.log("No changes found");
-              // }
-                setConferenceData(parsedData[0].data); // Update state only if there are changes
-              setIsloading(true);
+            //   console.log("No changes found");
+            // }
+            setConferenceData(parsedData[0].data); // Update state only if there are changes
+            setIsloading(true);
             setLoadingCredentials(false); // Set loading state to false once credentials are fetched
             const endTime = performance();
             const elapsedTime = endTime - startTime;
-            console.log(`C Data loaded in ${elapsedTime} milliseconds`);
-
+            // console.log(`C Data loaded in ${elapsedTime} milliseconds`);
           } else {
             alert(parsedData[0].Message);
             setConferenceData(null);
@@ -275,6 +356,7 @@ const App = () => {
   return (
     <>
       <StatusBar style="light" />
+      {/* <Gettoken /> */}
       {loadingCredentials ? ( // Conditionally render based on loadingCredentials state
         <MyContext.Provider
           value={{
@@ -326,6 +408,9 @@ const App = () => {
               setUserData,
               loadingCredentials,
               setLoadingCredentials,
+              device_tokens,
+              setDevice_tokens,
+              expoPushToken
             }}
           >
             <DrawerNav />

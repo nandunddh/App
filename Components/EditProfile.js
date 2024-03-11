@@ -1,18 +1,30 @@
-import { View, Text, StyleSheet, Image, Animated, TextInput, TouchableOpacity, LogBox } from 'react-native'
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import MyContext from '../MyContext';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Animated,
+  TextInput,
+  TouchableOpacity,
+  LogBox,
+} from "react-native";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import MyContext from "../MyContext";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { DB_URL } from './Constants/Constants';
-import { useNavigation } from '@react-navigation/native';
-import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
-import { Button } from '@rneui/base';
+import { DB_URL } from "./Constants/Constants";
+import { useNavigation } from "@react-navigation/native";
+import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
+import * as SecureStore from "expo-secure-store";
 
 const EditProfile = () => {
+  const imageUrl = "";
   const navigation = useNavigation();
   const { userData, setUserData } = useContext(MyContext);
   const [name, setName] = useState(userData ? userData.name : "");
-  const [mobilenumber, setMobileNumber] = useState(userData ? userData.mobilenumber : "");
+  const [mobilenumber, setMobileNumber] = useState(
+    userData ? userData.mobilenumber : ""
+  );
   const [location, setLocation] = useState(userData ? userData.location : "");
   const name1 = useRef();
   const mobilenumber1 = useRef();
@@ -22,13 +34,28 @@ const EditProfile = () => {
   const [old_path, setold_path] = useState(userData.profile);
   const [profile_path, setProfile_path] = useState(userData.profile);
 
-  LogBox.ignoreLogs(['Key "cancelled" in the image picker result is deprecated']);
+  LogBox.ignoreLogs([
+    'Key "cancelled" in the image picker result is deprecated',
+  ]);
 
   const handleUpdate = async () => {
-    console.log("name ", name, " phone ", mobilenumber, " location ", location, "profile ", profile_path);
+    console.log(
+      "name ",
+      name,
+      " phone ",
+      mobilenumber,
+      " location ",
+      location,
+      "profile ",
+      profile_path
+    );
 
-    if ((name !== userData.name) || (mobilenumber !== userData.mobilenumber) || (location !== userData.location || (profile_path !== userData.profile))) {
-
+    if (
+      name !== userData.name ||
+      mobilenumber !== userData.mobilenumber ||
+      location !== userData.location ||
+      profile_path !== userData.profile
+    ) {
       if (name.length === 0) {
         alert("Name can not be empty");
         name1.current.focus();
@@ -41,13 +68,12 @@ const EditProfile = () => {
         alert("Location can not be empty");
         loaction1.current.focus();
         return;
-      }
-      else {
+      } else {
         try {
           const APIURL = `${DB_URL}updateDeatils.php`;
           const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            Accept: "application/json",
+            "Content-Type": "application/json",
           };
 
           const Data = {
@@ -59,19 +85,22 @@ const EditProfile = () => {
           };
 
           if (profile_path !== userData.profile) {
-
             const uri = image;
 
             const formData = new FormData();
-            formData.append('new_image', { uri, name: profile_path, type: 'image/jpg' });
-            formData.append('old_image', old_path);
+            formData.append("new_image", {
+              uri,
+              name: profile_path,
+              type: "image/jpg",
+            });
+            formData.append("old_image", old_path);
 
             // Make a POST request to the PHP script
             fetch(`${DB_URL}profileUpdate.php`, {
-              method: 'POST',
+              method: "POST",
               body: formData,
               headers: {
-                'Content-Type': 'multipart/form-data',
+                "Content-Type": "multipart/form-data",
               },
             })
               .then((response) => response.json())
@@ -80,24 +109,23 @@ const EditProfile = () => {
                 // Handle the response as needed
               })
               .catch((error) => {
-                console.error('Error uploading image:', error);
+                console.error("Error uploading image:", error);
               });
           }
           // }
 
           const response = await fetch(APIURL, {
-            method: 'POST',
+            method: "POST",
             headers: headers,
-            body: JSON.stringify(Data)
+            body: JSON.stringify(Data),
           });
 
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
 
-
           const responseData = await response.text();
-          console.log("response = ", responseData)
+          console.log("response = ", responseData);
 
           if (responseData) {
             try {
@@ -108,7 +136,7 @@ const EditProfile = () => {
                 await setUserData(parsedData[0].Data[0]); // Update userData in the global context
                 navigation.goBack();
                 // navigation.navigate("Profile");
-                console.log("Edit Status", parsedData[0].Data[0])
+                console.log("Edit Status", parsedData[0].Data[0]);
               } else {
                 alert(parsedData[0].Message);
                 navigation.goBack();
@@ -128,19 +156,23 @@ const EditProfile = () => {
     } else {
       alert("No Change Found!");
     }
-  }
+  };
 
   useEffect(() => {
+    getStoredCredentials();
     (async () => {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        alert('Sorry, we need camera roll permissions to make this work!');
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        alert("Sorry, we need camera roll permissions to make this work!");
       }
-
+      // const storedProfileImage = await SecureStore.getItemAsync("profileImage");
+      // if (storedProfileImage) {
+      //   setProfile_path(storedProfileImage);
+      // }
     })();
     console.log("profile path", profile_path);
   }, [profile_path]);
-
 
   const takePicture = async () => {
     try {
@@ -155,7 +187,6 @@ const EditProfile = () => {
         setImage(null);
         setProfile_path(userData.profile);
       } else {
-
         const selectedAsset = result.assets[0];
         const imagePath = selectedAsset.uri;
         const randomNumber = Math.floor(Math.random() * 1000); // Generates a random number between 0 and 999
@@ -166,21 +197,50 @@ const EditProfile = () => {
         await FileSystem.copyAsync({ from: imagePath, to: destinationUri });
 
         // Do something with the imagePath and fileName (e.g., save to state)
-        setProfile_path(fileName)
-        console.log('Image Path:', imagePath);
-        console.log('File Name:', fileName);
-        console.log('destinationUri:', destinationUri);
+        setProfile_path(fileName);
+        console.log("Image Path:", imagePath);
+        console.log("File Name:", fileName);
+        console.log("destinationUri:", destinationUri);
 
         // Set the image state to display the selected image
         // setImage(imagePath);
         setImage(destinationUri);
       }
     } catch (error) {
-      console.error('Error occurred while taking a picture:', error);
+      console.error("Error occurred while taking a picture:", error);
       // Handle the error here, such as showing an alert
     }
   };
 
+  const getStoredCredentials = async () => {
+    try {
+      const storedEmail = await SecureStore.getItemAsync("email");
+      const storedPassword = await SecureStore.getItemAsync("password");
+      // const storedProfileImage = await SecureStore.getItemAsync("profileImage");
+
+      if (storedEmail && storedPassword) {
+        // alert(username + " username");
+        // await setStoredCredentials({
+        //   email: storedEmail,
+        //   password: storedPassword,
+        // });
+
+        console.log("Stored Credentials Login Screen:", {
+          email: storedEmail,
+          password: storedPassword,
+          // profile: storedProfileImage,
+        });
+
+        // imageUrl = storedProfileImage ? storedProfileImage : `${DB_URL}uploads/user_profile/${userData.profile}`;
+      } else {
+        console.log("No credentials found.");
+        console.log("userData", userData);
+      }
+    } catch (error) {
+      console.error("Error retrieving credentials:", error);
+    }
+    return false;
+  };
 
   const pickImage = async () => {
     try {
@@ -205,27 +265,51 @@ const EditProfile = () => {
 
         setProfile_path(fileName);
         setImage(destinationUri);
+
+        // await SecureStore.setItemAsync("profileImage", destinationUri);
       }
     } catch (error) {
-      console.error('Error picking image:', error);
-      Alert.alert('Error', 'An error occurred while picking an image.');
+      console.error("Error picking image:", error);
+      Alert.alert("Error", "An error occurred while picking an image.");
     }
   };
 
 
+
   return (
     <>
-      <Animated.ScrollView style={{ backgroundColor: "#fff", }}>
+      <Animated.ScrollView style={{ backgroundColor: "#fff" }}>
         <View style={styles.container}>
           <View style={styles.profile_container}>
-            {image == null ?
-              <Image source={{ uri: `${DB_URL}uploads/user_profile/${userData.profile}` }} style={styles.profile_image} />
-              :
+            {image == null ? (
+              <Image
+                source={{
+                  uri: `${DB_URL}uploads/user_profile/${userData.profile}`,
+                }}
+                style={styles.profile_image}
+              />
+            ) : (
               <Image source={{ uri: image }} style={styles.profile_image} />
-            }
+            )}
             <View style={{ flexDirection: "row" }}>
-              <TouchableOpacity title="Choose from gallery" onPress={pickImage} style={{ marginRight: 10, backgroundColor: "#363942", borderRadius: 10 }}>
-                <Text style={{ color: "#fff", paddingHorizontal: 20, paddingVertical: 10 }}>Choose from Gallery</Text>
+              <TouchableOpacity
+                title="Choose from gallery"
+                onPress={pickImage}
+                style={{
+                  marginRight: 10,
+                  backgroundColor: "#363942",
+                  borderRadius: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    color: "#fff",
+                    paddingHorizontal: 20,
+                    paddingVertical: 10,
+                  }}
+                >
+                  Choose from Gallery
+                </Text>
               </TouchableOpacity>
               {/* <TouchableOpacity title="Capture Image" onPress={takePicture} style={{ marginRight: 10, backgroundColor: "#363942", borderRadius: 10 }}>
                 <Text style={{ color: "#fff", paddingHorizontal: 20, paddingVertical: 10 }}>Capture Image</Text>
@@ -234,24 +318,79 @@ const EditProfile = () => {
           </View>
           <View style={{ flex: 1 }}>
             <View style={styles.inputbox}>
-              <Ionicons name="person-outline" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", justifyContent: "flex-end" }} />
-              <TextInput style={styles.textinput} clearTextOnFocus={false} defaultValue={userData.name} onChangeText={name => setName(name)} ref={name1} />
-
+              <Ionicons
+                name="person-outline"
+                size={30}
+                color="black"
+                style={{
+                  marginRight: 15,
+                  marginLeft: 15,
+                  alignSelf: "center",
+                  justifyContent: "flex-end",
+                }}
+              />
+              <TextInput
+                style={styles.textinput}
+                clearTextOnFocus={false}
+                defaultValue={userData.name}
+                onChangeText={(name) => setName(name)}
+                ref={name1}
+              />
             </View>
 
             <View style={styles.inputbox}>
-              <Ionicons name="call-outline" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", justifyContent: "flex-end" }} />
-              <TextInput style={styles.textinput} clearTextOnFocus={false} defaultValue={userData.mobilenumber} onChangeText={mobilenumber => setMobileNumber(mobilenumber)} ref={mobilenumber1} />
-
+              <Ionicons
+                name="call-outline"
+                size={30}
+                color="black"
+                style={{
+                  marginRight: 15,
+                  marginLeft: 15,
+                  alignSelf: "center",
+                  justifyContent: "flex-end",
+                }}
+              />
+              <TextInput
+                style={styles.textinput}
+                clearTextOnFocus={false}
+                defaultValue={userData.mobilenumber}
+                onChangeText={(mobilenumber) => setMobileNumber(mobilenumber)}
+                ref={mobilenumber1}
+              />
             </View>
             <View style={styles.inputbox}>
-              <Ionicons name="location-outline" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", justifyContent: "flex-end" }} />
-              <TextInput style={styles.textinput} clearTextOnFocus={false} defaultValue={userData.location} onChangeText={location => setLocation(location)} ref={loaction1} />
-
+              <Ionicons
+                name="location-outline"
+                size={30}
+                color="black"
+                style={{
+                  marginRight: 15,
+                  marginLeft: 15,
+                  alignSelf: "center",
+                  justifyContent: "flex-end",
+                }}
+              />
+              <TextInput
+                style={styles.textinput}
+                clearTextOnFocus={false}
+                defaultValue={userData.location}
+                onChangeText={(location) => setLocation(location)}
+                ref={loaction1}
+              />
             </View>
             <View style={{ marginTop: 25, marginBottom: 40 }}>
-              <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 22 }} onPress={handleUpdate}>
-                <Text style={{ color: "#fff", textAlign: "center" }}> Update </Text>
+              <TouchableOpacity
+                style={{
+                  borderRadius: 10,
+                  backgroundColor: "#363942",
+                  paddingVertical: 22,
+                }}
+                onPress={handleUpdate}
+              >
+                <Text style={{ color: "#fff", textAlign: "center" }}>
+                  {" "}
+                  Update{" "}
+                </Text>
               </TouchableOpacity>
               {/* <Button title='SIGN IN' color="#000" /> */}
             </View>
@@ -259,10 +398,10 @@ const EditProfile = () => {
         </View>
       </Animated.ScrollView>
     </>
-  )
-}
+  );
+};
 
-export default EditProfile
+export default EditProfile;
 
 const styles = StyleSheet.create({
   container: {
@@ -277,8 +416,7 @@ const styles = StyleSheet.create({
     height: 150,
     width: 150,
     marginBottom: 15,
-    borderRadius: 75
-
+    borderRadius: 75,
   },
   profile_name: {
     fontSize: 20,
@@ -296,6 +434,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 13,
     // width: "55%"
-    flex: 6
+    flex: 6,
   },
-})
+});

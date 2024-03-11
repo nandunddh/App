@@ -4,7 +4,7 @@
     "slug": "expo-notification",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/adaptive-icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -27,10 +27,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "googleServicesFile": "./google-services.json",
-      "permissions": [
-        "android.permission.RECORD_AUDIO"
-      ],
+      "permissions": ["CAMERA", "WRITE_EXTERNAL_STORAGE", "RECORD_AUDIO"],
       "package": "com.nanduexpo.USGAPP"
     },
     "web": {
@@ -40,27 +37,27 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Selecct and upload images.",
-          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+          "photosPermission": "Select and upload images.",
+          "cameraPermission": "Allow USGAPP to access your camera."
         }
       ],
-      "expo-router"
+      [
+      "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#ffffff",
+          "sounds": [
+            "./assets/iphone_14_notification.mp3",
+            "./assets/iphone_14_notification.mp3"
+          ]
+        }
+      ]
     ],
     "extra": {
       "eas": {
         "projectId": "d90ececd-a70a-49cb-abf3-a4271c6c5832"
       }
     },
-    "owner": "nanduexpo",
-    "permissions": {
-      "camera": {
-        "allowsRecording": true,
-        "allowsExternalStorage": true,
-        "android": {
-          "cameraPermission": true,
-          "storagePermission": true
-        }
-      }
-    }
+    "owner": "nanduexpo"
   }
 }
