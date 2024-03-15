@@ -1,5 +1,5 @@
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Platform } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { MaterialIcons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -12,6 +12,7 @@ import { Fontisto } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import { DB_URL } from '../Constants/Constants';
 import Animated from 'react-native-reanimated';
+import MyContext from '../../MyContext';
 
 const SignUp = ({ navigation }) => {
   const [hidePass, setHidePass] = useState(true);
@@ -25,7 +26,10 @@ const SignUp = ({ navigation }) => {
   const password1 = useRef();
   const cnpassword1 = useRef();
 
+  const {expoPushToken} = useContext(MyContext);
+
   useEffect(() => {
+    console.log("expoPushToken = ", expoPushToken);
     console.log("name", name)
     console.log("email", email)
     console.log("password", password)
@@ -82,11 +86,9 @@ const SignUp = ({ navigation }) => {
         Email: Email,
         Password: Password,
         isAdmin: fls,
-        // Password: Password,
+        token : expoPushToken,
+        
       };
-      console.log("name", name)
-      console.log("email", email)
-      console.log("password", password)
       // FETCH func ------------------------------------
       fetch(InsertAPIURL, {
         method: 'POST',
@@ -127,7 +129,7 @@ const SignUp = ({ navigation }) => {
           </View>
           <View style={styles.inputbox}>
             <Feather name="lock" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", }} />
-            <TextInput style={styles.textinput} placeholder='Type your password' clearTextOnFocus={true} secureTextEntry={hidePass ? true : false} onChangeText={password => setPassword(password)} ref={password1} defaultValue={password} />
+            <TextInput style={styles.textinput} placeholder='Type your password' clearTextOnFocus={false} secureTextEntry={hidePass ? true : false} onChangeText={password => setPassword(password)} ref={password1} defaultValue={password} />
             {hidePass ?
               <AntDesign name="eye" size={25} color="black" autoCorrect={false} onPress={() => setHidePass(!hidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
               :
@@ -137,8 +139,8 @@ const SignUp = ({ navigation }) => {
 
           </View>
           <View style={styles.inputbox}>
-            <Feather name="lock" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", flex: 1 }} />
-            <TextInput style={styles.textinput} placeholder='Type your confirm password' clearTextOnFocus={true} secureTextEntry={confhidePass ? true : false} onChangeText={confirmPw => setConfirmPw(confirmPw)} ref={cnpassword1} defaultValue={confirmPw} />
+            <Feather name="lock" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center"}} />
+            <TextInput style={styles.textinput} placeholder='Type your confirm password' clearTextOnFocus={false} secureTextEntry={confhidePass ? true : false} onChangeText={confirmPw => setConfirmPw(confirmPw)} ref={cnpassword1} defaultValue={confirmPw} />
             {confhidePass ?
               <AntDesign name="eye" size={25} color="black" autoCorrect={false} onPress={() => setConfHidePass(!confhidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
               :

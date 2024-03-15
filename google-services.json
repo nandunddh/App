@@ -1,12 +1,29 @@
 {
-    "client": [
-      {
-        "api_key": [
-          {
-            "current_key": "AIzaSyCwMCZyVB3AjLnnzN-BBg0RTHTLWkNylJI"
-          }
-        ]
+  "project_info": {
+    "project_number": "736514295080",
+    "project_id": "usgconferenceapp",
+    "storage_bucket": "usgconferenceapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736514295080:android:e6002b1ab8bbe6a5cbbc1d",
+        "android_client_info": {
+          "package_name": "com.nanduexpo.USGAPP"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDi2-T-LDi3S0gLrAGR3CJOKieF2T0gi98"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
       }
-    ]
-  }
-  
+    }
+  ],
+  "configuration_version": "1"
+}
