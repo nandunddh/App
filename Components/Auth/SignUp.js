@@ -13,6 +13,7 @@ import * as SecureStore from 'expo-secure-store';
 import { DB_URL } from '../Constants/Constants';
 import Animated from 'react-native-reanimated';
 import MyContext from '../../MyContext';
+import * as Device from 'expo-device';
 
 const SignUp = ({ navigation }) => {
   const [hidePass, setHidePass] = useState(true);
@@ -26,10 +27,10 @@ const SignUp = ({ navigation }) => {
   const password1 = useRef();
   const cnpassword1 = useRef();
 
-  const {expoPushToken} = useContext(MyContext);
+  // var { expoPushToken } = useContext(MyContext);
+
 
   useEffect(() => {
-    console.log("expoPushToken = ", expoPushToken);
     console.log("name", name)
     console.log("email", email)
     console.log("password", password)
@@ -80,14 +81,19 @@ const SignUp = ({ navigation }) => {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       };
-
+      // if (Device.isDevice) {
+      //   expoPushToken = expoPushToken;
+      // }
+      // else {
+      //   expoPushToken = "No Token for Virtual Device";
+      // }
       var Data = {
         Name: Name,
         Email: Email,
         Password: Password,
         isAdmin: fls,
-        token : expoPushToken,
-        
+        token: "expoPushToken",
+
       };
       // FETCH func ------------------------------------
       fetch(InsertAPIURL, {
@@ -114,7 +120,7 @@ const SignUp = ({ navigation }) => {
   return (
     <SafeAreaProvider>
       <Animated.ScrollView>
-        <View style={{ paddingHorizontal: 20, flex: 1, marginBottom: 20}}>
+        <View style={{ paddingHorizontal: 20, flex: 1, marginBottom: 20 }}>
           <Text style={{ marginVertical: 20 }}>Create account and enjoy all services</Text>
           <View style={styles.inputbox}>
             <MaterialCommunityIcons name="account-outline" size={34} color="#000" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", }} />
@@ -139,7 +145,7 @@ const SignUp = ({ navigation }) => {
 
           </View>
           <View style={styles.inputbox}>
-            <Feather name="lock" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center"}} />
+            <Feather name="lock" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center" }} />
             <TextInput style={styles.textinput} placeholder='Type your confirm password' clearTextOnFocus={false} secureTextEntry={confhidePass ? true : false} onChangeText={confirmPw => setConfirmPw(confirmPw)} ref={cnpassword1} defaultValue={confirmPw} />
             {confhidePass ?
               <AntDesign name="eye" size={25} color="black" autoCorrect={false} onPress={() => setConfHidePass(!confhidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
