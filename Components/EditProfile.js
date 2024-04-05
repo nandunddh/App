@@ -274,8 +274,6 @@ const EditProfile = () => {
     }
   };
 
-
-
   return (
     <>
       <Animated.ScrollView style={{ backgroundColor: "#fff" }}>

@@ -1,8 +1,8 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Platform } from 'react-native'
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Platform, Image } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { MaterialIcons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
@@ -14,16 +14,23 @@ import { DB_URL } from '../Constants/Constants';
 import Animated from 'react-native-reanimated';
 import MyContext from '../../MyContext';
 import * as Device from 'expo-device';
+import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
 
 const SignUp = ({ navigation }) => {
+  const no_image = require('../../assets/logo.png');
   const [hidePass, setHidePass] = useState(true);
   const [confhidePass, setConfHidePass] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
   const [name, setName] = useState("");
+  const [mobilenumber, setMobilenumber] = useState("");
+  const [image, setImage] = useState(no_image);
+  const [profile_path, setProfile_path] = useState();
   const email1 = useRef();
   const name1 = useRef();
+  const mobilenumber1 = useRef();
   const password1 = useRef();
   const cnpassword1 = useRef();
 
@@ -33,9 +40,41 @@ const SignUp = ({ navigation }) => {
   useEffect(() => {
     console.log("name", name)
     console.log("email", email)
+    console.log("mobilenumber", mobilenumber)
     console.log("password", password)
     console.log("cnpassword", confirmPw)
-  }, [email, name, password, confirmPw])
+  }, [email, name, password, confirmPw, mobilenumber])
+
+  const pickImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (result.canceled) {
+        setImage(null);
+      } else {
+        const selectedAsset = result.assets[0];
+        const imagePath = selectedAsset.uri;
+        const randomNumber = Math.floor(Math.random() * 1000); // Generates a random number between 0 and 999
+        const fileName = `Image_${Date.now()}_${randomNumber}.jpg`;
+
+        const destinationUri = `${FileSystem.documentDirectory}${fileName}`;
+        await FileSystem.copyAsync({ from: imagePath, to: destinationUri });
+
+        setProfile_path(fileName);
+        setImage(destinationUri);
+
+        // await SecureStore.setItemAsync("profileImage", destinationUri);
+      }
+    } catch (error) {
+      console.error("Error picking image:", error);
+      Alert.alert("Error", "An error occurred while picking an image.");
+    }
+  };
 
 
   const storeCredentials = async () => {
@@ -55,13 +94,17 @@ const SignUp = ({ navigation }) => {
     var fls = "false";
     var Name = name;
     var Password = password;
+    var Mobilenumber = mobilenumber;
+    var Profile_path = profile_path;
     var ConfirmPw = confirmPw;
     var checkEmail = RegExp(/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/i);
 
-    if ((Email.length == 0) || (Password.length == 0) || (ConfirmPw.length == 0) || (Name.length == 0)) {
+    if ((Email.length == 0) || (Password.length == 0) || (ConfirmPw.length == 0) || (Name.length == 0) || (Mobilenumber.length == 0) || (Profile_path.length == 0)) {
       alert("Required Field Is Missing!!!");
     } else if (!(checkEmail).test(Email)) {
       alert("invalid email!!!");
+    } else if (Mobilenumber.length < 10) {
+      alert("Enter an valid mobile number!!!");
     }
     // Password validations
     else if (Password.length < 8) {
@@ -91,7 +134,9 @@ const SignUp = ({ navigation }) => {
         Name: Name,
         Email: Email,
         Password: Password,
+        mobilenumber: Mobilenumber,
         isAdmin: fls,
+        Profile_path: Profile_path,
         token: "expoPushToken",
 
       };
@@ -122,6 +167,33 @@ const SignUp = ({ navigation }) => {
       <Animated.ScrollView>
         <View style={{ paddingHorizontal: 20, flex: 1, marginBottom: 20 }}>
           <Text style={{ marginVertical: 20 }}>Create account and enjoy all services</Text>
+          <View style={styles.profile_container}>
+            <Image source={{ uri: image }} style={styles.profile_image} />
+            <View style={{ flexDirection: "row" }}>
+              <TouchableOpacity
+                title="Choose from gallery"
+                onPress={pickImage}
+                style={{
+                  marginRight: 10,
+                  backgroundColor: "#363942",
+                  borderRadius: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    color: "#fff",
+                    paddingHorizontal: 20,
+                    paddingVertical: 10,
+                  }}
+                >
+                  Choose from Gallery
+                </Text>
+              </TouchableOpacity>
+              {/* <TouchableOpacity title="Capture Image" onPress={takePicture} style={{ marginRight: 10, backgroundColor: "#363942", borderRadius: 10 }}>
+                <Text style={{ color: "#fff", paddingHorizontal: 20, paddingVertical: 10 }}>Capture Image</Text>
+              </TouchableOpacity> */}
+            </View>
+          </View>
           <View style={styles.inputbox}>
             <MaterialCommunityIcons name="account-outline" size={34} color="#000" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", }} />
             <TextInput style={styles.textinput} placeholder='Type your full name' clearTextOnFocus={false} onChangeText={name => setName(name)} ref={name1} defaultValue={name} />
@@ -131,6 +203,11 @@ const SignUp = ({ navigation }) => {
           <View style={styles.inputbox}>
             <MaterialCommunityIcons name="email-outline" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", justifyContent: "flex-end" }} />
             <TextInput style={styles.textinput} placeholder='Type your email' clearTextOnFocus={false} onChangeText={email => setEmail(email)} ref={email1} defaultValue={email} />
+
+          </View>
+          <View style={styles.inputbox}>
+            <Ionicons name="call-outline" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", justifyContent: "flex-end" }} />
+            <TextInput style={styles.textinput} placeholder='Type your mobilenumber' clearTextOnFocus={false} onChangeText={mobilenumber => setEmail(mobilenumber)} ref={mobilenumber1} defaultValue={mobilenumber} />
 
           </View>
           <View style={styles.inputbox}>
@@ -242,5 +319,14 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderColor: "#e1e1e3",
 
+  }, profile_container: {
+    alignItems: "center",
+    paddingVertical: 30,
+  },
+  profile_image: {
+    height: 150,
+    width: 150,
+    marginBottom: 15,
+    borderRadius: 75,
   }
 })
