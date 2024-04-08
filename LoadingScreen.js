@@ -29,7 +29,6 @@ const LoadingScreen = () => {
     // if (storedCredentials !== null) {
     //   setLoadingCredentials(false);
     // }
-    console.log("con data 1 = ", storedCredentials);
   }, [loadingCredentials, userData, isLogin]);
 
   const getStoredCredentials = async () => {

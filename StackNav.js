@@ -21,6 +21,7 @@ import ContactUs from "./Components/ContactUs";
 import { Messgae } from "./Components/Auth/Messgae";
 import EditScreen from "./Components/EditScreen";
 import { useNavigation } from "@react-navigation/native";
+import SignUp_code from "./Components/Auth/SignUp_code";
 
 const Stack = createStackNavigator();
 
@@ -133,6 +134,7 @@ const AuthStackNavigator = () => {
       <Stack.Screen name="Verificationcode" component={Verificationcode} options={{ cardStyle: { backgroundColor: '#fff' } }} />
       <Stack.Screen name="New_Password" component={New_Password} options={{ cardStyle: { backgroundColor: '#fff' } }} />
       <Stack.Screen name="SignUp Screen" component={SignUp} options={{ cardStyle: { backgroundColor: '#fff' } }} />
+      <Stack.Screen name="SignUp Code" component={SignUp_code} options={{ cardStyle: { backgroundColor: '#fff' } }} />
     </Stack.Navigator>
   );
 }

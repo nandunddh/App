@@ -16,6 +16,7 @@ import MyContext from '../../MyContext';
 import * as Device from 'expo-device';
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
+import { Email } from './smtp';
 
 const SignUp = ({ navigation }) => {
   const no_image = require('../../assets/logo.png');
@@ -27,23 +28,109 @@ const SignUp = ({ navigation }) => {
   const [name, setName] = useState("");
   const [mobilenumber, setMobilenumber] = useState("");
   const [image, setImage] = useState(no_image);
+  const [location, setLocation] = useState("");
   const [profile_path, setProfile_path] = useState();
   const email1 = useRef();
   const name1 = useRef();
   const mobilenumber1 = useRef();
   const password1 = useRef();
   const cnpassword1 = useRef();
+  const location1 = useRef();
+  const [otp, setOtp] = useState('');
 
   // var { expoPushToken } = useContext(MyContext);
 
 
   useEffect(() => {
-    console.log("name", name)
-    console.log("email", email)
-    console.log("mobilenumber", mobilenumber)
-    console.log("password", password)
-    console.log("cnpassword", confirmPw)
-  }, [email, name, password, confirmPw, mobilenumber])
+    // console.log("name", name)
+    // console.log("email", email)
+    // console.log("mobilenumber", mobilenumber)
+    // console.log("password", password)
+    // console.log("cnpassword", confirmPw)
+    console.log("image ", image);
+    console.log("profile path ", profile_path);
+
+  }, [email, name, password, confirmPw, mobilenumber, image, profile_path, location, otp])
+
+
+  const generateOTP = async (params) => {
+
+    Email.send({
+      Username: "nandugoud113@gmail.com",
+      Password: "AC781B881AC3B360ACFFC638E3AC951181F8",
+      // SecureToken: "95009f41-b2ce-4a70-947f-62c2449e5f69",
+      Host: "smtp.elasticemail.com",
+      To: `${email}`,
+      From: "nandugoud113@gmail.com",
+      Subject: "OTP Verification",
+      Body: `<!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Email Verification</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+          }
+    
+          .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+          }
+    
+          h1 {
+            color: #ff6500;
+          }
+    
+          p {
+            line-height: 1.6;
+          }
+    
+          .verification-code {
+            font-size: 24px;
+            color: #28a745;
+            margin-top: 10px;
+            margin-bottom: 30px;
+          }
+          .name{
+            font-weight: bold;
+          }
+    
+          .expiration-info {
+            font-style: italic;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>Email Verification</h1>
+          <p>Hello <span class="name">${email}</span>,</p>
+          <p>Your verification code is:</p>
+          <div class="verification-code">${params}</div>
+          <p>Thank you for using our service!</p>
+        </div>
+      </body>
+      </html>`,
+      Port: 2525
+    }).then(
+      alert("OTP sent successfully"),
+      console.log("Otp ", params),
+      navigation.navigate('SignUp Code', { email }),
+      setOtp(params)
+    ).catch(
+      console.log("error in smtp"),
+      setOtp(""),
+      navigation.navigate('SignUp Screen'),
+    );
+  }
 
   const pickImage = async () => {
     try {
@@ -88,8 +175,50 @@ const SignUp = ({ navigation }) => {
     }
   }
 
+  const check_otp = () => {
+
+    try {
+      var APIURL = `${DB_URL}resetpassword.php`;
+      // var APIURL = "http://127.0.0.1:8000/USG/login.php";
+
+      var headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      };
+
+      var Data = {
+        Email: email,
+      };
+
+      fetch(APIURL, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(Data)
+      })
+        .then((Response) => Response.json())
+        .then((Response) => {
+          if (Response[0].Message == "Success") {
+            generateOTP(Response[0].OTP)
+            setOtp(Response[0].OTP)
+          }
+          else if (Response[0].Message == "Failed") {
+            alert(Response[0].Password);
+            navigation.navigate('SignUp Screen');
+          } else {
+            alert(Response[0].Message);
+            navigation.navigate('SignUp Screen');
+          }
+        })
+        .catch((error) => {
+          console.error("ERROR FOUND Reset Passowrd = " + error);
+        })
+    } catch (error) {
+      alert("Fetch Error!")
+    }
+  }
 
   const InsertRecord = () => {
+    alert("InsterRecords!");
     var Email = email;
     var fls = "false";
     var Name = name;
@@ -97,9 +226,10 @@ const SignUp = ({ navigation }) => {
     var Mobilenumber = mobilenumber;
     var Profile_path = profile_path;
     var ConfirmPw = confirmPw;
+    var Location = location;
     var checkEmail = RegExp(/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/i);
 
-    if ((Email.length == 0) || (Password.length == 0) || (ConfirmPw.length == 0) || (Name.length == 0) || (Mobilenumber.length == 0) || (Profile_path.length == 0)) {
+    if ((Email.length == 0) || (Password.length == 0) || (ConfirmPw.length == 0) || (Name.length == 0) || (Mobilenumber.length == 0) || (Profile_path.length == 0) || (Location.length == 0)) {
       alert("Required Field Is Missing!!!");
     } else if (!(checkEmail).test(Email)) {
       alert("invalid email!!!");
@@ -137,27 +267,57 @@ const SignUp = ({ navigation }) => {
         mobilenumber: Mobilenumber,
         isAdmin: fls,
         Profile_path: Profile_path,
+        Location: location,
         token: "expoPushToken",
 
       };
-      // FETCH func ------------------------------------
-      fetch(InsertAPIURL, {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(Data) //convert data to JSON
+      const uri = image;
+      const formData = new FormData();
+      formData.append("Profile_path", {
+        uri,
+        name: Profile_path,
+        type: "image/jpg",
+      });
+      fetch(`${DB_URL}create_profile.php`, {
+        method: "POST",
+        body: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
-        .then((response) => response.json()) //check response type of API (CHECK OUTPUT OF DATA IS IN JSON)
-        .then((response) => {
-          alert(response[0].Message);
-          console.log(response[0].Message);
-          storeCredentials()
-          navigation.navigate('Login Screen');
-          console.log("DATA", Data)     // If data is in JSON => Display alert msg
-          // this.props.navigation.navigate("SignInScreen"); //Navigate to next screen if authentications are valid
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("data = ", data);
+          // Handle the response as needed
+          fetch(InsertAPIURL, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(Data) //convert data to JSON
+          })
+            .then((response) => response.json()) //check response type of API (CHECK OUTPUT OF DATA IS IN JSON)
+            .then((response) => {
+              if (response[0].Message == "Sign Up Success!") {
+                // alert(response[0].Message);
+                console.log(response[0].Message);
+                storeCredentials()
+                check_otp()
+                // navigation.navigate('SignUp Code', { email });
+                console.log("DATA", Data)     // If data is in JSON => Display alert msg
+                // this.props.navigation.navigate("SignInScreen"); //Navigate to next screen if authentications are valid
+              }
+              else {
+                alert(response[0].Message);
+                navigation.navigate('Login Screen');
+              }
+            })
+            .catch((error) => {
+              alert("Error Occured" + error);
+              console.log("Error Occured" + error);
+            })
         })
         .catch((error) => {
-          alert("Error Occured" + error);
-        })
+          console.error("Error uploading image:", error);
+        });
     }
     // console.log(first)
   }
@@ -168,7 +328,7 @@ const SignUp = ({ navigation }) => {
         <View style={{ paddingHorizontal: 20, flex: 1, marginBottom: 20 }}>
           <Text style={{ marginVertical: 20 }}>Create account and enjoy all services</Text>
           <View style={styles.profile_container}>
-            <Image source={{ uri: image }} style={styles.profile_image} />
+            {/* <Image source={{ uri: image }} style={styles.profile_image} /> */}
             <View style={{ flexDirection: "row" }}>
               <TouchableOpacity
                 title="Choose from gallery"
@@ -207,7 +367,12 @@ const SignUp = ({ navigation }) => {
           </View>
           <View style={styles.inputbox}>
             <Ionicons name="call-outline" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", justifyContent: "flex-end" }} />
-            <TextInput style={styles.textinput} placeholder='Type your mobilenumber' clearTextOnFocus={false} onChangeText={mobilenumber => setEmail(mobilenumber)} ref={mobilenumber1} defaultValue={mobilenumber} />
+            <TextInput style={styles.textinput} placeholder='Type your mobilenumber' clearTextOnFocus={false} onChangeText={mobilenumber => setMobilenumber(mobilenumber)} ref={mobilenumber1} defaultValue={mobilenumber} />
+
+          </View>
+          <View style={styles.inputbox}>
+            <Ionicons name="location-outline" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", justifyContent: "flex-end" }} />
+            <TextInput style={styles.textinput} placeholder='Type your address' clearTextOnFocus={false} onChangeText={location => setLocation(location)} ref={location1} defaultValue={location} />
 
           </View>
           <View style={styles.inputbox}>

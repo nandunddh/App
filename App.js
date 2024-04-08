@@ -13,6 +13,7 @@ import performance from "performance-now";
 import Gettoken from "./Components/Getoken";
 import * as Notifications from "expo-notifications";
 import { Animated } from "react-native";
+import * as Device from 'expo-device';
 
 const App = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -42,8 +43,10 @@ const App = () => {
 
   useEffect(() => {
     console.log("UserData = ", userData);
-    if (expoPushToken.length == 0) {
-      setupPushNotifications();
+    if (Device.isDevice) {
+      if (expoPushToken.length == 0) {
+        setupPushNotifications();
+      }
     }
     startTime = performance();
     startTimeCdata = performance();
