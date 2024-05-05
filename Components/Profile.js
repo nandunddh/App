@@ -28,14 +28,24 @@ const Profile = ({ route }) => {
     <>
       <Animated.ScrollView>
         {userData ? (
+          // const img_uri = `${DB_URL}uploads/user_profile/${userData.profile}`;
           <View style={styles.container}>
             <View style={styles.profile_container}>
-              <Image
-                source={{
-                  uri: `${DB_URL}uploads/user_profile/${userData.profile}`,
-                }}
-                style={styles.profile_image}
-              />
+              {userData.profile == "no_image.jpg" ? (
+                <Image
+                  source={{
+                    uri: `${DB_URL}uploads/user_profile/no_image.jpg`,
+                  }}
+                  style={styles.profile_image}
+                />
+              ) : (
+                <Image
+                  source={{
+                    uri: `${DB_URL}uploads/user_profile/${userData.profile}`,
+                  }}
+                  style={styles.profile_image}
+                />
+              )}
               <Text style={{ fontSize: 20, fontWeight: "bold" }}>
                 {userData.name}
               </Text>

@@ -43,11 +43,11 @@ const App = () => {
 
   useEffect(() => {
     console.log("UserData = ", userData);
-    if (Device.isDevice) {
-      if (expoPushToken.length == 0) {
-        setupPushNotifications();
-      }
-    }
+    // if (Device.isDevice) {
+    //   if (expoPushToken.length == 0) {
+    //     setupPushNotifications();
+    //   }
+    // }
     startTime = performance();
     startTimeCdata = performance();
     startTimeUdata = performance();
@@ -56,9 +56,9 @@ const App = () => {
       getStoredCredentials();
     }
 
-    if (expoPushToken.length !== 0 && userData !== null) {
-      sendTokenToServer(expoPushToken);
-    }
+    // if (expoPushToken.length !== 0 && userData !== null) {
+    //   sendTokenToServer(expoPushToken);
+    // }
 
     // handleupcomingconferencelist();
   }, [price, ConferenceData]);
