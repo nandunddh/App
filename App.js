@@ -56,9 +56,9 @@ const App = () => {
       getStoredCredentials();
     }
 
-    if (expoPushToken.length !== 0 && userData !== null) {
-      sendTokenToServer(expoPushToken);
-    }
+    // if (expoPushToken.length !== 0 && userData !== null) {
+    //   sendTokenToServer(expoPushToken);
+    // }
 
     // handleupcomingconferencelist();
   }, [price, ConferenceData]);

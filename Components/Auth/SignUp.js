@@ -268,8 +268,6 @@ const SignUp = ({ navigation }) => {
         isAdmin: fls,
         Profile_path: Profile_path,
         Location: location,
-        token: "expoPushToken",
-
       };
       const uri = image;
       const formData = new FormData();

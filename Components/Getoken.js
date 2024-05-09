@@ -29,9 +29,9 @@ const Gettoken = () => {
         console.log("Expo Push Token:", expoPushToken);
 
         // You can send the token to your server here if needed
-        if (expoPushToken) {
-          await sendTokenToServer(expoPushToken);
-        }
+        // if (expoPushToken) {
+        //   await sendTokenToServer(expoPushToken);
+        // }
 
         setExpoPushToken(expoPushToken);
       } catch (error) {
