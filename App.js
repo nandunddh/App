@@ -43,11 +43,11 @@ const App = () => {
 
   useEffect(() => {
     console.log("UserData = ", userData);
-    if (Device.isDevice) {
-      if (expoPushToken.length == 0) {
-        setupPushNotifications();
-      }
-    }
+    // if (Device.isDevice) {
+    //   if (expoPushToken.length == 0) {
+    //     setupPushNotifications();
+    //   }
+    // }
     startTime = performance();
     startTimeCdata = performance();
     startTimeUdata = performance();
