@@ -31,27 +31,16 @@ const App = () => {
   const [device_tokens, setDevice_tokens] = useState([]);
 
 
-  const memoizedUserData = useMemo(() => userData, [userData]);
-  const memoizedConferenceData = useMemo(
-    () => ConferenceData,
-    [ConferenceData]
+  const debouncedHandleUpcomingConferenceList = useCallback(
+    debounce(() => {
+      handleupcomingconferencelist();
+    }, 60000), // Adjust the delay as per your requirement
+    [handleupcomingconferencelist]
   );
-  let startTime = "";
-  let startTimeCdata = "";
-  let startTimeUdata = "";
-  let startTimeFdata = "";
 
   useEffect(() => {
     console.log("UserData = ", userData);
-    // if (Device.isDevice) {
-    //   if (expoPushToken.length == 0) {
-    //     setupPushNotifications();
-    //   }
-    // }
-    startTime = performance();
-    startTimeCdata = performance();
-    startTimeUdata = performance();
-    startTimeFdata = performance();
+
     if (storedCredentials == null) {
       getStoredCredentials();
     }
@@ -61,13 +50,26 @@ const App = () => {
     // }
 
     // handleupcomingconferencelist();
+    debouncedHandleUpcomingConferenceList();
   }, [price, ConferenceData]);
+
+  function debounce(func, delay) {
+    let timeoutId;
+  
+    return function(...args) {
+      const context = this;
+      
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        func.apply(context, args);
+      }, delay);
+    };
+  }
 
   const animatedValue = new Animated.Value(0);
 
   // Attach a listener to the animated value
-  animatedValue.addListener((value) => {
-    console.log("Animated value updated:", value.value);
+  animatedValue.addListener(() => {
   });
 
   // Later in your code or component lifecycle
@@ -160,9 +162,6 @@ const App = () => {
       const responseData = await response.json();
 
       if (responseData[0].Message == "Success") {
-        const endTime = performance();
-        const elapsedTime = endTime - startTimeFdata;
-        console.log(`Flag loaded in ${elapsedTime} milliseconds`);
         console.log("flag updated!", responseData[0].data[0]);
         setPrice(responseData[0].data[0]);
         if (responseData[0].data[0].price != price.price) {
@@ -173,18 +172,6 @@ const App = () => {
       console.log("flag updated erroe", error);
     }
   };
-
-  // Run handleupcomingconferencelist again when ConferenceData changes
-  // useEffect(() => {
-  //   handleupcomingconferencelist();
-  // }, [ConferenceData]);
-
-  // useEffect(() => {
-  //   debouncedGetStoredCredentials();
-  //   return () => {
-  //     debouncedGetStoredCredentials.cancel(); // Cleanup debounce on unmount
-  //   };
-  // }, [memoizedConferenceData, memoizedUserData, debouncedGetStoredCredentials]);
 
   const getStoredCredentials = async () => {
     try {
@@ -199,9 +186,6 @@ const App = () => {
         });
         getUserData(storedEmail, storedPassword);
         // console.log('Stored Credentials App Screen:', { email: storedEmail, password: storedPassword, username: storedUsername });
-        const endTime = performance();
-        const elapsedTime = endTime - startTime;
-        console.log(`Data loaded in ${elapsedTime} milliseconds`);
       } else {
         console.log("No credentials found App.");
         setLoadingCredentials(false); // Set loading state to false if no credentials are found
@@ -241,9 +225,6 @@ const App = () => {
         }
         setIsLogin(true);
         handleupcomingconferencelist();
-        const endTime = performance();
-        const elapsedTime = endTime - startTime;
-        console.log(`User Data loaded in ${elapsedTime} milliseconds`);
       } else {
         alert(responseData[0].Message);
         setUserData(null);
@@ -332,9 +313,6 @@ const App = () => {
             setConferenceData(parsedData[0].data); // Update state only if there are changes
             setIsloading(true);
             setLoadingCredentials(false); // Set loading state to false once credentials are fetched
-            const endTime = performance();
-            const elapsedTime = endTime - startTime;
-            // console.log(`C Data loaded in ${elapsedTime} milliseconds`);
           } else {
             alert(parsedData[0].Message);
             setConferenceData(null);

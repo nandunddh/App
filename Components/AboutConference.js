@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 
 const AboutConference = ({ route }) => {
@@ -6,15 +6,16 @@ const AboutConference = ({ route }) => {
   const name = route.params.name;
   const about = route.params.about;
   const newtext = about.split(/\n/);
-  console.log("newtext   ", newtext)
   return (
-    <View style={{ backgroundColor: "#fff" }}>
-      {newtext && newtext.map((text, index) =>
-        <View style={{ paddingHorizontal: 20, paddingVertical: 10, }} key={index}>
-          <Text style={{ lineHeight: 22, textAlign: "justify", fontSize: 15, fontWeight: "400", fontFamily: "sans-serif" }}>{text}</Text>
-        </View>
-      )}
-    </View>
+    <ScrollView>
+      <View style={{ backgroundColor: "#fff" }}>
+        {newtext && newtext.map((text, index) =>
+          <View style={{ paddingHorizontal: 20, paddingVertical: 10, }} key={index}>
+            <Text style={{ lineHeight: 22, textAlign: "justify", fontSize: 15, fontWeight: "400", fontFamily: "sans-serif" }}>{text}</Text>
+          </View>
+        )}
+      </View>
+    </ScrollView>
   )
 }
 

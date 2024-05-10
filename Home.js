@@ -62,27 +62,44 @@ const Home = () => {
   //   }, 5000);
   // }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setAtiveIndex((prevIndex) => {
-        if (prevIndex === filteredConferences.length - 1) {
-          listReference.current.scrollToIndex({
-            index: 0,
-            animation: true,
-          });
-          return 0;
-        } else {
-          listReference.current.scrollToIndex({
-            index: prevIndex + 1,
-            animation: true,
-          });
-          return prevIndex + 1;
-        }
-      });
-    }, 5000);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setAtiveIndex((prevIndex) => {
+  //       if (prevIndex === filteredConferences.length - 1) {
+  //         listReference.current.scrollToIndex({
+  //           index: 0,
+  //           animation: true,
+  //         });
+  //         return 0;
+  //       } else {
+  //         listReference.current.scrollToIndex({
+  //           index: prevIndex + 1,
+  //           animation: true,
+  //         });
+  //         return prevIndex + 1;
+  //       }
+  //     });
+  //   }, 5000);
 
-    return () => clearInterval(interval); // Cleanup the interval on component unmount
-  }, [filteredConferences.length, activeIndex]);
+  //   return () => clearInterval(interval); // Cleanup the interval on component unmount
+  // }, [filteredConferences.length, activeIndex]);
+  useEffect(() => {
+    if (filteredConferences.length > 0) {
+        const interval = setInterval(() => {
+            setAtiveIndex((prevIndex) => {
+                const newIndex = (prevIndex + 1) % filteredConferences.length;
+                listReference.current.scrollToIndex({
+                    index: newIndex,
+                    animation: true,
+                });
+                return newIndex;
+            });
+        }, 5000);
+
+        return () => clearInterval(interval); // Cleanup the interval on component unmount
+    }
+}, [filteredConferences.length, activeIndex]);
+
 
   const handpleUrlPress = ({ conference }) => {
     // console.log("Join Now Pressed");
@@ -346,7 +363,7 @@ const Home = () => {
                               fontWeight: "600",
                             }}
                           >
-                            {item.venue}
+                            {item.venu}
                           </Text>
                         </View>
                       </View>
@@ -406,7 +423,7 @@ const Home = () => {
             </View> */}
         <View>
           <Animated.ScrollView>
-            {ConferenceData &&
+            {ConferenceData && ConferenceData.filter(conference => conference.token === "upcoming").length > 0 ? (
               ConferenceData.map((conference, index) => {
                 if (conference.token == "upcoming") {
                   const imageUrl = `${DB_URL}uploads/logos/${conference.logo}`;
@@ -506,7 +523,12 @@ const Home = () => {
                     </View>
                   );
                 }
-              })}
+              })
+            ) : (
+              <View style={{justifyContent: "center", marginBottom: 10}}>
+                <Text style={{textAlign: "center", fontSize: 20, fontWeight: "bold", color: "#f66b10"}}>Will Be updated Soon..</Text>
+              </View>
+            )}
           </Animated.ScrollView>
         </View>
       </View>
@@ -526,17 +548,17 @@ const Home = () => {
                 style={[
                   month == "All"
                     ? {
-                        backgroundColor: "#f66b10",
-                        borderRadius: 10,
-                        borderColor: "#fff",
-                        marginHorizontal: 10,
-                      }
+                      backgroundColor: "#f66b10",
+                      borderRadius: 10,
+                      borderColor: "#fff",
+                      marginHorizontal: 10,
+                    }
                     : {
-                        backgroundColor: "#fff",
-                        borderRadius: 10,
-                        borderColor: "#fff",
-                        marginHorizontal: 10,
-                      },
+                      backgroundColor: "#fff",
+                      borderRadius: 10,
+                      borderColor: "#fff",
+                      marginHorizontal: 10,
+                    },
                 ]}
               >
                 <TouchableOpacity onPress={() => setMonth("All")}>
@@ -544,17 +566,17 @@ const Home = () => {
                     style={[
                       month === "All"
                         ? {
-                            margin: 10,
-                            fontSize: 20,
-                            paddingHorizontal: 15,
-                            color: "#fff",
-                          }
+                          margin: 10,
+                          fontSize: 20,
+                          paddingHorizontal: 15,
+                          color: "#fff",
+                        }
                         : {
-                            margin: 10,
-                            fontSize: 20,
-                            paddingHorizontal: 15,
-                            color: "#000",
-                          },
+                          margin: 10,
+                          fontSize: 20,
+                          paddingHorizontal: 15,
+                          color: "#000",
+                        },
                     ]}
                   >
                     All
@@ -572,17 +594,17 @@ const Home = () => {
                       style={[
                         conference.month == month
                           ? {
-                              backgroundColor: "#f66b10",
-                              borderRadius: 10,
-                              borderColor: "#fff",
-                              marginHorizontal: 10,
-                            }
+                            backgroundColor: "#f66b10",
+                            borderRadius: 10,
+                            borderColor: "#fff",
+                            marginHorizontal: 10,
+                          }
                           : {
-                              backgroundColor: "#fff",
-                              borderRadius: 10,
-                              borderColor: "#fff",
-                              marginHorizontal: 10,
-                            },
+                            backgroundColor: "#fff",
+                            borderRadius: 10,
+                            borderColor: "#fff",
+                            marginHorizontal: 10,
+                          },
                       ]}
                     >
                       <TouchableOpacity
@@ -592,17 +614,17 @@ const Home = () => {
                           style={[
                             conference.month === month
                               ? {
-                                  margin: 10,
-                                  fontSize: 20,
-                                  paddingHorizontal: 15,
-                                  color: "#fff",
-                                }
+                                margin: 10,
+                                fontSize: 20,
+                                paddingHorizontal: 15,
+                                color: "#fff",
+                              }
                               : {
-                                  margin: 10,
-                                  fontSize: 20,
-                                  paddingHorizontal: 15,
-                                  color: "#000",
-                                },
+                                margin: 10,
+                                fontSize: 20,
+                                paddingHorizontal: 15,
+                                color: "#000",
+                              },
                           ]}
                         >
                           {conference.month}

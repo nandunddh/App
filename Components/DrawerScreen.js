@@ -119,13 +119,14 @@ const DrawerScreen = () => {
     <Animated.ScrollView>
       {userData &&
         <View style={{ paddingTop: 50 }}>
-          <View>
+          <View style={{flex:1}}>
             <View
               style={{
                 flexDirection: "row",
                 borderBottomWidth: 2,
                 borderBottomColor: "orange",
                 paddingBottom: 20,
+                flex:5
               }}
             >
               <View style={{ marginLeft: 10 }}>
@@ -154,7 +155,7 @@ const DrawerScreen = () => {
                 </Text>
               </View>
             </View>
-            <View style={{ marginVertical: 30 }}>
+            <View style={{ marginVertical: 30, flex:3 }}>
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate("Profile", { name: userData.name })
@@ -267,6 +268,7 @@ const DrawerScreen = () => {
               style={{
                 marginBottom: 50,
                 paddingHorizontal: 10,
+                flexBasis: "auto"
               }}
             >
               <Text>Privacy Policy | Terms & Conditions</Text>

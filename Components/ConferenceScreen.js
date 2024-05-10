@@ -13,6 +13,7 @@ import { ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Linking } from 'react-native';
 import Animated from 'react-native-reanimated';
+import MapView from 'react-native-maps';
 const { height: screenHeight } = Dimensions.get('window');
 
 LogBox.ignoreLogs(['Unsupported dashed / dotted border style']);
@@ -88,21 +89,24 @@ const ConferenceScreen = ({ route, navigation }) => {
                 }}>Read more</Text>
               </View>
             </View>
+            {venu != "Virtual" && 
             <View style={{ backgroundColor: "#fff", paddingHorizontal: 35, paddingBottom: 20 }}>
               <View style={{ paddingVertical: 20, borderBottomWidth: 1, borderStyle: "dotted" }}>
                 <Text style={Styles.aboutText}>Location</Text>
               </View>
               <View style={{ height: 250, paddingBottom: 30 }}>
-                <Text style={{ lineHeight: 22, marginVertical: 10, fontSize: 16, fontWeight: "400" }}>{hotelAddress}</Text>
-                {/* <MapView style={Styles.map}
+                {/* <Text style={{ lineHeight: 22, marginVertical: 10, fontSize: 16, fontWeight: "400" }}>
+                  {hotelAddress}</Text> */}
+                <MapView style={Styles.map}
                   initialRegion={{
                     latitude: 42.34616716969697,
                     longitude: -71.25787434479032,
                     latitudeDelta: 0.0,
                     longitudeDelta: 0.08,
-                  }} /> */}
+                  }} />
               </View>
             </View>
+            }
           </View>
           <View style={{ backgroundColor: "#fff", marginVertical: 20, paddingHorizontal: 35, paddingBottom: 20 }}>
             <View style={{ paddingVertical: 20, borderBottomWidth: 1, borderStyle: "dashed" }}>
