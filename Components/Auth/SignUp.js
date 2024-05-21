@@ -7,6 +7,7 @@ import {
   ScrollView,
   Platform,
   Image,
+  Alert,
 } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -55,8 +56,8 @@ const SignUp = ({ navigation }) => {
     // console.log("mobilenumber", mobilenumber)
     // console.log("password", password)
     // console.log("cnpassword", confirmPw)
-    console.log("image ", image);
-    console.log("profile path ", profile_path);
+    // console.log("image ", image);
+    // console.log("profile path ", profile_path);
   }, [
     email,
     name,
@@ -69,84 +70,114 @@ const SignUp = ({ navigation }) => {
     otp,
   ]);
 
+  // const generateOTP = async (params) => {
+  //   Email.send({
+  //     Username: "nandugoud113@gmail.com",
+  //     Password: "AC781B881AC3B360ACFFC638E3AC951181F8",
+  //     // SecureToken: "95009f41-b2ce-4a70-947f-62c2449e5f69",
+  //     Host: "smtp.elasticemail.com",
+  //     To: `${email}`,
+  //     From: "nandugoud113@gmail.com",
+  //     Subject: "OTP Verification",
+  //     Body: `<!DOCTYPE html>
+  //     <html lang="en">
+  //     <head>
+  //       <meta charset="UTF-8">
+  //       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  //       <title>Email Verification</title>
+  //       <style>
+  //         body {
+  //           font-family: Arial, sans-serif;
+  //           background-color: #f4f4f4;
+  //           color: #333;
+  //           padding: 20px;
+  //         }
+
+  //         .container {
+  //           max-width: 600px;
+  //           margin: 0 auto;
+  //           background-color: #fff;
+  //           border-radius: 5px;
+  //           box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  //           padding: 20px;
+  //         }
+
+  //         h1 {
+  //           color: #ff6500;
+  //         }
+
+  //         p {
+  //           line-height: 1.6;
+  //         }
+
+  //         .verification-code {
+  //           font-size: 24px;
+  //           color: #28a745;
+  //           margin-top: 10px;
+  //           margin-bottom: 30px;
+  //         }
+  //         .name{
+  //           font-weight: bold;
+  //         }
+
+  //         .expiration-info {
+  //           font-style: italic;
+  //         }
+  //       </style>
+  //     </head>
+  //     <body>
+  //       <div class="container">
+  //         <h1>Email Verification</h1>
+  //         <p>Hello <span class="name">${email}</span>,</p>
+  //         <p>Your verification code is:</p>
+  //         <div class="verification-code">${params}</div>
+  //         <p>Thank you for using our service!</p>
+  //       </div>
+  //     </body>
+  //     </html>`,
+  //     Port: 2525,
+  //   }).then(
+  //     alert("OTP sent successfully" + params),
+  //     console.log("Otp ", params),
+  //     navigation.navigate("SignUp Code", { email }),
+  //     setOtp(params),
+  //   );
+  //   // .catch(
+  //   //   console.log("error in smtp"),
+  //   //   setOtp(""),
+  //   //   navigation.navigate("SignUp Screen")
+  //   // );
+  // };
+
   const generateOTP = async (params) => {
-    Email.send({
-      Username: "nandugoud113@gmail.com",
-      Password: "AC781B881AC3B360ACFFC638E3AC951181F8",
-      // SecureToken: "95009f41-b2ce-4a70-947f-62c2449e5f69",
-      Host: "smtp.elasticemail.com",
-      To: `${email}`,
-      From: "nandugoud113@gmail.com",
-      Subject: "OTP Verification",
-      Body: `<!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Email Verification</title>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            padding: 20px;
-          }
-    
-          .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-          }
-    
-          h1 {
-            color: #ff6500;
-          }
-    
-          p {
-            line-height: 1.6;
-          }
-    
-          .verification-code {
-            font-size: 24px;
-            color: #28a745;
-            margin-top: 10px;
-            margin-bottom: 30px;
-          }
-          .name{
-            font-weight: bold;
-          }
-    
-          .expiration-info {
-            font-style: italic;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <h1>Email Verification</h1>
-          <p>Hello <span class="name">${email}</span>,</p>
-          <p>Your verification code is:</p>
-          <div class="verification-code">${params}</div>
-          <p>Thank you for using our service!</p>
-        </div>
-      </body>
-      </html>`,
-      Port: 2525,
-    }).then(
-      alert("OTP sent successfully" + params),
-      console.log("Otp ", params),
-      navigation.navigate("SignUp Code", { email }),
-      setOtp(params),
-    );
-    // .catch(
-    //   console.log("error in smtp"),
-    //   setOtp(""),
-    //   navigation.navigate("SignUp Screen")
-    // );
+    console.log("params =:" , params);
+
+    const formData = new FormData();
+    formData.append('to', email);
+    formData.append('subject', 'OTP Verification');
+    formData.append('name', name);
+    formData.append('otp', params);
+
+    // Make the AJAX call
+    fetch(`${DB_URL}send-email`, {
+      method: 'POST',
+      body: formData
+    })
+      .then(response => {
+        if (response.ok) {
+          Alert.alert('Success', `Email sent successfully ${email}`),
+          navigation.navigate("SignUp Code", { email });
+        } else {
+          Alert.alert('Error', 'Failed to send email. Please try again later.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        Alert.alert('Error', 'Failed to send email. Please try again later.');
+      });
   };
+
+
 
   const pickImage = async () => {
     try {
@@ -192,7 +223,7 @@ const SignUp = ({ navigation }) => {
 
   const check_otp = () => {
     try {
-      var APIURL = `${DB_URL}resetpassword.php`;
+      var APIURL = `${DB_URL}otp_verification.php`;
       // var APIURL = "http://127.0.0.1:8000/USG/login.php";
 
       var headers = {
@@ -202,6 +233,7 @@ const SignUp = ({ navigation }) => {
 
       var Data = {
         Email: email,
+        Flag: "fail"
       };
 
       fetch(APIURL, {
@@ -212,6 +244,7 @@ const SignUp = ({ navigation }) => {
         .then((Response) => Response.json())
         .then((Response) => {
           if (Response[0].Message == "Success") {
+            console.log("check_status === > ",Response[0].check_status);
             generateOTP(Response[0].OTP);
             setOtp(Response[0].OTP);
           } else if (Response[0].Message == "Failed") {
@@ -231,6 +264,8 @@ const SignUp = ({ navigation }) => {
   };
 
   const InsertRecord = () => {
+    console.log("inster Record");
+    alert("Insert Record");
     var Email = email;
     var fls = "false";
     var Name = name;
@@ -301,7 +336,7 @@ const SignUp = ({ navigation }) => {
           alert(response[0].Message);
           if (response[0].Message == "Complete--!") {
             //   console.log(response[0].Message);
-            storeCredentials();
+            
             check_otp();
             //   // navigation.navigate('SignUp Code', { email });
             //   console.log("DATA", Data); // If data is in JSON => Display alert msg

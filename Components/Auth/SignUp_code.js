@@ -13,13 +13,14 @@ const SignUp_code = () => {
   const [otp, setOtp] = useState('');
 
   const handleSubmitOtp = async () => {
+    console.log("email form signUp_code = ", email);
     if (otp.length == 0) {
       alert("Type your Otp");
       otp1.focus()
     }
     else {
       try {
-        var APIURL = `${DB_URL}resetpassword.php`;
+        var APIURL = `${DB_URL}otp_verification.php`;
         // var APIURL = "http://127.0.0.1:8000/USG/login.php";
 
         var headers = {
@@ -29,6 +30,7 @@ const SignUp_code = () => {
 
         var Data = {
           OTP: otp,
+          Email: email,
         };
 
         fetch(APIURL, {
@@ -48,7 +50,7 @@ const SignUp_code = () => {
             }
           })
           .catch((error) => {
-            console.error("ERROR FOUND Verification = " + error);
+            console.error("ERROR FOUND Verification Sign up = " + error);
           })
       } catch (error) {
         alert("Fetch Error!")

@@ -65,13 +65,13 @@ const Login = () => {
   useEffect(() => {
     // getStoredCredentials()
     checkStorderCredentials();
-  }, [ memorizedislogin, memorizedisAdmin, memorizedemail, memorizedstoredCredentials, memorizedloadingCredentials, getStoredCredentials]);
+  }, [memorizedislogin, memorizedisAdmin, memorizedemail, memorizedstoredCredentials, memorizedloadingCredentials, getStoredCredentials]);
 
   const checkStorderCredentials = () => {
     if (storedCredentials == null) {
       // setLoadingCredentials(true);
       getStoredCredentials();
-    } 
+    }
     if (storedCredentials !== null) {
       // getStoredCredentials();\
       console.log("Login Stored = ", storedCredentials);
@@ -109,12 +109,12 @@ const Login = () => {
           setIsAdmin(true);
           handleupcomingconferencelist();
         }
-        else{
+        else {
           // setIsLogin(true);
           handleupcomingconferencelist();
         }
       } else {
-        alert(responseData[0].Message);
+        // alert(responseData[0].Message);
         setUserData(null);
       }
     } catch (error) {
@@ -207,7 +207,7 @@ const Login = () => {
 
       const responseData = await response.json();
 
-      if (responseData[0].Message === "Success") {
+      if (responseData[0].Message == "Email Not Verfied") {
         // if (responseData[0].IsAdmin == true) {
         //   await setUser_name(responseData[0].User_Name);
         //   await storeCredentials();
@@ -215,8 +215,20 @@ const Login = () => {
         //   navigation.navigate("Admin Tab");
         //   // await storeCredentials();
         // } else {
-          await storeCredentials();
-          await setUser_name(responseData[0].User_Name);
+
+        // }
+        alert("Dear User kindly Verfiy you email!");
+        navigation.navigate("SignUp Code", {email});
+      } else if (responseData[0].Message === "Success") {
+        // if (responseData[0].IsAdmin == true) {
+        //   await setUser_name(responseData[0].User_Name);
+        //   await storeCredentials();
+        //   // await setIsLogin(true);
+        //   navigation.navigate("Admin Tab");
+        //   // await storeCredentials();
+        // } else {
+        await storeCredentials();
+        await setUser_name(responseData[0].User_Name);
         // }
         // alert(responseData[0].User_Name);
         console.log("Data user name", user_name);
