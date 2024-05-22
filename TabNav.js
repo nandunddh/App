@@ -8,6 +8,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AddNotification from "./Components/AddNotification";
+import DisplayPdf from "./Components/DisplayPdf";
 
 const Tab = createBottomTabNavigator();
 
@@ -50,6 +51,13 @@ const UserTabs = () => {
         headerTitle: "Current Conferences"
       }} />
       <Tab.Screen name="User Notification Tab" component={Notification} options={{
+        headerTitleAlign: "center",
+        tabBarLabel: "",
+        tabBarIcon: () => (
+          <Ionicons name="notifications-outline" size={30} />
+        ),
+      }} />
+      <Tab.Screen name="Display Pdf" component={DisplayPdf} options={{
         headerTitleAlign: "center",
         tabBarLabel: "",
         tabBarIcon: () => (

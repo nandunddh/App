@@ -51,6 +51,8 @@ const App = () => {
 
     // handleupcomingconferencelist();
     debouncedHandleUpcomingConferenceList();
+
+    console.log("ConferenceData = ", ConferenceData);
   }, [price, ConferenceData]);
 
   function debounce(func, delay) {

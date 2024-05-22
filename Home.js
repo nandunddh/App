@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Linking,
   LogBox,
-  FlatList,
+  FlatList
 } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import MyContext from "./MyContext";
@@ -28,7 +28,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import Animated from "react-native-reanimated";
 
 LogBox.ignoreLogs([
-  "Possible unhandled promise rejection (id: 1): Error: Unable to open URL: mailto:contact@unitedscientificgroup.net",
+  "Possible unhandled promise rejection (id: 1): Error: Unable to open URL: mailto:contact@unitedscientificgroup.net"
 ]);
 
 const { width } = Dimensions.get("window");
@@ -39,7 +39,7 @@ const Home = () => {
   const [activeIndex, setAtiveIndex] = useState(0);
   const { ConferenceData } = useContext(MyContext);
   const filteredConferences = ConferenceData.filter(
-    (conference) => conference.token === "live"
+    conference => conference.token === "live"
   );
   const seenMonths = new Set();
   const navigation = useNavigation();
@@ -83,23 +83,25 @@ const Home = () => {
 
   //   return () => clearInterval(interval); // Cleanup the interval on component unmount
   // }, [filteredConferences.length, activeIndex]);
-  useEffect(() => {
-    if (filteredConferences.length > 0) {
+  useEffect(
+    () => {
+      if (filteredConferences.length > 0) {
         const interval = setInterval(() => {
-            setAtiveIndex((prevIndex) => {
-                const newIndex = (prevIndex + 1) % filteredConferences.length;
-                listReference.current.scrollToIndex({
-                    index: newIndex,
-                    animation: true,
-                });
-                return newIndex;
+          setAtiveIndex(prevIndex => {
+            const newIndex = (prevIndex + 1) % filteredConferences.length;
+            listReference.current.scrollToIndex({
+              index: newIndex,
+              animation: true
             });
+            return newIndex;
+          });
         }, 5000);
 
         return () => clearInterval(interval); // Cleanup the interval on component unmount
-    }
-}, [filteredConferences.length, activeIndex]);
-
+      }
+    },
+    [filteredConferences.length, activeIndex]
+  );
 
   const handpleUrlPress = ({ conference }) => {
     // console.log("Join Now Pressed");
@@ -120,7 +122,7 @@ const Home = () => {
         about: conference.about,
         aboutshort: conference.aboutshort,
         hotelAddress: conference.hotelAddress,
-        url: conference.url,
+        url: conference.url
       });
     } catch (error) {
       console.error("Navigation error:", error);
@@ -143,17 +145,15 @@ const Home = () => {
                 paddingLeft: 5,
                 paddingRight: 5,
                 textAlign: "left",
-                flex: 1,
+                flex: 1
               }}
             >
-              {conference.logo ? (
-                <Image
+              {conference.logo
+                ? <Image
                   source={{ uri: imageUrl }}
                   style={{ width: 60, height: 60, borderRadius: 50 }}
                 />
-              ) : (
-                <Text>No Logo</Text>
-              )}
+                : <Text>No Logo</Text>}
             </View>
             <View style={{ flex: 3 }}>
               <Text style={{ fontWeight: "600", fontSize: 17 }}>
@@ -167,14 +167,15 @@ const Home = () => {
                       style={{
                         color: "#f66b10",
                         fontSize: 15,
-                        fontWeight: "bold",
+                        fontWeight: "bold"
                       }}
                     >
-                      {" "}
-                      |{" "}
+                      {" "}|{" "}
                     </Text>
                   </Text>
-                  <Text>{conference.venu}</Text>
+                  <Text>
+                    {conference.venu}
+                  </Text>
                 </View>
               </Text>
             </View>
@@ -186,7 +187,7 @@ const Home = () => {
               paddingLeft: 5,
               flex: 1,
               justifyContent: "center",
-              alignItems: "center",
+              alignItems: "center"
             }}
           >
             <Text
@@ -194,7 +195,7 @@ const Home = () => {
                 marginBottom: 5,
                 fontWeight: "bold",
                 color: "#f66b10",
-                fontSize: 14,
+                fontSize: 14
               }}
             >
               From ${conference.price}
@@ -210,7 +211,7 @@ const Home = () => {
                   fontWeight: "bold",
                   fontSize: 15,
                   paddingHorizontal: 5,
-                  paddingVertical: 5,
+                  paddingVertical: 5
                 }}
               >
                 Join Now
@@ -227,7 +228,8 @@ const Home = () => {
       <View style={styles.center}>
         {/* Top View */}
         <View>
-          {ConferenceData && ConferenceData.length > 0 && (
+          {ConferenceData &&
+            ConferenceData.length > 0 &&
             <View
               style={{
                 backgroundColor: "#363942",
@@ -235,14 +237,14 @@ const Home = () => {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 height: 120,
-                paddingTop: 15,
+                paddingTop: 15
               }}
             >
               <Text
                 style={{
                   color: "#fff",
                   fontSize: 17,
-                  fontWeight: "bold",
+                  fontWeight: "bold"
                 }}
               >
                 {ConferenceData[0].month} {ConferenceData[0].year} Conferences
@@ -253,14 +255,11 @@ const Home = () => {
               <Text
                 style={{ textAlign: "right", color: "red" }}
                 onPress={() =>
-                  navigation.navigate("User CurrentConference Tab")
-                }
+                  navigation.navigate("User CurrentConference Tab")}
               >
-                {" "}
-                View all
+                {" "}View all
               </Text>
-            </View>
-          )}
+            </View>}
         </View>
         {/* End Of Top View */}
         {/* Banner Section */}
@@ -268,16 +267,16 @@ const Home = () => {
           style={{
             marginTop: -60,
             flexDirection: "row",
-            marginBottom: 30,
+            marginBottom: 30
           }}
         >
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
             data={ConferenceData.filter(
-              (conference) => conference && conference.token === "live"
+              conference => conference && conference.token === "live"
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={item => item.id}
             ref={listReference}
             renderItem={({ item }) => {
               const imageUrl = `${DB_URL}uploads/banners/${item.banner}`;
@@ -292,27 +291,25 @@ const Home = () => {
                         backgroundColor: "#fff",
                         width: width - 20,
                         alignItems: "center",
-                        overflow: "hidden",
+                        overflow: "hidden"
                       }}
                     >
-                      {item.banner ? (
-                        <Image
+                      {item.banner
+                        ? <Image
                           source={{ uri: imageUrl }}
                           style={{
                             borderRadius: 15,
                             width: "100%",
                             aspectRatio: 236 / 153,
-                            resizeMode: "cover",
+                            resizeMode: "cover"
                           }}
                         />
-                      ) : (
-                        <Text>No Banner</Text>
-                      )}
+                        : <Text>No Banner</Text>}
                       <Text
                         style={{
                           fontSize: 20,
                           fontWeight: "bold",
-                          textAlign: "center",
+                          textAlign: "center"
                         }}
                       >
                         {item.name}
@@ -322,7 +319,7 @@ const Home = () => {
                           fontSize: 17,
                           fontWeight: "600",
                           textAlign: "center",
-                          color: "#f66b10",
+                          color: "#f66b10"
                         }}
                       >
                         {item.title}
@@ -331,7 +328,7 @@ const Home = () => {
                         style={{
                           flexDirection: "row",
                           marginVertical: 12,
-                          justifyContent: "center",
+                          justifyContent: "center"
                         }}
                       >
                         <View style={{ flexDirection: "row" }}>
@@ -340,7 +337,7 @@ const Home = () => {
                             style={{
                               fontSize: 15,
                               fontWeight: "600",
-                              marginHorizontal: 10,
+                              marginHorizontal: 10
                             }}
                           >
                             {item.month} {item.dates}, {item.year}
@@ -349,7 +346,7 @@ const Home = () => {
                         <View
                           style={{
                             flexDirection: "row",
-                            textAlign: "center",
+                            textAlign: "center"
                           }}
                         >
                           <EvilIcons
@@ -360,7 +357,7 @@ const Home = () => {
                           <Text
                             style={{
                               fontSize: 15,
-                              fontWeight: "600",
+                              fontWeight: "600"
                             }}
                           >
                             {item.venu}
@@ -373,7 +370,7 @@ const Home = () => {
                             marginVertical: 10,
                             flexDirection: "row",
                             justifyContent: "center",
-                            marginHorizontal: 10,
+                            marginHorizontal: 10
                           }}
                         >
                           <TouchableOpacity
@@ -391,15 +388,38 @@ const Home = () => {
                               style={{
                                 color: "#fff",
                                 textAlign: "center",
-                                fontSize: 20,
+                                fontSize: 20
                               }}
                             >
-                              {" "}
-                              Register Now{" "}
+                              {" "}Register Now{" "}
                             </Text>
                           </TouchableOpacity>
+                          {item.pdf_url && (item.pdf_url.length !== 0) &&
+                            <TouchableOpacity
+                              style={{
+                                borderRadius: 10,
+                                backgroundColor: "#e58027",
+                                paddingVertical: 12,
+                                paddingHorizontal: 20,
+                                marginLeft: 20
+                              }}
+                              onPress={() => {
+                                navigation.navigate("Display Pdf", {pdf_url: item.pdf_url});
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  color: "#fff",
+                                  textAlign: "center",
+                                  fontSize: 20
+                                }}
+                              >
+                                {" "}Program{" "}
+                              </Text>
+                            </TouchableOpacity>
+                          }
                         </View>
-                        <View></View>
+                        <View />
                       </View>
                     </View>
                   </View>
@@ -423,8 +443,10 @@ const Home = () => {
             </View> */}
         <View>
           <Animated.ScrollView>
-            {ConferenceData && ConferenceData.filter(conference => conference.token === "upcoming").length > 0 ? (
-              ConferenceData.map((conference, index) => {
+            {ConferenceData &&
+              ConferenceData.filter(conference => conference.token === "upcoming")
+                .length > 0
+              ? ConferenceData.map((conference, index) => {
                 if (conference.token == "upcoming") {
                   const imageUrl = `${DB_URL}uploads/logos/${conference.logo}`;
                   // console.log("Banner", imageUrl);
@@ -437,21 +459,19 @@ const Home = () => {
                             paddingLeft: 5,
                             paddingRight: 5,
                             textAlign: "left",
-                            flex: 1,
+                            flex: 1
                           }}
                         >
-                          {conference.logo ? (
-                            <Image
+                          {conference.logo
+                            ? <Image
                               source={{ uri: imageUrl }}
                               style={{
                                 width: 60,
                                 height: 60,
-                                borderRadius: 50,
+                                borderRadius: 50
                               }}
                             />
-                          ) : (
-                            <Text>No Logo</Text>
-                          )}
+                            : <Text>No Logo</Text>}
                         </View>
                         <View style={{ flex: 3 }}>
                           <Text style={{ fontWeight: "600", fontSize: 17 }}>
@@ -461,7 +481,7 @@ const Home = () => {
                                 style={{
                                   fontWeight: "normal",
                                   fontSize: 13,
-                                  marginTop: 4,
+                                  marginTop: 4
                                 }}
                               >
                                 {conference.month} {conference.dates},{" "}
@@ -470,14 +490,15 @@ const Home = () => {
                                   style={{
                                     color: "#f66b10",
                                     fontSize: 15,
-                                    fontWeight: "bold",
+                                    fontWeight: "bold"
                                   }}
                                 >
-                                  {" "}
-                                  |{" "}
+                                  {" "}|{" "}
                                 </Text>
                               </Text>
-                              <Text>{conference.venu}</Text>
+                              <Text>
+                                {conference.venu}
+                              </Text>
                             </View>
                           </Text>
                         </View>
@@ -489,7 +510,7 @@ const Home = () => {
                           paddingLeft: 5,
                           flex: 1,
                           justifyContent: "center",
-                          alignItems: "center",
+                          alignItems: "center"
                         }}
                       >
                         <Text
@@ -497,7 +518,7 @@ const Home = () => {
                             marginBottom: 5,
                             fontWeight: "bold",
                             color: "#f66b10",
-                            fontSize: 14,
+                            fontSize: 14
                           }}
                         >
                           From ${conference.price}
@@ -513,7 +534,7 @@ const Home = () => {
                               fontWeight: "bold",
                               fontSize: 15,
                               paddingHorizontal: 5,
-                              paddingVertical: 5,
+                              paddingVertical: 5
                             }}
                           >
                             Join Now
@@ -524,11 +545,18 @@ const Home = () => {
                   );
                 }
               })
-            ) : (
-              <View style={{justifyContent: "center", marginBottom: 10}}>
-                <Text style={{textAlign: "center", fontSize: 20, fontWeight: "bold", color: "#f66b10"}}>Will Be updated Soon..</Text>
-              </View>
-            )}
+              : <View style={{ justifyContent: "center", marginBottom: 10 }}>
+                <Text
+                  style={{
+                    textAlign: "center",
+                    fontSize: 20,
+                    fontWeight: "bold",
+                    color: "#f66b10"
+                  }}
+                >
+                  Will Be updated Soon..
+                </Text>
+              </View>}
           </Animated.ScrollView>
         </View>
       </View>
@@ -551,14 +579,14 @@ const Home = () => {
                       backgroundColor: "#f66b10",
                       borderRadius: 10,
                       borderColor: "#fff",
-                      marginHorizontal: 10,
+                      marginHorizontal: 10
                     }
                     : {
                       backgroundColor: "#fff",
                       borderRadius: 10,
                       borderColor: "#fff",
-                      marginHorizontal: 10,
-                    },
+                      marginHorizontal: 10
+                    }
                 ]}
               >
                 <TouchableOpacity onPress={() => setMonth("All")}>
@@ -569,14 +597,14 @@ const Home = () => {
                           margin: 10,
                           fontSize: 20,
                           paddingHorizontal: 15,
-                          color: "#fff",
+                          color: "#fff"
                         }
                         : {
                           margin: 10,
                           fontSize: 20,
                           paddingHorizontal: 15,
-                          color: "#000",
-                        },
+                          color: "#000"
+                        }
                     ]}
                   >
                     All
@@ -597,14 +625,14 @@ const Home = () => {
                             backgroundColor: "#f66b10",
                             borderRadius: 10,
                             borderColor: "#fff",
-                            marginHorizontal: 10,
+                            marginHorizontal: 10
                           }
                           : {
                             backgroundColor: "#fff",
                             borderRadius: 10,
                             borderColor: "#fff",
-                            marginHorizontal: 10,
-                          },
+                            marginHorizontal: 10
+                          }
                       ]}
                     >
                       <TouchableOpacity
@@ -617,14 +645,14 @@ const Home = () => {
                                 margin: 10,
                                 fontSize: 20,
                                 paddingHorizontal: 15,
-                                color: "#fff",
+                                color: "#fff"
                               }
                               : {
                                 margin: 10,
                                 fontSize: 20,
                                 paddingHorizontal: 15,
-                                color: "#000",
-                              },
+                                color: "#000"
+                              }
                           ]}
                         >
                           {conference.month}
@@ -646,21 +674,21 @@ const Home = () => {
                         <View
                           style={{
                             flexDirection: "row",
-                            paddingVertical: 10,
+                            paddingVertical: 10
                           }}
                         >
                           <View
                             style={{
                               paddingHorizontal: 10,
                               alignItems: "center",
-                              flexDirection: "column",
+                              flexDirection: "column"
                             }}
                           >
                             <Text
                               style={{
                                 fontWeight: "normal",
                                 fontSize: 17,
-                                marginTop: 4,
+                                marginTop: 4
                               }}
                             >
                               {conference.month}
@@ -670,7 +698,7 @@ const Home = () => {
                                 fontWeight: "bold",
                                 fontSize: 17,
                                 marginTop: 4,
-                                color: "#f66b10",
+                                color: "#f66b10"
                               }}
                             >
                               {conference.dates}
@@ -679,13 +707,13 @@ const Home = () => {
                           <View
                             style={{
                               flexDirection: "column",
-                              paddingLeft: 5,
+                              paddingLeft: 5
                             }}
                           >
                             <Text
                               style={{
                                 fontWeight: "600",
-                                fontSize: 18,
+                                fontSize: 18
                               }}
                             >
                               {conference.name}
@@ -693,7 +721,7 @@ const Home = () => {
                             <Text
                               style={{
                                 fontWeight: "normal",
-                                fontSize: 16,
+                                fontSize: 16
                               }}
                             >
                               {conference.venu}
@@ -705,19 +733,18 @@ const Home = () => {
                             borderTopWidth: 1,
                             flexDirection: "row",
                             flex: 1,
-                            borderColor: "#bfbfbf",
+                            borderColor: "#bfbfbf"
                           }}
                         >
                           <View
                             style={{
                               flex: 2,
                               alignItems: "center",
-                              justifyContent: "center",
+                              justifyContent: "center"
                             }}
                           >
                             <Text style={{ fontSize: 16 }}>
-                              {" "}
-                              <Entypo
+                              {" "}<Entypo
                                 name="ticket"
                                 size={18}
                                 color="black"
@@ -726,7 +753,7 @@ const Home = () => {
                               <Text
                                 style={{
                                   fontWeight: "bold",
-                                  fontSize: 18,
+                                  fontSize: 18
                                 }}
                               >
                                 {conference.price}
@@ -739,7 +766,7 @@ const Home = () => {
                               borderLeftWidth: 1,
                               paddingHorizontal: 10,
                               paddingBottom: 5,
-                              borderColor: "#bfbfbf",
+                              borderColor: "#bfbfbf"
                             }}
                           >
                             <Text
@@ -751,7 +778,7 @@ const Home = () => {
                                 backgroundColor: "#363942",
                                 paddingVertical: 10,
                                 marginTop: 5,
-                                borderRadius: 5,
+                                borderRadius: 5
                               }}
                               onPress={() => {
                                 Linking.openURL(`${conference.url}`);
@@ -771,21 +798,21 @@ const Home = () => {
                         <View
                           style={{
                             flexDirection: "row",
-                            paddingVertical: 10,
+                            paddingVertical: 10
                           }}
                         >
                           <View
                             style={{
                               paddingHorizontal: 10,
                               alignItems: "center",
-                              flexDirection: "column",
+                              flexDirection: "column"
                             }}
                           >
                             <Text
                               style={{
                                 fontWeight: "normal",
                                 fontSize: 17,
-                                marginTop: 4,
+                                marginTop: 4
                               }}
                             >
                               {conference.month}
@@ -795,7 +822,7 @@ const Home = () => {
                                 fontWeight: "bold",
                                 fontSize: 17,
                                 marginTop: 4,
-                                color: "#f66b10",
+                                color: "#f66b10"
                               }}
                             >
                               {conference.dates}
@@ -804,13 +831,13 @@ const Home = () => {
                           <View
                             style={{
                               flexDirection: "column",
-                              paddingLeft: 5,
+                              paddingLeft: 5
                             }}
                           >
                             <Text
                               style={{
                                 fontWeight: "600",
-                                fontSize: 18,
+                                fontSize: 18
                               }}
                             >
                               {conference.name}
@@ -818,7 +845,7 @@ const Home = () => {
                             <Text
                               style={{
                                 fontWeight: "normal",
-                                fontSize: 16,
+                                fontSize: 16
                               }}
                             >
                               {conference.venu}
@@ -830,19 +857,18 @@ const Home = () => {
                             borderTopWidth: 1,
                             flexDirection: "row",
                             flex: 1,
-                            borderColor: "#bfbfbf",
+                            borderColor: "#bfbfbf"
                           }}
                         >
                           <View
                             style={{
                               flex: 2,
                               alignItems: "center",
-                              justifyContent: "center",
+                              justifyContent: "center"
                             }}
                           >
                             <Text style={{ fontSize: 16 }}>
-                              {" "}
-                              <Entypo
+                              {" "}<Entypo
                                 name="ticket"
                                 size={18}
                                 color="black"
@@ -851,7 +877,7 @@ const Home = () => {
                               <Text
                                 style={{
                                   fontWeight: "bold",
-                                  fontSize: 18,
+                                  fontSize: 18
                                 }}
                               >
                                 {conference.price}
@@ -864,7 +890,7 @@ const Home = () => {
                               borderLeftWidth: 1,
                               paddingHorizontal: 10,
                               paddingBottom: 5,
-                              borderColor: "#bfbfbf",
+                              borderColor: "#bfbfbf"
                             }}
                           >
                             <Text
@@ -876,7 +902,7 @@ const Home = () => {
                                 backgroundColor: "#363942",
                                 paddingVertical: 10,
                                 marginTop: 5,
-                                borderRadius: 5,
+                                borderRadius: 5
                               }}
                               onPress={() => {
                                 Linking.openURL(`${conference.url}`);
@@ -899,14 +925,14 @@ const Home = () => {
         style={{
           backgroundColor: "#fff",
           paddingVertical: 10,
-          height: "100%",
+          height: "100%"
         }}
       >
         <Text
           style={{
             textAlign: "center",
             fontSize: 20,
-            fontWeight: "bold",
+            fontWeight: "bold"
           }}
         >
           About USG
@@ -918,7 +944,7 @@ const Home = () => {
               style={{
                 fontSize: 18,
                 textAlign: "justify",
-                lineHeight: 25,
+                lineHeight: 25
               }}
             >
               <Text style={{ fontWeight: "bold" }}>
@@ -936,7 +962,7 @@ const Home = () => {
               style={{
                 fontSize: 18,
                 textAlign: "justify",
-                lineHeight: 25,
+                lineHeight: 25
               }}
             >
               USG's primary goal is to establish scientific networking platforms
@@ -950,7 +976,7 @@ const Home = () => {
               style={{
                 fontSize: 18,
                 textAlign: "justify",
-                lineHeight: 25,
+                lineHeight: 25
               }}
             >
               USG is governed by a board of directors comprising renowned
@@ -976,20 +1002,20 @@ const Home = () => {
           style={{
             marginVertical: 10,
             marginHorizontal: 10,
-            backgroundColor: "#86bc42",
+            backgroundColor: "#86bc42"
           }}
         >
           <View
             style={{
               flexDirection: "row",
-              justifyContent: "space-between",
+              justifyContent: "space-between"
             }}
           >
             <View
               style={{
                 flexDirection: "row",
                 padding: 10,
-                justifyContent: "flex-end",
+                justifyContent: "flex-end"
               }}
             >
               <MaterialIcons name="keyboard-voice" size={45} color="white" />
@@ -999,7 +1025,7 @@ const Home = () => {
                     color: "#fff",
                     fontSize: 20,
                     fontWeight: "600",
-                    paddingLeft: 5,
+                    paddingLeft: 5
                   }}
                 >
                   CONFERENCES
@@ -1010,7 +1036,7 @@ const Home = () => {
                     fontSize: 15,
                     paddingLeft: 5,
                     justifyContent: "flex-end",
-                    textAlign: "right",
+                    textAlign: "right"
                   }}
                 >
                   By Our Experienced Team
@@ -1023,7 +1049,7 @@ const Home = () => {
                   color: "#fff",
                   fontSize: 20,
                   fontWeight: "600",
-                  justifyContent: "flex-end",
+                  justifyContent: "flex-end"
                 }}
               >
                 79
@@ -1034,20 +1060,20 @@ const Home = () => {
             style={{
               borderWidth: 1,
               marginHorizontal: 30,
-              borderColor: "#ffffff1a",
+              borderColor: "#ffffff1a"
             }}
-          ></View>
+          />
           <View
             style={{
               flexDirection: "row",
-              justifyContent: "space-between",
+              justifyContent: "space-between"
             }}
           >
             <View
               style={{
                 flexDirection: "row",
                 padding: 10,
-                justifyContent: "flex-end",
+                justifyContent: "flex-end"
               }}
             >
               <MaterialCommunityIcons
@@ -1061,7 +1087,7 @@ const Home = () => {
                     color: "#fff",
                     fontSize: 20,
                     fontWeight: "600",
-                    paddingLeft: 5,
+                    paddingLeft: 5
                   }}
                 >
                   SPEAKERS
@@ -1072,7 +1098,7 @@ const Home = () => {
                     fontSize: 15,
                     paddingLeft: 5,
                     justifyContent: "flex-end",
-                    textAlign: "right",
+                    textAlign: "right"
                   }}
                 >
                   Keynotes, Featured Speakers
@@ -1085,7 +1111,7 @@ const Home = () => {
                   color: "#fff",
                   fontSize: 20,
                   fontWeight: "600",
-                  justifyContent: "flex-end",
+                  justifyContent: "flex-end"
                 }}
               >
                 3547
@@ -1096,20 +1122,20 @@ const Home = () => {
             style={{
               borderWidth: 1,
               marginHorizontal: 30,
-              borderColor: "#ffffff1a",
+              borderColor: "#ffffff1a"
             }}
-          ></View>
+          />
           <View
             style={{
               flexDirection: "row",
-              justifyContent: "space-between",
+              justifyContent: "space-between"
             }}
           >
             <View
               style={{
                 flexDirection: "row",
                 padding: 10,
-                justifyContent: "flex-end",
+                justifyContent: "flex-end"
               }}
             >
               <MaterialCommunityIcons
@@ -1123,7 +1149,7 @@ const Home = () => {
                     color: "#fff",
                     fontSize: 20,
                     fontWeight: "600",
-                    paddingLeft: 5,
+                    paddingLeft: 5
                   }}
                 >
                   PARTNERS
@@ -1134,7 +1160,7 @@ const Home = () => {
                     fontSize: 15,
                     paddingLeft: 5,
                     justifyContent: "flex-end",
-                    textAlign: "right",
+                    textAlign: "right"
                   }}
                 >
                   We Provides All Industry Services
@@ -1147,7 +1173,7 @@ const Home = () => {
                   color: "#fff",
                   fontSize: 20,
                   fontWeight: "600",
-                  justifyContent: "flex-end",
+                  justifyContent: "flex-end"
                 }}
               >
                 56
@@ -1158,20 +1184,20 @@ const Home = () => {
             style={{
               borderWidth: 1,
               marginHorizontal: 30,
-              borderColor: "#ffffff1a",
+              borderColor: "#ffffff1a"
             }}
-          ></View>
+          />
           <View
             style={{
               flexDirection: "row",
-              justifyContent: "space-between",
+              justifyContent: "space-between"
             }}
           >
             <View
               style={{
                 flexDirection: "row",
                 padding: 10,
-                justifyContent: "flex-end",
+                justifyContent: "flex-end"
               }}
             >
               <SimpleLineIcons name="globe-alt" size={45} color="white" />
@@ -1181,7 +1207,7 @@ const Home = () => {
                     color: "#fff",
                     fontSize: 20,
                     fontWeight: "600",
-                    paddingLeft: 5,
+                    paddingLeft: 5
                   }}
                 >
                   COUNTRIES
@@ -1192,7 +1218,7 @@ const Home = () => {
                     fontSize: 15,
                     paddingLeft: 5,
                     justifyContent: "flex-end",
-                    textAlign: "right",
+                    textAlign: "right"
                   }}
                 >
                   We are in All Continents
@@ -1205,7 +1231,7 @@ const Home = () => {
                   color: "#fff",
                   fontSize: 20,
                   fontWeight: "600",
-                  justifyContent: "flex-end",
+                  justifyContent: "flex-end"
                 }}
               >
                 75
@@ -1217,7 +1243,7 @@ const Home = () => {
           style={{
             backgroundColor: "#373a43",
             borderTopLeftRadius: 80,
-            borderTopEndRadius: 80,
+            borderTopEndRadius: 80
           }}
         >
           <View>
@@ -1228,7 +1254,7 @@ const Home = () => {
                 marginTop: 12,
                 height: 1,
                 marginHorizontal: 150,
-                borderRadius: 50,
+                borderRadius: 50
               }}
             >
               {/* <Text>-------------</Text> */}
@@ -1242,14 +1268,14 @@ const Home = () => {
               paddingHorizontal: 10,
               justifyContent: "space-evenly",
               borderTopLeftRadius: 60,
-              borderTopEndRadius: 60,
+              borderTopEndRadius: 60
             }}
           >
             <View
               style={{
                 backgroundColor: "#f66b10",
                 borderRadius: 60,
-                paddingHorizontal: 5,
+                paddingHorizontal: 5
               }}
             >
               <Zocial
@@ -1265,7 +1291,7 @@ const Home = () => {
               style={{
                 backgroundColor: "#fbbf47",
                 borderRadius: 60,
-                padding: 5,
+                padding: 5
               }}
             >
               <MaterialCommunityIcons
@@ -1281,7 +1307,7 @@ const Home = () => {
               style={{
                 backgroundColor: "#3f82f7",
                 borderRadius: 60,
-                padding: 5,
+                padding: 5
               }}
             >
               {/* <MaterialCommunityIcons name="directions" size={50} color="white" /> */}
@@ -1304,13 +1330,13 @@ const Home = () => {
 
 const styles = StyleSheet.create({
   center: {
-    flex: 1,
+    flex: 1
   },
   viewBox: {
     paddingHorizontal: 20,
     justifyContent: "center",
     width: width,
-    alignItems: "center",
+    alignItems: "center"
     // height: 430,
   },
   notificationcontainer: {
@@ -1322,13 +1348,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderRadius: 25,
     justifyContent: "space-between",
-    flex: 1,
+    flex: 1
   },
   header2: {
     fontSize: 20,
     paddingLeft: 20,
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 20
   },
   flatlistcontainer: {
     backgroundColor: "#fff",
@@ -1336,8 +1362,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     flexDirection: "column",
     borderRadius: 10,
-    justifyContent: "space-between",
-  },
+    justifyContent: "space-between"
+  }
 });
 
 export default Home;
