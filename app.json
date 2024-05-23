@@ -27,7 +27,12 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["CAMERA", "WRITE_EXTERNAL_STORAGE", "RECORD_AUDIO"],
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.RECORD_AUDIO"
+      ],
       "package": "com.nanduexpo.USGAPP",
       "googleServicesFile": "google-services.json"
     },
@@ -43,7 +48,7 @@
         }
       ],
       [
-      "expo-notifications",
+        "expo-notifications",
         {
           "icon": "./assets/icon.png",
           "color": "#ffffff",
@@ -59,6 +64,12 @@
         "projectId": "d90ececd-a70a-49cb-abf3-a4271c6c5832"
       }
     },
-    "owner": "nanduexpo"
+    "owner": "nanduexpo",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/d90ececd-a70a-49cb-abf3-a4271c6c5832"
+    }
   }
 }
