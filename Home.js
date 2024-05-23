@@ -124,6 +124,8 @@ const Home = () => {
         aboutshort: conference.aboutshort,
         hotelAddress: conference.hotelAddress,
         url: conference.url,
+        latitude: conference.latitude,
+        longitude: conference.longitude,
         pdf_url: conference.pdf_url
       });
     } catch (error) {

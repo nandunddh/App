@@ -28,6 +28,8 @@ const ConferenceScreen = ({ route, navigation }) => {
   const [aboutShort, setAboutShort] = useState(route.params.aboutshort);
   const [about, setAbout] = useState(route.params.about);
   const [hotelAddress, setHotelAddress] = useState(route.params.hotelAddress);
+  const [latitude, setLatitude] = useState(route.params.latitude);
+  const [longitude, setLongitude] = useState(route.params.longitude);
   const [url, setUrl] = useState(route.params.url);
 
   useEffect(() => {
@@ -101,8 +103,8 @@ const ConferenceScreen = ({ route, navigation }) => {
                   {hotelAddress}</Text> */}
                 <MapView style={Styles.map}
                   initialRegion={{
-                    latitude: 42.34616716969697,
-                    longitude: -71.25787434479032,
+                    latitude: {latitude},
+                    longitude: {longitude},
                     latitudeDelta: 0.0,
                     longitudeDelta: 0.08,
                   }} />
