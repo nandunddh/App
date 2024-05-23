@@ -90,22 +90,22 @@ const ConferenceScreen = ({ route, navigation }) => {
               }}>Read more</Text>
             </View>
           </View>
-          {venu !== "Virtual" &&
+          {/* {venu !== "Virtual" &&
             <View style={{ backgroundColor: "#fff", paddingHorizontal: 35, paddingBottom: 20 }}>
               <View style={{ paddingVertical: 20, borderBottomWidth: 1, borderStyle: "dotted" }}>
                 <Text style={Styles.aboutText}>Location</Text>
               </View>
               <View style={{ height: 250, paddingBottom: 30 }}>
-                {/* <MapView style={Styles.map}
+                <MapView style={Styles.map}
                   initialRegion={{
                     latitude: 42.34616716969697,
                     longitude: -71.25787434479032,
                     latitudeDelta: 0.0,
                     longitudeDelta: 0.08,
-                  }} /> */}
+                  }} />
               </View>
             </View>
-          }
+          } */}
         </View>
         <View style={{ backgroundColor: "#fff", marginVertical: 20, paddingHorizontal: 35, paddingBottom: 20 }}>
           <View style={{ paddingVertical: 20, borderBottomWidth: 1, borderStyle: "dashed" }}>
