@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useMemo } from "react";
-import { View, ActivityIndicator, StyleSheet } from "react-native";
+import { View, ActivityIndicator, StyleSheet, Dimensions, Image } from "react-native";
 import MyContext from "./MyContext";
 import * as SecureStore from "expo-secure-store";
 import { DB_URL } from "./Components/Constants/Constants";
+const { width, height } = Dimensions.get('window');
 
 const LoadingScreen = () => {
   const memorizedislogin = useMemo(() => isLogin, [isLogin]);
@@ -96,7 +97,8 @@ const LoadingScreen = () => {
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color="#0000ff" />
+      {/* <ActivityIndicator size="large" color="#0000ff" /> */}
+      <Image source={require('./assets/splash.png')} style={styles.loadingImage} />
     </View>
   );
 };
@@ -106,6 +108,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#fff"
+  },
+  loadingImage: {
+    width: width, 
+    height: height,
+    resizeMode: 'contain',
   },
 });
 

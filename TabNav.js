@@ -57,13 +57,13 @@ const UserTabs = () => {
           <Ionicons name="notifications-outline" size={30} />
         ),
       }} />
-      <Tab.Screen name="Display Pdf" component={DisplayPdf} options={{
+      {/* <Tab.Screen name="Display Pdf" component={DisplayPdf} options={{
         headerTitleAlign: "center",
         tabBarLabel: "",
         tabBarIcon: () => (
           <Ionicons name="notifications-outline" size={30} />
         ),
-      }} />
+      }} /> */}
      
       <Tab.Screen name="Profile Tab" component={Profile} options={{
         headerTitleAlign: "center",

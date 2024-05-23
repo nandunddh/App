@@ -22,7 +22,9 @@ const Profile = ({ route }) => {
   } = useContext(MyContext);
   // const notification_image = require("../assets/nandu.png");
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    // Image.prefetch(userData.profile);
+  }, []);
 
   return (
     <>
@@ -37,6 +39,7 @@ const Profile = ({ route }) => {
                     uri: `${DB_URL}uploads/user_profile/no_image.jpg`,
                   }}
                   style={styles.profile_image}
+                  resizeMode="cover"
                 />
               ) : (
                 <Image
@@ -44,6 +47,7 @@ const Profile = ({ route }) => {
                     uri: `${DB_URL}uploads/user_profile/${userData.profile}`,
                   }}
                   style={styles.profile_image}
+                  resizeMode="cover"
                 />
               )}
               <Text style={{ fontSize: 20, fontWeight: "bold" }}>

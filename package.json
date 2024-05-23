@@ -38,6 +38,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "^0.72.10",
+    "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "~2.12.0",
     "react-native-maps": "1.7.1",
     "react-native-reanimated": "^3.3.0",
@@ -45,8 +46,8 @@
     "react-native-screens": "~3.22.0",
     "react-native-vector-icons": "^10.0.3",
     "react-native-web": "~0.19.6",
-    "react-router-dom": "^6.22.2",
-    "react-native-webview": "13.2.2"
+    "react-native-webview": "13.2.2",
+    "react-router-dom": "^6.22.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

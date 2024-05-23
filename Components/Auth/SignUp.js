@@ -157,6 +157,7 @@ const SignUp = ({ navigation }) => {
     formData.append('subject', 'OTP Verification');
     formData.append('name', name);
     formData.append('otp', params);
+    formData.append('emailtype', "email verification");
 
     // Make the AJAX call
     fetch(`${DB_URL}send-email`, {
@@ -165,7 +166,7 @@ const SignUp = ({ navigation }) => {
     })
       .then(response => {
         if (response.ok) {
-          Alert.alert('Success', `Email sent successfully ${email}`),
+          Alert.alert('Success', `Email sent successfully`),
           navigation.navigate("SignUp Code", { email });
         } else {
           Alert.alert('Error', 'Failed to send email. Please try again later.');

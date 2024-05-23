@@ -1,10 +1,10 @@
-import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import React, { useContext, useRef, useState } from 'react'
 import Animated from 'react-native-reanimated'
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MyContext from '../MyContext';
-import { Messgae } from './Auth/Messgae';
+import { DB_URL } from './Constants/Constants';
 
 const ContactUs = ({ navigation }) => {
   // const navigation = useNavigation();
@@ -20,11 +20,38 @@ const ContactUs = ({ navigation }) => {
   const email1 = useRef();
 
   const handleSubmit = () => {
-    Messgae({ email, name, mobilenumber, message }, (status) => {
-      if (status == true) {
-        setMessage("");
-      }
+    // Messgae({ email, name, mobilenumber, message }, (status) => {
+    //   if (status == true) {
+    //     setMessage("");
+    //   }
+    // })
+
+    const formData = new FormData();
+    formData.append('email', email);
+    formData.append('mobilenumber', mobilenumber);
+    formData.append('message', message);
+    formData.append('name', name);
+    formData.append('emailtype', "contact us");
+
+    // Make the AJAX call
+    fetch(`${DB_URL}send-email`, {
+      method: 'POST',
+      body: formData
     })
+      .then(response => {
+        if (response.ok) {
+          Alert.alert('Success', `Thanks for Contacting USG.\nOur Support team will contact you shortly.`),
+            navigation.navigate("User Home Tab");
+            setMessage("");
+        } else {
+          Alert.alert('Error', 'Failed to send email. Please try again later.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        Alert.alert('Error', 'Failed to send email. Please try again later.');
+      });
+
   }
   return (
     <Animated.ScrollView style={{ backgroundColor: "#fff", }}>

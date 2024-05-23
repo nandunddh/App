@@ -104,8 +104,9 @@ const Home = () => {
   );
 
   const handpleUrlPress = ({ conference }) => {
-    // console.log("Join Now Pressed");
+    // navigation.navigate("Display Pdf", {pdf_url: conference.name});
     const imageUrl = `${DB_URL}uploads/banners/${conference.banner}`;
+    // const screenname = "Display Pdf";
     const screenname = "Conference screen";
     const url = `${screenname}`;
     try {
@@ -122,7 +123,8 @@ const Home = () => {
         about: conference.about,
         aboutshort: conference.aboutshort,
         hotelAddress: conference.hotelAddress,
-        url: conference.url
+        url: conference.url,
+        pdf_url: conference.pdf_url
       });
     } catch (error) {
       console.error("Navigation error:", error);
@@ -404,7 +406,7 @@ const Home = () => {
                                 marginLeft: 20
                               }}
                               onPress={() => {
-                                navigation.navigate("Display Pdf", {pdf_url: item.pdf_url});
+                                Linking.openURL(item.pdf_url);
                               }}
                             >
                               <Text
@@ -465,6 +467,7 @@ const Home = () => {
                           {conference.logo
                             ? <Image
                               source={{ uri: imageUrl }}
+                              resizeMode="cover"
                               style={{
                                 width: 60,
                                 height: 60,

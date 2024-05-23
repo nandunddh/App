@@ -9,10 +9,6 @@ const DisplayPdf = () => {
   return (
     <View style={styles.container}>
       <Text>{pdf_url}</Text>
-       <WebView
-        source={{ uri: pdf_url }}
-        style={styles.webview}
-      />
     </View>
   );
 };
