@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Dimensions, LogBox, StyleSheet, Linking } from 'react-native';
+import { View, Text, Dimensions, LogBox, StyleSheet, Linking, ScrollView } from 'react-native';
 import { Image } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Entypo, EvilIcons, Fontisto, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
-import Animated from 'react-native-reanimated';
 import MapView from 'react-native-maps';
 import LoadingScreen from '../LoadingScreen';
+
 const { height: screenHeight } = Dimensions.get('window');
 
 LogBox.ignoreLogs(['Unsupported dashed / dotted border style']);
 
-
 const ConferenceScreen = ({ route, navigation }) => {
   const insets = useSafeAreaInsets();
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true);
 
   const [name, setName] = useState(route.params.name);
   const [title, setTitle] = useState(route.params.title);
@@ -28,22 +27,20 @@ const ConferenceScreen = ({ route, navigation }) => {
   const [aboutShort, setAboutShort] = useState(route.params.aboutshort);
   const [about, setAbout] = useState(route.params.about);
   const [hotelAddress, setHotelAddress] = useState(route.params.hotelAddress);
-  const [latitude, setLatitude] = useState(route.params.latitude);
-  const [longitude, setLongitude] = useState(route.params.longitude);
   const [url, setUrl] = useState(route.params.url);
 
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }); // Simulated loading time
+    }, 1000); // Simulated loading time
   }, [route.params]);
+
   if (loading) {
-    return (
-      <LoadingScreen />
-    );
+    return <LoadingScreen />;
   }
+
   return (
-    <Animated.ScrollView>
+    <ScrollView>
       <View>
         <View>
           <Image source={{ uri: image }} style={Styles.image} resizeMode="cover" />
@@ -99,15 +96,13 @@ const ConferenceScreen = ({ route, navigation }) => {
                 <Text style={Styles.aboutText}>Location</Text>
               </View>
               <View style={{ height: 250, paddingBottom: 30 }}>
-                {/* <Text style={{ lineHeight: 22, marginVertical: 10, fontSize: 16, fontWeight: "400" }}>
-                  {hotelAddress}</Text> */}
-                <MapView style={Styles.map}
+                {/* <MapView style={Styles.map}
                   initialRegion={{
-                    latitude: {latitude},
-                    longitude: {longitude},
+                    latitude: 42.34616716969697,
+                    longitude: -71.25787434479032,
                     latitudeDelta: 0.0,
                     longitudeDelta: 0.08,
-                  }} />
+                  }} /> */}
               </View>
             </View>
           }
@@ -148,7 +143,7 @@ const ConferenceScreen = ({ route, navigation }) => {
           </View>
         </View>
       </View>
-    </Animated.ScrollView>
+    </ScrollView>
   );
 }
 
@@ -181,7 +176,6 @@ const Styles = StyleSheet.create({
   boldtext: {
     fontWeight: "bold",
     fontSize: 15,
-    // textTransform: "capitalize"
   },
   boldtextDate: {
     fontWeight: "bold",
@@ -189,7 +183,6 @@ const Styles = StyleSheet.create({
     textTransform: "capitalize"
   },
   aboutText: {
-    // textAlign: "center",
     fontSize: 18,
     fontWeight: "bold"
   },
@@ -207,4 +200,4 @@ const Styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff'
   },
-})
+});
