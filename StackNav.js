@@ -22,6 +22,7 @@ import { Messgae } from "./Components/Auth/Messgae";
 import EditScreen from "./Components/EditScreen";
 import { useNavigation } from "@react-navigation/native";
 import SignUp_code from "./Components/Auth/SignUp_code";
+import { vw } from "react-native-viewport-units";
 
 const Stack = createStackNavigator();
 
@@ -42,7 +43,7 @@ const MainStackNavigator = () => {
       )
     }
     return (
-      <View style={{ marginLeft: 20 }}>
+      <View style={{ marginLeft: 20 * vw }}>
         <TouchableOpacity onPress={handlePress}>
           {/* <Image
             source={require("./assets/nandu.png")}
@@ -56,7 +57,7 @@ const MainStackNavigator = () => {
   const HeaderLeft = () => {
     const navigation = useNavigation();
     return (
-      <View style={{ marginLeft: 20 }}>
+      <View style={{ marginLeft: 20 * vw }}>
         <TouchableOpacity onPress={() => navigation.navigate("EventsList")}>
           {/* <Image
             source={require("./assets/nandu.png")}
@@ -83,9 +84,9 @@ const MainStackNavigator = () => {
           <View>
             <Text style={{ color: "#fff" }}> Hi Welcome </Text>
             {userData ? 
-            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20, }}> {userData.name}</Text>
+            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 * vw, }}> {userData.name}</Text>
             :
-            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20, }}> loading...</Text>
+            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 * vw, }}> loading...</Text>
           }
           </View>
         </View>

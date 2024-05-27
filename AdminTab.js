@@ -10,6 +10,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AddNotification from "./Components/AddNotification";
 import UserList from "./Components/UserList";
 import EventsList from "./Components/EventsList";
+import { vw } from "react-native-viewport-units";
 
 const Tab = createBottomTabNavigator();
 
@@ -25,12 +26,12 @@ const AdminTab = () => {
           borderTopWidth: 0, // Hide the default top border
         },
         tabBarLabelStyle: {
-          fontSize: 12,
+          fontSize: 12 * vw,
           fontWeight: 'bold',
         },
         tabBarIconStyle: {
-          marginBottom: -3,
-          marginTop: 5, // Adjust icon position vertically
+          marginBottom: -3 * vw,
+          marginTop: 5 * vw, // Adjust icon position vertically
         },
       }}>
       <Tab.Screen name="AdminTab Home Tab" component={MainStackNavigator}

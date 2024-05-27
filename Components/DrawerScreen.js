@@ -17,6 +17,7 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import Octicons from "react-native-vector-icons/Octicons";
 import { useNavigation } from "@react-navigation/native";
 import { DB_URL } from "./Constants/Constants";
+import { vh, vw } from "react-native-viewport-units";
 
 const { width, height } = Dimensions.get("window");
 
@@ -201,47 +202,47 @@ const styles = StyleSheet.create({
   contentContainer: {
     flexGrow: 1,
     justifyContent: "flex-start",
-    paddingTop: 50,
+    paddingTop: 50 * vw,
   },
   userInfoContainer: {
     flexDirection: "row",
     borderBottomWidth: 2,
     borderBottomColor: "orange",
-    paddingBottom: 20,
-    paddingHorizontal: 10,
+    paddingBottom: 20 * vw,
+    paddingHorizontal: 10 * vw,
   },
   profileImage: {
-    borderRadius: 80,
-    width: 80,
-    height: 80,
+    borderRadius: 80 * vw,
+    width: 80 * vw,
+    height: 80 * vh,
   },
   userInfoText: {
     justifyContent: "center",
-    paddingLeft: 10,
+    paddingLeft: 10 * vw,
   },
   userName: {
     fontWeight: "bold",
-    fontSize: 20,
-    paddingTop: 20,
+    fontSize: 20 * vw,
+    paddingTop: 20 * vw,
     textTransform: "capitalize",
   },
   userEmail: {
-    fontSize: 15,
-    paddingVertical: 10,
+    fontSize: 15 * vw,
+    paddingVertical: 10 * vw,
   },
   menuContainer: {
-    marginVertical: 30,
+    marginVertical: 30 * vw,
     flex: 1,
   },
   menuItem: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 20 * vw,
     backgroundColor: "#eee",
-    paddingHorizontal: 5,
-    margin: 10,
-    borderRadius: 15,
-    paddingVertical: 10,
+    paddingHorizontal: 5 * vw,
+    margin: 10 * vw,
+    borderRadius: 15 * vw,
+    paddingVertical: 10 * vw,
   },
   menuIcon: {
     flex: 1,
@@ -250,7 +251,7 @@ const styles = StyleSheet.create({
     flex: 4,
   },
   footer: {
-    padding: 10,
+    padding: 10 * vw,
     alignItems: "center",
     justifyContent: "flex-end"
   },

@@ -26,6 +26,8 @@ import { SimpleLineIcons } from "@expo/vector-icons";
 import { Zocial } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import Animated from "react-native-reanimated";
+import { vw } from "react-native-viewport-units";
+
 
 LogBox.ignoreLogs([
   "Possible unhandled promise rejection (id: 1): Error: Unable to open URL: mailto:contact@unitedscientificgroup.net"
@@ -237,17 +239,17 @@ const Home = () => {
             <View
               style={{
                 backgroundColor: "#363942",
-                paddingHorizontal: 25,
+                paddingHorizontal: 25 * vw,
                 flexDirection: "row",
                 justifyContent: "space-between",
-                height: 120,
-                paddingTop: 15
+                height: 120 * vh,
+                paddingTop: 15 * vw
               }}
             >
               <Text
                 style={{
                   color: "#fff",
-                  fontSize: 17,
+                  fontSize: 17 * vw,
                   fontWeight: "bold"
                 }}
               >
@@ -269,9 +271,9 @@ const Home = () => {
         {/* Banner Section */}
         <View
           style={{
-            marginTop: -60,
+            marginTop: -60 * vw,
             flexDirection: "row",
-            marginBottom: 30
+            marginBottom: 30 * vw
           }}
         >
           <FlatList
@@ -289,11 +291,11 @@ const Home = () => {
                   <View style={styles.viewBox}>
                     <View
                       style={{
-                        borderWidth: 10,
+                        borderWidth: 10 * vw,
                         borderColor: "#fff",
-                        borderRadius: 15,
+                        borderRadius: 15 * vw,
                         backgroundColor: "#fff",
-                        width: width - 20,
+                        width: (width - 20),
                         alignItems: "center",
                         overflow: "hidden"
                       }}
@@ -302,7 +304,7 @@ const Home = () => {
                         ? <Image
                           source={{ uri: imageUrl }}
                           style={{
-                            borderRadius: 15,
+                            borderRadius: 15 * vw,
                             width: "100%",
                             aspectRatio: 236 / 153,
                             resizeMode: "cover"
@@ -311,7 +313,7 @@ const Home = () => {
                         : <Text>No Banner</Text>}
                       <Text
                         style={{
-                          fontSize: 20,
+                          fontSize: 20 * vw,
                           fontWeight: "bold",
                           textAlign: "center"
                         }}
@@ -320,7 +322,7 @@ const Home = () => {
                       </Text>
                       <Text
                         style={{
-                          fontSize: 17,
+                          fontSize: 17 * vw,
                           fontWeight: "600",
                           textAlign: "center",
                           color: "#f66b10"
@@ -331,7 +333,7 @@ const Home = () => {
                       <View
                         style={{
                           flexDirection: "row",
-                          marginVertical: 12,
+                          marginVertical: 12 * vw,
                           justifyContent: "center"
                         }}
                       >
@@ -339,9 +341,9 @@ const Home = () => {
                           <Fontisto name="date" size={18} color="#f66b10" />
                           <Text
                             style={{
-                              fontSize: 15,
+                              fontSize: 15 * vw,
                               fontWeight: "600",
-                              marginHorizontal: 10
+                              marginHorizontal: 10 * vw
                             }}
                           >
                             {item.month} {item.dates}, {item.year}
@@ -360,7 +362,7 @@ const Home = () => {
                           />
                           <Text
                             style={{
-                              fontSize: 15,
+                              fontSize: 15 * vw,
                               fontWeight: "600"
                             }}
                           >
@@ -371,18 +373,18 @@ const Home = () => {
                       <View>
                         <View
                           style={{
-                            marginVertical: 10,
+                            marginVertical: 10 * vw,
                             flexDirection: "row",
                             justifyContent: "center",
-                            marginHorizontal: 10
+                            marginHorizontal: 10 * vw
                           }}
                         >
                           <TouchableOpacity
                             style={{
-                              borderRadius: 10,
+                              borderRadius: 10 * vw,
                               backgroundColor: "#363942",
-                              paddingVertical: 12,
-                              paddingHorizontal: 20,
+                              paddingVertical: 12 * vw,
+                              paddingHorizontal: 20 * vw,
                             }}
                             onPress={() => {
                               handpleUrlPress({ conference: item });
@@ -392,7 +394,7 @@ const Home = () => {
                               style={{
                                 color: "#fff",
                                 textAlign: "center",
-                                fontSize: 20
+                                fontSize: 20 * vw
                               }}
                             >
                               {" "}Register Now{" "}
@@ -401,11 +403,11 @@ const Home = () => {
                           {item.pdf_url && (item.pdf_url.length !== 0) &&
                             <TouchableOpacity
                               style={{
-                                borderRadius: 10,
+                                borderRadius: 10 * vw,
                                 backgroundColor: "#e58027",
-                                paddingVertical: 12,
-                                paddingHorizontal: 20,
-                                marginLeft: 20
+                                paddingVertical: 12 * vw,
+                                paddingHorizontal: 20 * vw,
+                                marginLeft: 20 * vw
                               }}
                               onPress={() => {
                                 Linking.openURL(item.pdf_url);
@@ -415,7 +417,7 @@ const Home = () => {
                                 style={{
                                   color: "#fff",
                                   textAlign: "center",
-                                  fontSize: 20
+                                  fontSize: 20 * vw
                                 }}
                               >
                                 {" "}Program{" "}
@@ -460,8 +462,8 @@ const Home = () => {
                       <View style={{ flexDirection: "row", flex: 3 }}>
                         <View
                           style={{
-                            paddingLeft: 5,
-                            paddingRight: 5,
+                            paddingLeft: 5 * vw,
+                            paddingRight: 5 * vw,
                             textAlign: "left",
                             flex: 1
                           }}
@@ -471,22 +473,22 @@ const Home = () => {
                               source={{ uri: imageUrl }}
                               resizeMode="cover"
                               style={{
-                                width: 60,
-                                height: 60,
-                                borderRadius: 50
+                                width: 60 * vw,
+                                height: 60 * vh,
+                                borderRadius: 50 * vw
                               }}
                             />
                             : <Text>No Logo</Text>}
                         </View>
                         <View style={{ flex: 3 }}>
-                          <Text style={{ fontWeight: "600", fontSize: 17 }}>
+                          <Text style={{ fontWeight: "600", fontSize: 17 * vw}}>
                             {conference.name} {"\n"}
                             <View>
                               <Text
                                 style={{
                                   fontWeight: "normal",
-                                  fontSize: 13,
-                                  marginTop: 4
+                                  fontSize: 13 * vw,
+                                  marginTop: 4 * vw
                                 }}
                               >
                                 {conference.month} {conference.dates},{" "}
@@ -494,7 +496,7 @@ const Home = () => {
                                 <Text
                                   style={{
                                     color: "#f66b10",
-                                    fontSize: 15,
+                                    fontSize: 15 * vw,
                                     fontWeight: "bold"
                                   }}
                                 >
@@ -511,8 +513,8 @@ const Home = () => {
                       <View
                         style={{
                           alignItems: "end",
-                          borderLeftWidth: 1,
-                          paddingLeft: 5,
+                          borderLeftWidth: 1 ,
+                          paddingLeft: 5 * vw,
                           flex: 1,
                           justifyContent: "center",
                           alignItems: "center"
@@ -520,10 +522,10 @@ const Home = () => {
                       >
                         <Text
                           style={{
-                            marginBottom: 5,
+                            marginBottom: 5 * vw,
                             fontWeight: "bold",
                             color: "#f66b10",
-                            fontSize: 14
+                            fontSize: 14 * vw
                           }}
                         >
                           From ${conference.price}
@@ -531,15 +533,15 @@ const Home = () => {
                         {/* <Button title="Join" onPress={() =>}/> */}
                         {/* <TouchableOpacity onPress={() => alert('Button Pressed')}> */}
                         <TouchableOpacity
-                          style={{ borderWidth: 1, borderRadius: 10 }}
+                          style={{ borderWidth: 1 * vw, borderRadius: 10 * vw }}
                           onPress={() => handpleUrlPress({ conference })}
                         >
                           <Text
                             style={{
                               fontWeight: "bold",
-                              fontSize: 15,
-                              paddingHorizontal: 5,
-                              paddingVertical: 5
+                              fontSize: 15 * vw,
+                              paddingHorizontal: 5 * vw,
+                              paddingVertical: 5 * vw
                             }}
                           >
                             Join Now
@@ -550,11 +552,11 @@ const Home = () => {
                   );
                 }
               })
-              : <View style={{ justifyContent: "center", marginBottom: 10 }}>
+              : <View style={{ justifyContent: "center", marginBottom: 10 * vw }}>
                 <Text
                   style={{
                     textAlign: "center",
-                    fontSize: 20,
+                    fontSize: 20 * vw,
                     fontWeight: "bold",
                     color: "#f66b10"
                   }}
@@ -582,15 +584,15 @@ const Home = () => {
                   month == "All"
                     ? {
                       backgroundColor: "#f66b10",
-                      borderRadius: 10,
+                      borderRadius: 10 * vw,
                       borderColor: "#fff",
-                      marginHorizontal: 10
+                      marginHorizontal: 10 * vw
                     }
                     : {
                       backgroundColor: "#fff",
-                      borderRadius: 10,
+                      borderRadius: 10 * vw,
                       borderColor: "#fff",
-                      marginHorizontal: 10
+                      marginHorizontal: 10 * vw
                     }
                 ]}
               >
@@ -599,15 +601,15 @@ const Home = () => {
                     style={[
                       month === "All"
                         ? {
-                          margin: 10,
-                          fontSize: 20,
-                          paddingHorizontal: 15,
+                          margin: 10 * vw,
+                          fontSize: 20 * vw,
+                          paddingHorizontal: 15 * vw,
                           color: "#fff"
                         }
                         : {
-                          margin: 10,
-                          fontSize: 20,
-                          paddingHorizontal: 15,
+                          margin: 10 * vw,
+                          fontSize: 20 * vw,
+                          paddingHorizontal: 15 * vw,
                           color: "#000"
                         }
                     ]}
@@ -628,15 +630,15 @@ const Home = () => {
                         conference.month == month
                           ? {
                             backgroundColor: "#f66b10",
-                            borderRadius: 10,
+                            borderRadius: 10 * vw,
                             borderColor: "#fff",
-                            marginHorizontal: 10
+                            marginHorizontal: 10 * vw
                           }
                           : {
                             backgroundColor: "#fff",
-                            borderRadius: 10,
+                            borderRadius: 10 * vw,
                             borderColor: "#fff",
-                            marginHorizontal: 10
+                            marginHorizontal: 10 * vw
                           }
                       ]}
                     >
@@ -647,15 +649,15 @@ const Home = () => {
                           style={[
                             conference.month === month
                               ? {
-                                margin: 10,
-                                fontSize: 20,
-                                paddingHorizontal: 15,
+                                margin: 10 * vw,
+                                fontSize: 20 * vw,
+                                paddingHorizontal: 15 * vw,  
                                 color: "#fff"
                               }
                               : {
-                                margin: 10,
-                                fontSize: 20,
-                                paddingHorizontal: 15,
+                                margin: 10 * vw,
+                                fontSize: 20 * vw,
+                                paddingHorizontal: 15 * vw,
                                 color: "#000"
                               }
                           ]}
@@ -669,7 +671,7 @@ const Home = () => {
               }
             })}
           </Animated.ScrollView>
-          <View style={{ marginTop: 10 }}>
+          <View style={{ marginTop: 10 * vw }}>
             {ConferenceData &&
               ConferenceData.map((conference, index) => {
                 if (month == "All") {
@@ -679,12 +681,12 @@ const Home = () => {
                         <View
                           style={{
                             flexDirection: "row",
-                            paddingVertical: 10
+                            paddingVertical: 10 * vw
                           }}
                         >
                           <View
                             style={{
-                              paddingHorizontal: 10,
+                              paddingHorizontal: 10 * vw,
                               alignItems: "center",
                               flexDirection: "column"
                             }}
@@ -692,8 +694,8 @@ const Home = () => {
                             <Text
                               style={{
                                 fontWeight: "normal",
-                                fontSize: 17,
-                                marginTop: 4
+                                fontSize: 17 * vw,
+                                marginTop: 4 * vw
                               }}
                             >
                               {conference.month}
@@ -701,8 +703,8 @@ const Home = () => {
                             <Text
                               style={{
                                 fontWeight: "bold",
-                                fontSize: 17,
-                                marginTop: 4,
+                                fontSize: 17 * vw,
+                                marginTop: 4 * vw,
                                 color: "#f66b10"
                               }}
                             >
@@ -712,13 +714,13 @@ const Home = () => {
                           <View
                             style={{
                               flexDirection: "column",
-                              paddingLeft: 5
+                              paddingLeft: 5 * vw
                             }}
                           >
                             <Text
                               style={{
                                 fontWeight: "600",
-                                fontSize: 18
+                                fontSize: 18 * vw
                               }}
                             >
                               {conference.name}
@@ -726,7 +728,7 @@ const Home = () => {
                             <Text
                               style={{
                                 fontWeight: "normal",
-                                fontSize: 16
+                                fontSize: 16 * vw
                               }}
                             >
                               {conference.venu}
@@ -735,7 +737,7 @@ const Home = () => {
                         </View>
                         <View
                           style={{
-                            borderTopWidth: 1,
+                            borderTopWidth: 1 * vw,
                             flexDirection: "row",
                             flex: 1,
                             borderColor: "#bfbfbf"
@@ -748,7 +750,7 @@ const Home = () => {
                               justifyContent: "center"
                             }}
                           >
-                            <Text style={{ fontSize: 16 }}>
+                            <Text style={{ fontSize: 16 * vw }}>
                               {" "}<Entypo
                                 name="ticket"
                                 size={18}
@@ -758,7 +760,7 @@ const Home = () => {
                               <Text
                                 style={{
                                   fontWeight: "bold",
-                                  fontSize: 18
+                                  fontSize: 18 * vw
                                 }}
                               >
                                 {conference.price}
@@ -768,22 +770,22 @@ const Home = () => {
                           <View
                             style={{
                               flex: 1,
-                              borderLeftWidth: 1,
-                              paddingHorizontal: 10,
-                              paddingBottom: 5,
+                              borderLeftWidth: 1 * vw,
+                              paddingHorizontal: 10 * vw,
+                              paddingBottom: 5 * vw,
                               borderColor: "#bfbfbf"
                             }}
                           >
                             <Text
                               style={{
                                 fontWeight: "bold",
-                                fontSize: 16,
+                                fontSize: 16 * vw,
                                 textAlign: "center",
                                 color: "#fff",
                                 backgroundColor: "#363942",
-                                paddingVertical: 10,
-                                marginTop: 5,
-                                borderRadius: 5
+                                paddingVertical: 10 * vw,
+                                marginTop: 5 * vw,
+                                borderRadius: 5 * vw
                               }}
                               onPress={() => {
                                 Linking.openURL(`${conference.url}`);
@@ -803,12 +805,12 @@ const Home = () => {
                         <View
                           style={{
                             flexDirection: "row",
-                            paddingVertical: 10
+                            paddingVertical: 10 * vw
                           }}
                         >
                           <View
                             style={{
-                              paddingHorizontal: 10,
+                              paddingHorizontal: 10 * vw,
                               alignItems: "center",
                               flexDirection: "column"
                             }}
@@ -816,8 +818,8 @@ const Home = () => {
                             <Text
                               style={{
                                 fontWeight: "normal",
-                                fontSize: 17,
-                                marginTop: 4
+                                fontSize: 17 * vw,
+                                marginTop: 4 * vw
                               }}
                             >
                               {conference.month}
@@ -825,8 +827,8 @@ const Home = () => {
                             <Text
                               style={{
                                 fontWeight: "bold",
-                                fontSize: 17,
-                                marginTop: 4,
+                                fontSize: 17 * vw,
+                                marginTop: 4 * vw,
                                 color: "#f66b10"
                               }}
                             >
@@ -836,13 +838,13 @@ const Home = () => {
                           <View
                             style={{
                               flexDirection: "column",
-                              paddingLeft: 5
+                              paddingLeft: 5 * vw
                             }}
                           >
                             <Text
                               style={{
                                 fontWeight: "600",
-                                fontSize: 18
+                                fontSize: 18 * vw
                               }}
                             >
                               {conference.name}
@@ -850,7 +852,7 @@ const Home = () => {
                             <Text
                               style={{
                                 fontWeight: "normal",
-                                fontSize: 16
+                                fontSize: 16 * vw
                               }}
                             >
                               {conference.venu}
@@ -859,7 +861,7 @@ const Home = () => {
                         </View>
                         <View
                           style={{
-                            borderTopWidth: 1,
+                            borderTopWidth: 1 * vw,
                             flexDirection: "row",
                             flex: 1,
                             borderColor: "#bfbfbf"
@@ -872,7 +874,7 @@ const Home = () => {
                               justifyContent: "center"
                             }}
                           >
-                            <Text style={{ fontSize: 16 }}>
+                            <Text style={{ fontSize: 16 * vw }}>
                               {" "}<Entypo
                                 name="ticket"
                                 size={18}
@@ -882,7 +884,7 @@ const Home = () => {
                               <Text
                                 style={{
                                   fontWeight: "bold",
-                                  fontSize: 18
+                                  fontSize: 18 * vw
                                 }}
                               >
                                 {conference.price}
@@ -893,21 +895,21 @@ const Home = () => {
                             style={{
                               flex: 1,
                               borderLeftWidth: 1,
-                              paddingHorizontal: 10,
-                              paddingBottom: 5,
+                              paddingHorizontal: 10 * vw,
+                              paddingBottom: 5 * vw,
                               borderColor: "#bfbfbf"
                             }}
                           >
                             <Text
                               style={{
                                 fontWeight: "bold",
-                                fontSize: 16,
+                                fontSize: 16 * vw,
                                 textAlign: "center",
                                 color: "#fff",
                                 backgroundColor: "#363942",
-                                paddingVertical: 10,
-                                marginTop: 5,
-                                borderRadius: 5
+                                paddingVertical: 10 * vw,
+                                marginTop: 5 * vw,
+                                borderRadius: 5 * vw
                               }}
                               onPress={() => {
                                 Linking.openURL(`${conference.url}`);
@@ -929,14 +931,14 @@ const Home = () => {
       <View
         style={{
           backgroundColor: "#fff",
-          paddingVertical: 10,
+          paddingVertical: 10  * vw,
           height: "100%"
         }}
       >
         <Text
           style={{
             textAlign: "center",
-            fontSize: 20,
+            fontSize: 20  * vw,
             fontWeight: "bold"
           }}
         >
@@ -944,12 +946,12 @@ const Home = () => {
         </Text>
         <View style={{ alignItems: "center" }}>
           <Image source={require("./assets/logo.png")} />
-          <View style={{ marginHorizontal: 15 }}>
+          <View style={{ marginHorizontal: 15 * vw }}>
             <Text
               style={{
-                fontSize: 18,
+                fontSize: 18 * vw,
                 textAlign: "justify",
-                lineHeight: 25
+                lineHeight: 25 * vw
               }}
             >
               <Text style={{ fontWeight: "bold" }}>
@@ -965,9 +967,9 @@ const Home = () => {
             </Text>
             <Text
               style={{
-                fontSize: 18,
+                fontSize: 1 * vw8,
                 textAlign: "justify",
-                lineHeight: 25
+                lineHeight: 25 * vw
               }}
             >
               USG's primary goal is to establish scientific networking platforms
@@ -979,9 +981,9 @@ const Home = () => {
             </Text>
             <Text
               style={{
-                fontSize: 18,
+                fontSize: 18 * vw,
                 textAlign: "justify",
-                lineHeight: 25
+                lineHeight: 25 * vw
               }}
             >
               USG is governed by a board of directors comprising renowned
@@ -1005,8 +1007,8 @@ const Home = () => {
                     </View> */}
         <View
           style={{
-            marginVertical: 10,
-            marginHorizontal: 10,
+            marginVertical: 10 * vw,
+            marginHorizontal: 10 * vw,
             backgroundColor: "#86bc42"
           }}
         >
@@ -1019,18 +1021,18 @@ const Home = () => {
             <View
               style={{
                 flexDirection: "row",
-                padding: 10,
+                padding: 10 * vw,
                 justifyContent: "flex-end"
               }}
             >
-              <MaterialIcons name="keyboard-voice" size={45} color="white" />
+              <MaterialIcons name="keyboard-voice" size={45 * vw} color="white" />
               <View style={{ flexDirection: "column" }}>
                 <Text
                   style={{
                     color: "#fff",
-                    fontSize: 20,
+                    fontSize: 20 * vw,
                     fontWeight: "600",
-                    paddingLeft: 5
+                    paddingLeft: 5 * vw
                   }}
                 >
                   CONFERENCES
@@ -1038,8 +1040,8 @@ const Home = () => {
                 <Text
                   style={{
                     color: "#fff",
-                    fontSize: 15,
-                    paddingLeft: 5,
+                    fontSize: 15 * vw,
+                    paddingLeft: 5 * vw,
                     justifyContent: "flex-end",
                     textAlign: "right"
                   }}
@@ -1048,11 +1050,11 @@ const Home = () => {
                 </Text>
               </View>
             </View>
-            <View style={{ padding: 10, justifyContent: "center" }}>
+            <View style={{ padding: 10 * vw, justifyContent: "center" }}>
               <Text
                 style={{
                   color: "#fff",
-                  fontSize: 20,
+                  fontSize: 20 * vw,
                   fontWeight: "600",
                   justifyContent: "flex-end"
                 }}
@@ -1063,8 +1065,8 @@ const Home = () => {
           </View>
           <View
             style={{
-              borderWidth: 1,
-              marginHorizontal: 30,
+              borderWidth: 1 * vw,
+              marginHorizontal: 30 * vw,
               borderColor: "#ffffff1a"
             }}
           />
@@ -1077,20 +1079,20 @@ const Home = () => {
             <View
               style={{
                 flexDirection: "row",
-                padding: 10,
+                padding: 10 * vw,
                 justifyContent: "flex-end"
               }}
             >
               <MaterialCommunityIcons
                 name="account-outline"
-                size={45}
+                size={45 * vw}
                 color="white"
               />
               <View style={{ flexDirection: "column" }}>
                 <Text
                   style={{
                     color: "#fff",
-                    fontSize: 20,
+                    fontSize: 20 * vw,
                     fontWeight: "600",
                     paddingLeft: 5
                   }}
@@ -1100,8 +1102,8 @@ const Home = () => {
                 <Text
                   style={{
                     color: "#fff",
-                    fontSize: 15,
-                    paddingLeft: 5,
+                    fontSize: 15 * vw,
+                    paddingLeft: 5 * vw,
                     justifyContent: "flex-end",
                     textAlign: "right"
                   }}
@@ -1110,11 +1112,11 @@ const Home = () => {
                 </Text>
               </View>
             </View>
-            <View style={{ padding: 10, justifyContent: "center" }}>
+            <View style={{ padding: 10 * vw, justifyContent: "center" }}>
               <Text
                 style={{
                   color: "#fff",
-                  fontSize: 20,
+                  fontSize: 20 * vw,
                   fontWeight: "600",
                   justifyContent: "flex-end"
                 }}
@@ -1125,8 +1127,8 @@ const Home = () => {
           </View>
           <View
             style={{
-              borderWidth: 1,
-              marginHorizontal: 30,
+              borderWidth: 1 * vw,
+              marginHorizontal: 30 * vw,
               borderColor: "#ffffff1a"
             }}
           />
@@ -1139,22 +1141,22 @@ const Home = () => {
             <View
               style={{
                 flexDirection: "row",
-                padding: 10,
+                padding: 10 * vw,
                 justifyContent: "flex-end"
               }}
             >
               <MaterialCommunityIcons
                 name="briefcase-outline"
-                size={45}
+                size={45 * vw}
                 color="white"
               />
               <View style={{ flexDirection: "column" }}>
                 <Text
                   style={{
                     color: "#fff",
-                    fontSize: 20,
+                    fontSize: 20 * vw,
                     fontWeight: "600",
-                    paddingLeft: 5
+                    paddingLeft: 5 * vw
                   }}
                 >
                   PARTNERS
@@ -1162,8 +1164,8 @@ const Home = () => {
                 <Text
                   style={{
                     color: "#fff",
-                    fontSize: 15,
-                    paddingLeft: 5,
+                    fontSize: 15 * vw,
+                    paddingLeft: 5 * vw,
                     justifyContent: "flex-end",
                     textAlign: "right"
                   }}
@@ -1172,11 +1174,11 @@ const Home = () => {
                 </Text>
               </View>
             </View>
-            <View style={{ padding: 10, justifyContent: "center" }}>
+            <View style={{ padding: 10 * vw, justifyContent: "center" }}>
               <Text
                 style={{
                   color: "#fff",
-                  fontSize: 20,
+                  fontSize: 20 * vw,
                   fontWeight: "600",
                   justifyContent: "flex-end"
                 }}
@@ -1187,8 +1189,8 @@ const Home = () => {
           </View>
           <View
             style={{
-              borderWidth: 1,
-              marginHorizontal: 30,
+              borderWidth: 1 * vw,
+              marginHorizontal: 30 * vw,
               borderColor: "#ffffff1a"
             }}
           />
@@ -1201,18 +1203,18 @@ const Home = () => {
             <View
               style={{
                 flexDirection: "row",
-                padding: 10,
+                padding: 10 * vw,
                 justifyContent: "flex-end"
               }}
             >
-              <SimpleLineIcons name="globe-alt" size={45} color="white" />
+              <SimpleLineIcons name="globe-alt" size={45 * vw} color="white" />
               <View style={{ flexDirection: "column" }}>
                 <Text
                   style={{
                     color: "#fff",
-                    fontSize: 20,
+                    fontSize: 20 * vw,
                     fontWeight: "600",
-                    paddingLeft: 5
+                    paddingLeft: 5 * vw
                   }}
                 >
                   COUNTRIES
@@ -1220,8 +1222,8 @@ const Home = () => {
                 <Text
                   style={{
                     color: "#fff",
-                    fontSize: 15,
-                    paddingLeft: 5,
+                    fontSize: 15 * vw,
+                    paddingLeft: 5 * vw,
                     justifyContent: "flex-end",
                     textAlign: "right"
                   }}
@@ -1230,11 +1232,11 @@ const Home = () => {
                 </Text>
               </View>
             </View>
-            <View style={{ padding: 10, justifyContent: "center" }}>
+            <View style={{ padding: 10 * vw, justifyContent: "center" }}>
               <Text
                 style={{
                   color: "#fff",
-                  fontSize: 20,
+                  fontSize: 20 * vw,
                   fontWeight: "600",
                   justifyContent: "flex-end"
                 }}
@@ -1247,19 +1249,19 @@ const Home = () => {
         <View
           style={{
             backgroundColor: "#373a43",
-            borderTopLeftRadius: 80,
-            borderTopEndRadius: 80
+            borderTopLeftRadius: 80 * vw,
+            borderTopEndRadius: 80 * vw
           }}
         >
           <View>
             <View
               style={{
-                borderTopWidth: 5,
+                borderTopWidth: 5 * vw,
                 borderColor: "#fff",
-                marginTop: 12,
-                height: 1,
-                marginHorizontal: 150,
-                borderRadius: 50
+                marginTop: 12 * vw,
+                height: 1 * vh,
+                marginHorizontal: 150 * vw,
+                borderRadius: 50 * vw
               }}
             >
               {/* <Text>-------------</Text> */}
@@ -1269,23 +1271,23 @@ const Home = () => {
             style={{
               backgroundColor: "#373a43",
               flexDirection: "row",
-              paddingVertical: 20,
-              paddingHorizontal: 10,
+              paddingVertical: 20 * vw,
+              paddingHorizontal: 10 * vw,
               justifyContent: "space-evenly",
-              borderTopLeftRadius: 60,
-              borderTopEndRadius: 60
+              borderTopLeftRadius: 60 * vw,
+              borderTopEndRadius: 60 * vw
             }}
           >
             <View
               style={{
                 backgroundColor: "#f66b10",
-                borderRadius: 60,
-                paddingHorizontal: 5
+                borderRadius: 60 * vw,
+                paddingHorizontal: 5 * vw
               }}
             >
               <Zocial
                 name="call"
-                size={45}
+                size={45 * vw}
                 color="white"
                 onPress={() => {
                   Linking.openURL(`tel:+1-469-854-2280/81`);
@@ -1295,13 +1297,13 @@ const Home = () => {
             <View
               style={{
                 backgroundColor: "#fbbf47",
-                borderRadius: 60,
-                padding: 5
+                borderRadius: 60 * vw,
+                padding: 5 * vw
               }}
             >
               <MaterialCommunityIcons
                 name="email-outline"
-                size={48}
+                size={48 * vw}
                 color="white"
                 onPress={() => {
                   Linking.openURL(`mailto:contact@unitedscientificgroup.net`);
@@ -1311,14 +1313,14 @@ const Home = () => {
             <View
               style={{
                 backgroundColor: "#3f82f7",
-                borderRadius: 60,
-                padding: 5
+                borderRadius: 60 * vw,
+                padding: 5 * vw
               }}
             >
               {/* <MaterialCommunityIcons name="directions" size={50} color="white" /> */}
               <FontAwesome5
                 name="globe"
-                size={45}
+                size={45 * vw}
                 color="white"
                 onPress={() => {
                   Linking.openURL("https://unitedscientificgroup.org");
@@ -1338,7 +1340,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   viewBox: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 20 * vw,
     justifyContent: "center",
     width: width,
     alignItems: "center"
@@ -1346,27 +1348,27 @@ const styles = StyleSheet.create({
   },
   notificationcontainer: {
     backgroundColor: "#fff",
-    marginHorizontal: 15,
-    marginVertical: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 15,
+    marginHorizontal: 15 * vw,
+    marginVertical: 10 * vw,
+    paddingHorizontal: 10 * vw,
+    paddingVertical: 15 * vw,
     flexDirection: "row",
-    borderRadius: 25,
+    borderRadius: 25 * vw,
     justifyContent: "space-between",
     flex: 1
   },
   header2: {
-    fontSize: 20,
-    paddingLeft: 20,
+    fontSize: 20 * vw,
+    paddingLeft: 20 * vw,
     fontWeight: "bold",
-    marginBottom: 20
+    marginBottom: 20 * vw
   },
   flatlistcontainer: {
     backgroundColor: "#fff",
-    marginHorizontal: 15,
-    marginVertical: 10,
+    marginHorizontal: 15 * vw,
+    marginVertical: 10 * vw,
     flexDirection: "column",
-    borderRadius: 10,
+    borderRadius: 10 * vw,
     justifyContent: "space-between"
   }
 });
