@@ -33,7 +33,7 @@ const UserTabs = () => {
           marginTop: 5, // Adjust icon position vertically
         },
       }}>
-      <Tab.Screen name="User Home Tab" component={MainStackNavigator}
+      <Tab.Screen name="Home Tab" component={MainStackNavigator}
         options={{
           headerShown: false,
           tabBarLabel: "",
@@ -42,7 +42,7 @@ const UserTabs = () => {
           ),
         }}
       />
-      <Tab.Screen name="User CurrentConference Tab" component={CurrentConferences} options={{
+      <Tab.Screen name="CurrentConference Tab" component={CurrentConferences} options={{
         headerTitleAlign: "center",
         tabBarLabel: "",
         tabBarIcon: () => (
@@ -50,7 +50,7 @@ const UserTabs = () => {
         ),
         headerTitle: "Current Conferences"
       }} />
-      <Tab.Screen name="User Notification Tab" component={Notification} options={{
+      <Tab.Screen name="Notification Tab" component={Notification} options={{
         headerTitleAlign: "center",
         tabBarLabel: "",
         tabBarIcon: () => (

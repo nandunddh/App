@@ -33,7 +33,7 @@ const AdminTab = () => {
           marginTop: 5, // Adjust icon position vertically
         },
       }}>
-      <Tab.Screen name="AdminTab Home Tab" component={MainStackNavigator}
+      <Tab.Screen name="Home Tab" component={MainStackNavigator}
         options={{
           headerShown: false,
           tabBarLabel: "",
@@ -42,7 +42,7 @@ const AdminTab = () => {
           ),
         }}
       />
-      <Tab.Screen name="AdminTab CurrentConference Tab" component={CurrentConferences} options={{
+      <Tab.Screen name="CurrentConference Tab" component={CurrentConferences} options={{
         headerTitleAlign: "center",
         tabBarLabel: "",
         tabBarIcon: () => (
@@ -50,28 +50,28 @@ const AdminTab = () => {
         ),
         headerTitle: "Current Conferences"
       }} />
-      <Tab.Screen name="AdminTab Notification Tab" component={Notification} options={{
+      <Tab.Screen name="Notification Tab" component={Notification} options={{
         headerTitleAlign: "center",
         tabBarLabel: "",
         tabBarIcon: () => (
           <Ionicons name="notifications-outline" size={30} />
         ),
       }} />
-      <Tab.Screen name="AdminTab Add Notification Tab" component={AddNotification} options={{
+      <Tab.Screen name="Add Notification Tab" component={AddNotification} options={{
         headerTitleAlign: "center",
         tabBarLabel: "",
         tabBarIcon: () => (
           <MaterialIcons name="add-alert" size={30} />
         ),
       }} />
-      <Tab.Screen name="UserList" component={UserList} options={{
+      {/* <Tab.Screen name="UserList" component={UserList} options={{
         headerTitleAlign: "center", 
         tabBarLabel: "",
         tabBarIcon: () => (
           <MaterialCommunityIcons name="account-group-outline" size={30} />
         ),
         
-      }} />
+      }} /> */}
       <Tab.Screen name="EventsList" component={EventsList} options={{
         headerTitleAlign: "center",
         tabBarLabel: "",
@@ -80,10 +80,9 @@ const AdminTab = () => {
         ),
       }} />
 
-      <Tab.Screen name="AdminTab Profile Tab" component={Profile} options={{
+      <Tab.Screen name="Profile Tab" component={Profile} options={{
         headerTitleAlign: "center",
         tabBarLabel: " ",
-        headerTitle: "AdminTab Profile",
         tabBarIcon: () => (
           <MaterialCommunityIcons name="account-outline" size={30} />
         ),

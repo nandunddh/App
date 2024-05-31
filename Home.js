@@ -26,6 +26,8 @@ import { SimpleLineIcons } from "@expo/vector-icons";
 import { Zocial } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import Animated from "react-native-reanimated";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
 
 LogBox.ignoreLogs([
   "Possible unhandled promise rejection (id: 1): Error: Unable to open URL: mailto:contact@unitedscientificgroup.net"
@@ -259,7 +261,7 @@ const Home = () => {
               <Text
                 style={{ textAlign: "right", color: "red" }}
                 onPress={() =>
-                  navigation.navigate("User CurrentConference Tab")}
+                  navigation.navigate("CurrentConference Tab")}
               >
                 {" "}View all
               </Text>
@@ -293,7 +295,7 @@ const Home = () => {
                         borderColor: "#fff",
                         borderRadius: 15,
                         backgroundColor: "#fff",
-                        width: width - 20,
+                        width: wp("95%"),
                         alignItems: "center",
                         overflow: "hidden"
                       }}
@@ -303,9 +305,10 @@ const Home = () => {
                           source={{ uri: imageUrl }}
                           style={{
                             borderRadius: 15,
-                            width: "100%",
+                            width: wp("90%"),
                             aspectRatio: 236 / 153,
-                            resizeMode: "cover"
+                            resizeMode: "cover",
+                            overflow: "hidden"
                           }}
                         />
                         : <Text>No Banner</Text>}
@@ -383,6 +386,7 @@ const Home = () => {
                               backgroundColor: "#363942",
                               paddingVertical: 12,
                               paddingHorizontal: 20,
+                              width: wp("50%")
                             }}
                             onPress={() => {
                               handpleUrlPress({ conference: item });
@@ -405,7 +409,8 @@ const Home = () => {
                                 backgroundColor: "#e58027",
                                 paddingVertical: 12,
                                 paddingHorizontal: 20,
-                                marginLeft: 20
+                                marginLeft: 20,
+                                width: wp("30%")
                               }}
                               onPress={() => {
                                 Linking.openURL(item.pdf_url);
@@ -566,6 +571,80 @@ const Home = () => {
         </View>
       </View>
       {/* End Comming Conferences */}
+      {/* Virtual Conferences */}
+      <View>
+        <View>
+          <Text style={styles.header2}>Virtual Conferences</Text>
+        </View>
+        <View>
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={ConferenceData.filter(
+              conference => conference && conference.venu === "Virtual" && conference.token !== "completed"
+            )}
+            renderItem={({ item }) => {
+              const imageUrl = `${DB_URL}uploads/banners/${item.banner}`;
+              return (
+                <View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      Linking.openURL(item.url);
+                    }}
+                  >
+                    {ConferenceData.filter(
+                      conference => conference && conference.venu === "Virtual" && conference.token !== "completed"
+                    ).length > 2 ?
+                      <View style={styles.VirtualviewBox}>
+                        <View
+                          style={{
+                            borderRadius: 15,
+                            overflow: "hidden"
+                          }}
+                        >
+                          {item.banner
+                            ? <Image
+                              source={{ uri: imageUrl }}
+                              style={{
+                                borderRadius: 15,
+                                width: wp("75%"),
+                                aspectRatio: 236 / 153,
+                                resizeMode: "cover"
+                              }}
+                            />
+                            : <Text>No Banner</Text>}
+                        </View>
+                      </View>
+                      :
+                      <View style={styles.VirtualviewBox1}>
+                        <View
+                          style={{
+                            borderRadius: 15,
+                            overflow: "hidden"
+                          }}
+                        >
+                          {item.banner
+                            ? <Image
+                              source={{ uri: imageUrl }}
+                              style={{
+                                borderRadius: 15,
+                                width: wp("100%"),
+                                aspectRatio: 236 / 153,
+                                resizeMode: "cover"
+                              }}
+                            />
+                            : <Text>No Banner</Text>}
+                        </View>
+                      </View>
+                    }
+                  </TouchableOpacity>
+                </View>
+              );
+            }}
+          />
+        </View>
+      </View>
+      {/* End Comming Conferences */}
       {/* All Conferences 2024 */}
       <View>
         <View>
@@ -584,13 +663,15 @@ const Home = () => {
                       backgroundColor: "#f66b10",
                       borderRadius: 10,
                       borderColor: "#fff",
-                      marginHorizontal: 10
+                      marginHorizontal: 10,
+                      marginTop: 10
                     }
                     : {
                       backgroundColor: "#fff",
                       borderRadius: 10,
                       borderColor: "#fff",
-                      marginHorizontal: 10
+                      marginHorizontal: 10,
+                      marginTop: 10
                     }
                 ]}
               >
@@ -602,13 +683,15 @@ const Home = () => {
                           margin: 10,
                           fontSize: 20,
                           paddingHorizontal: 15,
-                          color: "#fff"
+                          color: "#fff",
+                          marginTop: 10
                         }
                         : {
                           margin: 10,
                           fontSize: 20,
                           paddingHorizontal: 15,
-                          color: "#000"
+                          color: "#000",
+                          marginTop: 10
                         }
                     ]}
                   >
@@ -630,13 +713,15 @@ const Home = () => {
                             backgroundColor: "#f66b10",
                             borderRadius: 10,
                             borderColor: "#fff",
-                            marginHorizontal: 10
+                            marginHorizontal: 10,
+                            marginTop: 10
                           }
                           : {
                             backgroundColor: "#fff",
                             borderRadius: 10,
                             borderColor: "#fff",
-                            marginHorizontal: 10
+                            marginHorizontal: 10,
+                            marginTop: 10
                           }
                       ]}
                     >
@@ -1329,7 +1414,7 @@ const Home = () => {
         </View>
       </View>
       {/* </View> */}
-    </Animated.ScrollView>
+    </Animated.ScrollView >
   );
 };
 
@@ -1340,9 +1425,23 @@ const styles = StyleSheet.create({
   viewBox: {
     paddingHorizontal: 20,
     justifyContent: "center",
-    width: width,
+    width: wp("100%"),
     alignItems: "center"
     // height: 430,
+  },
+  VirtualviewBox: {
+    paddingHorizontal: 10,
+    justifyContent: "center",
+    width: wp("80%"),
+    alignItems: "center",
+    marginVertical: 10
+  },
+  VirtualviewBox1: {
+    paddingHorizontal: 30,
+    justifyContent: "center",
+    width: wp("100%"),
+    alignItems: "center",
+    marginVertical: 10
   },
   notificationcontainer: {
     backgroundColor: "#fff",
@@ -1359,7 +1458,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingLeft: 20,
     fontWeight: "bold",
-    marginBottom: 20
+    marginVertical: 10
   },
   flatlistcontainer: {
     backgroundColor: "#fff",

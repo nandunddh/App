@@ -41,7 +41,7 @@ const ContactUs = ({ navigation }) => {
       .then(response => {
         if (response.ok) {
           Alert.alert('Success', `Thanks for Contacting USG.\nOur Support team will contact you shortly.`),
-            navigation.navigate("User Home Tab");
+            navigation.navigate("Home Tab");
             setMessage("");
         } else {
           Alert.alert('Error', 'Failed to send email. Please try again later.');
