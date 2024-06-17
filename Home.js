@@ -404,7 +404,7 @@ const Home = () => {
       {/* Comming COnferences */}
       <View>
         <View>
-          <Text style={styles.header2}>UpComing Conferences</Text>
+          <Text style={styles.header2}>Upcoming Conferences</Text>
         </View>
         {/* <View>
               {ConferenceData.map((conference, index) => (
