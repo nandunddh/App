@@ -443,7 +443,7 @@ const Home = () => {
       {/* Comming COnferences */}
       <View>
         <View>
-          <Text style={styles.header2}>Coming Conferences</Text>
+          <Text style={styles.header2}>UpComing Conferences</Text>
         </View>
         {/* <View>
               {ConferenceData.map((conference, index) => (
