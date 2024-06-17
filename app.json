@@ -34,7 +34,8 @@
         "android.permission.RECORD_AUDIO"
       ],
       "package": "com.nanduexpo.USGAPP",
-      "googleServicesFile": "google-services.json"
+      "googleServicesFile": "google-services.json",
+      "useNextNotificationsApi":true
     },
     "web": {
       "favicon": "./assets/favicon.png",
