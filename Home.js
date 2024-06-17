@@ -46,45 +46,6 @@ const Home = () => {
   const seenMonths = new Set();
   const navigation = useNavigation();
 
-  // useEffect(() => {
-  //   setInterval(() => {
-  //     if (activeIndex === 0) {
-  //       setAtiveIndex(activeIndex + 1);
-  //       listReference.current.scrollToIndex({
-  //         index: activeIndex,
-  //         animation: false,
-  //       });
-  //     } else if (activeIndex === filteredConferences.length - 1) {
-  //       setAtiveIndex(0);
-  //       listReference.current.scrollToIndex({
-  //         index: activeIndex,
-  //         animation: false,
-  //       });
-  //     }
-  //   }, 5000);
-  // }, []);
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setAtiveIndex((prevIndex) => {
-  //       if (prevIndex === filteredConferences.length - 1) {
-  //         listReference.current.scrollToIndex({
-  //           index: 0,
-  //           animation: true,
-  //         });
-  //         return 0;
-  //       } else {
-  //         listReference.current.scrollToIndex({
-  //           index: prevIndex + 1,
-  //           animation: true,
-  //         });
-  //         return prevIndex + 1;
-  //       }
-  //     });
-  //   }, 5000);
-
-  //   return () => clearInterval(interval); // Cleanup the interval on component unmount
-  // }, [filteredConferences.length, activeIndex]);
   useEffect(
     () => {
       if (filteredConferences.length > 0) {
