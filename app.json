@@ -20,7 +20,8 @@
         "LSApplicationQueriesSchemes": [
           "lyft"
         ]
-      }
+      },
+      "bundleIdentifier": "com.nanduexpo.USGAPP"
     },
     "android": {
       "adaptiveIcon": {
@@ -34,8 +35,7 @@
         "android.permission.RECORD_AUDIO"
       ],
       "package": "com.nanduexpo.USGAPP",
-      "googleServicesFile": "google-services.json",
-      "useNextNotificationsApi":true
+      "googleServicesFile": "google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png",

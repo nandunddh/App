@@ -1,7 +1,6 @@
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Button, FlatList, Platform } from 'react-native'
 import React, { useContext, useRef, useState } from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { SelectList } from 'react-native-dropdown-select-list';
 import { DB_URL } from '../Constants/Constants';
 import ImagePick from './ImagePick';
 import MyContext from '../MyContext';
