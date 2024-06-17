@@ -60,7 +60,8 @@
             "./assets/iphone_14_notification.mp3"
           ]
         }
-      ]
+      ],
+      "expo-router"
     ],
     "extra": {
       "eas": {
