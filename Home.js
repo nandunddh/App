@@ -542,8 +542,7 @@ const Home = () => {
             horizontal
             showsHorizontalScrollIndicator={false}
             data={ConferenceData.filter(
-              conference => conference && conference.venu === "Virtual" && conference.token !== "completed"
-            )}
+              conference => conference && conference.isvirtual === "yes")}
             renderItem={({ item }) => {
               const imageUrl = `${DB_URL}uploads/banners/${item.banner}`;
               return (
@@ -554,8 +553,7 @@ const Home = () => {
                     }}
                   >
                     {ConferenceData.filter(
-                      conference => conference && conference.venu === "Virtual" && conference.token !== "completed"
-                    ).length > 2 ?
+                      conference => conference && conference.isvirtual === "yes").length > 2 ?
                       <View style={styles.VirtualviewBox}>
                         <View
                           style={{
@@ -568,7 +566,7 @@ const Home = () => {
                               source={{ uri: imageUrl }}
                               style={{
                                 borderRadius: 15,
-                                width: wp("75%"),
+                                width: wp("90%"),
                                 aspectRatio: 236 / 153,
                                 resizeMode: "cover"
                               }}
@@ -1391,9 +1389,9 @@ const styles = StyleSheet.create({
     // height: 430,
   },
   VirtualviewBox: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 50,
     justifyContent: "center",
-    width: wp("80%"),
+    width: wp("100%"),
     alignItems: "center",
     marginVertical: 10
   },

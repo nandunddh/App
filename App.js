@@ -14,6 +14,7 @@ import Gettoken from "./Components/Getoken";
 import * as Notifications from "expo-notifications";
 import { Animated } from "react-native";
 import * as Device from 'expo-device';
+import 'expo-dev-client';
 
 const App = () => {
   const [isLogin, setIsLogin] = useState(false);
