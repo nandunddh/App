@@ -136,7 +136,7 @@ const ConferenceScreen = ({ route, navigation }) => {
                 <Text style={{ color: "#fff", fontSize: 18 }} onPress={() => Linking.openURL("mailto:contact@unitedscientificgroup.net")}>Email</Text>
               </View>
               <View style={{ paddingHorizontal: 20, backgroundColor: "#10b384", paddingVertical: 7, marginRight: 10, flexDirection: "row", borderRadius: 5 }}>
-                <Ionicons name="md-call-outline" size={24} color="white" style={{ paddingRight: 7 }} />
+                <Ionicons name="call-outline" size={24} color="white" style={{ paddingRight: 7 }} />
                 <Text style={{ color: "#fff", fontSize: 18 }} onPress={() => Linking.openURL("tel:+1-4698542280")}>Phone</Text>
               </View>
             </View>

@@ -24,7 +24,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
@@ -52,9 +52,9 @@
         {
           "icon": "./assets/icon.png",
           "color": "#ffffff",
-          "sounds": [
-            "./assets/iphone_14_notification.mp3"
-          ]
+          "defaultChannel": "default",
+          "sounds": ["./assets/iphone_14_notification.mp3"],
+          "mode": "usgv1"
         }
       ],
       "expo-router"

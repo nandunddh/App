@@ -1,19 +1,13 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import { Platform, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import DrawerNav from "./DrawerNav";
 import { DB_URL } from "./Components/Constants/Constants";
 import MyContext from "./MyContext";
 import * as SecureStore from "expo-secure-store";
 import LoadingScreen from "./LoadingScreen"; // Import the loading screen component
-import Web from "./Web";
-import debounce from "lodash/debounce";
-import performance from "performance-now";
-import Gettoken from "./Components/Getoken";
-import * as Notifications from "expo-notifications";
 import { Animated } from "react-native";
-import * as Device from 'expo-device';
 import 'expo-dev-client';
 
 const App = () => {
@@ -40,6 +34,7 @@ const App = () => {
   );
 
   useEffect(() => {
+
     console.log("UserData = ", userData);
 
     if (storedCredentials == null) {
@@ -53,15 +48,18 @@ const App = () => {
     // handleupcomingconferencelist();
     debouncedHandleUpcomingConferenceList();
 
-    console.log("ConferenceData = ", ConferenceData);
+    // console.log("ConferenceData = ", ConferenceData);
+
   }, [price, ConferenceData]);
+
+
 
   function debounce(func, delay) {
     let timeoutId;
-  
-    return function(...args) {
+
+    return function (...args) {
       const context = this;
-      
+
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
         func.apply(context, args);
@@ -82,99 +80,34 @@ const App = () => {
     useNativeDriver: false, // Note: UseNativeDriver requires 'value' listener to be added
   }).start();
 
-  const setupPushNotifications = async () => {
-    try {
-      const { status: existingStatus } =
-        await Notifications.getPermissionsAsync();
+  
+  // const update = async () => {
+  //   try {
+  //     const APIURL = `${DB_URL}flag.php`;
 
-      if (existingStatus !== "granted") {
-        const { status } = await Notifications.requestPermissionsAsync();
-        if (status !== "granted") {
-          console.log("Permission for push notifications denied.");
-          return;
-        }
-      }
+  //     const headers = {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json",
+  //     };
 
-      try {
-        const tokenData = await Notifications.getExpoPushTokenAsync();
-        const expoPushToken = tokenData.data;
+  //     const response = await fetch(APIURL, {
+  //       method: "GET",
+  //       headers: headers,
+  //     });
 
-        // console.log("Expo Push Token:", expoPushToken);
+  //     const responseData = await response.json();
 
-        setExpoPushToken(expoPushToken);
-      } catch (tokenError) {
-        console.error("Error fetching Expo Push Token:", tokenError);
-      }
-    } catch (error) {
-      console.error("Error setting up push notifications:", error);
-    }
-  };
-
-  const sendTokenToServer = async (expoPushToken) => {
-    try {
-      const APIURL = `${DB_URL}store_token.php`;
-      const headers = {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      };
-
-      const Data = {
-        token: expoPushToken,
-        email: userData.email,
-      };
-
-      // console.log("expo token from function = ", expoPushToken);
-      const response = await fetch(APIURL, {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(Data),
-      });
-
-      const responseData = await response.json();
-
-      if (responseData[0].Message === "Success") {
-        const tokens = responseData[0].Data.map((item) => item);
-        setDevice_tokens(tokens);
-        console.log("Device Tokens:", tokens);
-      } else {
-        console.log("Error user token ", responseData[0].Message);
-      }
-
-      // console.log("Response = ", responseData[0].Data);
-
-      console.log("data toke", Data);
-    } catch (error) {
-      console.error("ERROR FOUND Storing token = ", error);
-    }
-  };
-
-  const update = async () => {
-    try {
-      const APIURL = `${DB_URL}flag.php`;
-
-      const headers = {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      };
-
-      const response = await fetch(APIURL, {
-        method: "GET",
-        headers: headers,
-      });
-
-      const responseData = await response.json();
-
-      if (responseData[0].Message == "Success") {
-        console.log("flag updated!", responseData[0].data[0]);
-        setPrice(responseData[0].data[0]);
-        if (responseData[0].data[0].price != price.price) {
-          console.log("Data changed...........", price);
-        }
-      }
-    } catch (error) {
-      console.log("flag updated erroe", error);
-    }
-  };
+  //     if (responseData[0].Message == "Success") {
+  //       console.log("flag updated!", responseData[0].data[0]);
+  //       setPrice(responseData[0].data[0]);
+  //       if (responseData[0].data[0].price != price.price) {
+  //         console.log("Data changed...........", price);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.log("flag updated erroe", error);
+  //   }
+  // };
 
   const getStoredCredentials = async () => {
     try {

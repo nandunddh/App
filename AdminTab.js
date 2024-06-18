@@ -10,7 +10,6 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AddNotification from "./Components/AddNotification";
 import UserList from "./Components/UserList";
 import EventsList from "./Components/EventsList";
-import send_push from "./Components/pushnotificationwithcourier/send_push";
 
 const Tab = createBottomTabNavigator();
 

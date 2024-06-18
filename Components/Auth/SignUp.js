@@ -4,13 +4,10 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
   Platform,
-  Image,
   Alert,
 } from "react-native";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { MaterialIcons } from "@expo/vector-icons";
+import React, { useEffect, useRef, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
@@ -22,11 +19,18 @@ import { Fontisto } from "@expo/vector-icons";
 import * as SecureStore from "expo-secure-store";
 import { DB_URL } from "../Constants/Constants";
 import Animated from "react-native-reanimated";
-import MyContext from "../../MyContext";
-import * as Device from "expo-device";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
-import { Email } from "./smtp";
+import Constants from "expo-constants";
+import * as Notifications from "expo-notifications";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
 
 const SignUp = ({ navigation }) => {
   const no_image = require("../../assets/logo.png");
@@ -47,17 +51,36 @@ const SignUp = ({ navigation }) => {
   const cnpassword1 = useRef();
   const location1 = useRef();
   const [otp, setOtp] = useState("");
+  const notificationListener = useRef();
+  const responseListener = useRef();
+  const [expoPushToken, setExpoPushToken] = useState("");
 
   // var { expoPushToken } = useContext(MyContext);
 
   useEffect(() => {
-    // console.log("name", name)
-    // console.log("email", email)
-    // console.log("mobilenumber", mobilenumber)
-    // console.log("password", password)
-    // console.log("cnpassword", confirmPw)
-    // console.log("image ", image);
-    // console.log("profile path ", profile_path);
+
+
+    registerForPushNotificationsAsync().then((token) => {
+      if (token) {
+        setExpoPushToken(token);
+        // sendTokenToBackend(token);
+      }
+    });
+
+    notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
+      console.log(notification);
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
+      console.log(response);
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+
+
   }, [
     email,
     name,
@@ -70,87 +93,71 @@ const SignUp = ({ navigation }) => {
     otp,
   ]);
 
-  // const generateOTP = async (params) => {
-  //   Email.send({
-  //     Username: "nandugoud113@gmail.com",
-  //     Password: "AC781B881AC3B360ACFFC638E3AC951181F8",
-  //     // SecureToken: "95009f41-b2ce-4a70-947f-62c2449e5f69",
-  //     Host: "smtp.elasticemail.com",
-  //     To: `${email}`,
-  //     From: "nandugoud113@gmail.com",
-  //     Subject: "OTP Verification",
-  //     Body: `<!DOCTYPE html>
-  //     <html lang="en">
-  //     <head>
-  //       <meta charset="UTF-8">
-  //       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  //       <title>Email Verification</title>
-  //       <style>
-  //         body {
-  //           font-family: Arial, sans-serif;
-  //           background-color: #f4f4f4;
-  //           color: #333;
-  //           padding: 20px;
-  //         }
+  const registerForPushNotificationsAsync = async () => {
+    let token;
 
-  //         .container {
-  //           max-width: 600px;
-  //           margin: 0 auto;
-  //           background-color: #fff;
-  //           border-radius: 5px;
-  //           box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  //           padding: 20px;
-  //         }
+    if (Platform.OS === "android") {
+      await Notifications.setNotificationChannelAsync("default", {
+        name: "default",
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: "#000000",
+      });
+    }
 
-  //         h1 {
-  //           color: #ff6500;
-  //         }
+    // if (Device.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      Alert.alert("Failed to get push token for push notification!");
+      return null;
+    }
 
-  //         p {
-  //           line-height: 1.6;
-  //         }
+    try {
+      const tokenData = await Notifications.getExpoPushTokenAsync({
+        projectId: Constants.expoConfig.extra.eas.projectId,
+      });
+      token = tokenData.data;
+      console.log("Expo Push Token:", token);
+    } catch (tokenError) {
+      console.error("Error fetching Expo Push Token:", tokenError);
+    }
+    // } else {
+    //   Alert.alert("Must use physical device for Push Notifications");
+    // }
 
-  //         .verification-code {
-  //           font-size: 24px;
-  //           color: #28a745;
-  //           margin-top: 10px;
-  //           margin-bottom: 30px;
-  //         }
-  //         .name{
-  //           font-weight: bold;
-  //         }
+    return token;
+  };
 
-  //         .expiration-info {
-  //           font-style: italic;
-  //         }
-  //       </style>
-  //     </head>
-  //     <body>
-  //       <div class="container">
-  //         <h1>Email Verification</h1>
-  //         <p>Hello <span class="name">${email}</span>,</p>
-  //         <p>Your verification code is:</p>
-  //         <div class="verification-code">${params}</div>
-  //         <p>Thank you for using our service!</p>
-  //       </div>
-  //     </body>
-  //     </html>`,
-  //     Port: 2525,
-  //   }).then(
-  //     alert("OTP sent successfully" + params),
-  //     console.log("Otp ", params),
-  //     navigation.navigate("SignUp Code", { email }),
-  //     setOtp(params),
-  //   );
-  //   // .catch(
-  //   //   console.log("error in smtp"),
-  //   //   setOtp(""),
-  //   //   navigation.navigate("SignUp Screen")
-  //   // );
+  // const sendTokenToBackend = async (token) => {
+  //   try {
+  //     const response = await fetch(`${DB_URL}save_token.php`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         userId: userData.token,
+  //         expoPushToken: token,
+  //       }),
+  //     });
+
+  //     if (!response.ok) {
+  //       console.error("Failed to send token to backend:", response.status);
+  //     } else {
+  //       console.log("Token sent to backend successfully.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error sending token to backend:", error);
+  //   }
   // };
 
   const generateOTP = async (params) => {
-    console.log("params =:" , params);
+    console.log("params =:", params);
 
     const formData = new FormData();
     formData.append('to', email);
@@ -167,7 +174,7 @@ const SignUp = ({ navigation }) => {
       .then(response => {
         if (response.ok) {
           Alert.alert('Success', `Email sent successfully`),
-          navigation.navigate("SignUp Code", { email });
+            navigation.navigate("SignUp Code", { email });
         } else {
           Alert.alert('Error', 'Failed to send email. Please try again later.');
         }
@@ -245,7 +252,7 @@ const SignUp = ({ navigation }) => {
         .then((Response) => Response.json())
         .then((Response) => {
           if (Response[0].Message == "Success") {
-            console.log("check_status === > ",Response[0].check_status);
+            console.log("check_status === > ", Response[0].check_status);
             generateOTP(Response[0].OTP);
             setOtp(Response[0].OTP);
           } else if (Response[0].Message == "Failed") {
@@ -324,7 +331,7 @@ const SignUp = ({ navigation }) => {
         isAdmin: fls,
         Profile_path: "no_image.jpg",
         Location: location,
-        token: "expoPushToken",
+        token: expoPushToken,
 
       };
       fetch(InsertAPIURL, {
@@ -337,7 +344,7 @@ const SignUp = ({ navigation }) => {
           alert(response[0].Message);
           if (response[0].Message == "Complete--!") {
             //   console.log(response[0].Message);
-            
+
             check_otp();
             //   // navigation.navigate('SignUp Code', { email });
             //   console.log("DATA", Data); // If data is in JSON => Display alert msg
