@@ -1,31 +1,12 @@
 {
-  "cli": {
-    "version": ">= 7.3.0"
-  },
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal",
-      "channel": "development"
+      "distribution": "internal"
     },
     "preview": {
-      "android": {
-        "buildType": "apk"
-      },
-      "channel": "preview"
+      "distribution": "internal"
     },
-    "usgv1": {
-      "android": {
-        "buildType": "apk",
-        "gradleCommand": ":app:assembleRelease"
-      },
-      "channel": "usgv1"
-    },
-    "production": {
-      "channel": "production"
-    }
-  },
-  "submit": {
     "production": {}
   }
 }
